@@ -177,7 +177,8 @@ mng_trgt::init(synfig::ProgressCallback * /* cb */)
 	}
 
 	time_t t = time (NULL);
-	struct tm* gmt = gmtime(&t);
+    struct tm result;
+	struct tm* gmt = gmtime_r(&t, &result);
 	w=desc.get_w(); h=desc.get_h();
 	file = fopen(filename.c_str(), POPEN_BINARY_WRITE_TYPE);
 	if (file == NULL) goto cleanup_on_error;

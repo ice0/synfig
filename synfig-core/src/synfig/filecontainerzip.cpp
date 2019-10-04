@@ -80,7 +80,8 @@ namespace synfig
 
 			inline explicit DOSTimestamp(time_t time)
 			{
-				tm *t = localtime(&time);
+                struct tm result;
+				tm *t = localtime_r(&time, &result);
 				dos_time = ((t->tm_sec  & 0x3f) >>  1)
 						 | ((t->tm_min  & 0x3f) <<  5)
 						 | ((t->tm_hour & 0x1f) << 11);

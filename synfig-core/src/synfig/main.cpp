@@ -429,7 +429,8 @@ current_time()
 	struct tm *lt;
 	char b[buflen];
 	time(&t);
-	lt = localtime(&t);
+    struct tm result;
+	lt = localtime_r(&t, &result);
 	strftime(b, buflen, " [%X] ", lt);
 	return String(b);
 }
