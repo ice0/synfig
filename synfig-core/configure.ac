@@ -111,15 +111,16 @@ AC_ARG_WITH(magickpp,
 	with_magickpp="yes"
 ])
 if test $with_magickpp = "yes" ; then {
+	AM_CONDITIONAL(HAVE_LIBMAGICKPP,true)
 	PKG_CHECK_MODULES(MAGICKPP, Magick++ >= 6.4.2,[
 		with_magickpp="yes"
 		AM_CONDITIONAL(HAVE_LIBMAGICKPP,true)
 		CONFIG_DEPS="$CONFIG_DEPS Magick++"
-	],[
-		with_magickpp="no"
-		AC_MSG_RESULT([ *** Magick++ Output target disabled])
-		AM_CONDITIONAL(HAVE_LIBMAGICKPP,false)
 	])
+} else {
+	with_magickpp="no"
+	AC_MSG_RESULT([ *** Magick++ Output target disabled])
+	AM_CONDITIONAL(HAVE_LIBMAGICKPP,false)
 } ; fi
 
 
