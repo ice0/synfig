@@ -43,11 +43,6 @@ include_directories(
 )
 
 ##
-## Search path for libs (needed to link with libsynfig)
-##
-link_directories(${CMAKE_PREFIX_PATH}/lib)
-
-##
 ## Sub-directories
 ##
 

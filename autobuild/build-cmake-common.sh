@@ -6,7 +6,7 @@
 
 # Define standard build settings
 build_mode="Debug"
-make_jobs=1
+make_jobs=6
 print_build_settings_and_exit="false"
 write_portable_run_code="true"
 synfigstudio_data_prefix=""
@@ -31,6 +31,7 @@ cmake_build_type_option="-DCMAKE_BUILD_TYPE=$build_mode"
 cmake_prefix_option="-DCMAKE_PREFIX_PATH=${absolute_base_dir}/${cmake_build_dir}/${out_dir}"
 cmake_install_prefix_option="-DCMAKE_INSTALL_PREFIX=${absolute_base_dir}/${cmake_build_dir}/${out_dir}"
 cmake_cxxflags_option="-DCMAKE_CXX_FLAGS=-I ${absolute_base_dir}/${cmake_build_dir}/${out_dir}/include"
+cmake_cxxflags_studio="$cmake_cxxflags_option -L ${absolute_base_dir}/${cmake_build_dir}/${out_dir}/lib" # to find libsynfig
 cmake_dataprefix_option=""
 
 build_etl() {
@@ -94,7 +95,7 @@ build_synfig_studio() {
     fi
     
     # Configure, make, render images and install
-    cmake "$cmake_build_type_option" "$cmake_prefix_option" "$cmake_install_prefix_option" "$cmake_cxxflags_option" "$cmake_dataprefix_option" ../../synfig-studio/ && $make_build_command && run_command_in_outenv "$synfig_studio_make_cmd" && make install
+    cmake "$cmake_build_type_option" "$cmake_prefix_option" "$cmake_install_prefix_option" "$cmake_cxxflags_studio" "$cmake_dataprefix_option" ../../synfig-studio/ && $make_build_command && run_command_in_outenv "$synfig_studio_make_cmd" && make install
     
     if [ $? -ne 0 ]
         then
