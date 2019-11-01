@@ -42,6 +42,7 @@ $ARCH-fftw \
 $ARCH-glibmm \
 $ARCH-libxml++2.6 \
 $ARCH-pango \
+$ARCH-imagemagick \
 $ARCH-gtkmm3
 
 # build mlt
