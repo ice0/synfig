@@ -83,5 +83,5 @@ matrix:
   allow_failures:
   #  - env: CMAKE=true
   #  - os: osx
-    - osx_image: xcode10
+  #  - osx_image: xcode10
     - name: "Test render engine for regressions"

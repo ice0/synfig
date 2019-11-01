@@ -104,14 +104,13 @@ AM_CONDITIONAL(WITH_IMAGEMAGICK, test $with_imagemagick = yes)
 
 
 
-
+# Magick++ CHECK--------------------
 AC_ARG_WITH(magickpp,
 	AS_HELP_STRING(--without-magickpp, [do not support Magick++]),[
 ],[
 	with_magickpp="yes"
 ])
 if test $with_magickpp = "yes" ; then {
-	AM_CONDITIONAL(HAVE_LIBMAGICKPP,true)
 	PKG_CHECK_MODULES(MAGICKPP, Magick++ >= 6.4.2,[
 		with_magickpp="yes"
 		AM_CONDITIONAL(HAVE_LIBMAGICKPP,true)
@@ -119,8 +118,8 @@ if test $with_magickpp = "yes" ; then {
 	])
 } else {
 	with_magickpp="no"
-	AC_MSG_RESULT([ *** Magick++ Output target disabled])
 	AM_CONDITIONAL(HAVE_LIBMAGICKPP,false)
+	AC_MSG_RESULT([ *** Magick++ Output target disabled])
 } ; fi
 
 
@@ -555,6 +554,17 @@ SYNFIG_CFLAGS="$BOOST_CPPFLAGS $LIBZ_CFLAGS $GLIBMM_CFLAGS $GIOMM_CFLAGS $LIBXML
 CONFIG_CFLAGS="`echo $CONFIG_CFLAGS | sed s/-mno-cygwin//g | sed s/-mwindows//g`"
 SYNFIG_CFLAGS="`echo $SYNFIG_CFLAGS | sed s/-mno-cygwin//g | sed s/-mwindows//g`"
 SYNFIG_LIBS="`echo $SYNFIG_LIBS | sed s/-mno-cygwin//g | sed s/-mwindows//g`"
+
+# There is an error in the Magick++ library.
+# It adds '-fopenmp' flag on systems with OpenMP disabled (OSX 10.13 (High Sierra) for example).
+# And then we build Synfig we get the error "clang: error: unsupported option '-fopenmp'"
+# The code below will remove this flag on systems where OpenMP is not supported.
+AC_OPENMP
+# If compiler supports OpenMP in OPENMP_CXXFLAGS will be non-empty value
+if test "x$OPENMP_CXXFLAGS" = "x" ; then { # compiler doesn't support OpenMP
+    SYNFIG_CFLAGS="`echo $SYNFIG_CFLAGS | sed s/-fopenmp//g`"
+} ; fi
+
 
 AC_SUBST(LIBADD_DL)
 

@@ -110,6 +110,17 @@ PKG_CHECK_MODULES(SYNFIG, [synfig >= 1.3.11] [ETL >= 1.3.11] sigc++-2.0,,[
 AC_SUBST(SYNFIG_CFLAGS)
 AC_SUBST(SYNFIG_LIBS)
 
+# There is an error in the Magick++ library.
+# It adds '-fopenmp' flag on systems with OpenMP disabled (OSX 10.13 (High Sierra) for example).
+# And then we build Synfig we get the error "clang: error: unsupported option '-fopenmp'"
+# The code below will remove this flag on systems where OpenMP is not supported.
+AC_OPENMP
+# If compiler supports OpenMP in OPENMP_CXXFLAGS will be non-empty value
+if test "x$OPENMP_CXXFLAGS" = "x" ; then { # compiler doesn't support OpenMP
+    SYNFIG_CFLAGS="`echo $SYNFIG_CFLAGS | sed s/-fopenmp//g`"
+} ; fi
+
+
 AC_ARG_ENABLE([jack],
     AS_HELP_STRING([--enable-jack],
            [ Enable experimental JACK transport support experimental ]),
