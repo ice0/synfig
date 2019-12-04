@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.8)
 
 project(synfig-studio)
 
+if(NOT DEFINED DEVELOPMENT_SNAPSHOT)
+    set(DEVELOPMENT_SNAPSHOT true)
+endif()
+
 add_subdirectory(ETL)
 include_directories(ETL)
 include_directories(${PROJECT_BINARY_DIR}/ETL) # to find the generated etl_profile.h
