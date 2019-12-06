@@ -30,18 +30,15 @@
 #endif
 
 #include <iostream>
-//#include <boost/format.hpp>
 
 #include <autorevision.h>
 #include <synfig/general.h>
 #include <synfig/localization.h>
-#include <synfig/canvas.h>
 #include <synfig/canvasfilenaming.h>
 #include <synfig/context.h>
 #include <synfig/target.h>
 #include <synfig/layer.h>
 #include <synfig/module.h>
-#include <synfig/main.h>
 #include <synfig/importer.h>
 #include <synfig/loadcanvas.h>
 #include <synfig/guid.h>
@@ -222,21 +219,21 @@ SynfigCommandLineParser::SynfigCommandLineParser() :
 	context.add_group(og_debug);
 #endif
 
-	_allowed_video_codecs.push_back(VideoCodec("flv", "Flash Video (FLV) / Sorenson Spark / Sorenson H.263."));
-	_allowed_video_codecs.push_back(VideoCodec("h263p", "H.263+ / H.263-1998 / H.263 version 2."));
-	_allowed_video_codecs.push_back(VideoCodec("huffyuv", "Huffyuv / HuffYUV."));
-	_allowed_video_codecs.push_back(VideoCodec("libtheora", "libtheora Theora."));
-	_allowed_video_codecs.push_back(VideoCodec("libx264", "H.264 / AVC / MPEG-4 AVC."));
-	_allowed_video_codecs.push_back(VideoCodec("libx264-lossless", "H.264 / AVC / MPEG-4 AVC (LossLess)."));
-	_allowed_video_codecs.push_back(VideoCodec("mjpeg", "MJPEG (Motion JPEG)."));
-	_allowed_video_codecs.push_back(VideoCodec("mpeg1video", "Raw MPEG-1 video."));
-	_allowed_video_codecs.push_back(VideoCodec("mpeg2video", "Raw MPEG-2 video."));
-	_allowed_video_codecs.push_back(VideoCodec("mpeg4", "MPEG-4 part 2 (XviD/DivX)."));
-	_allowed_video_codecs.push_back(VideoCodec("msmpeg4", "MPEG-4 part 2 Microsoft variant version 3."));
-	_allowed_video_codecs.push_back(VideoCodec("msmpeg4v1", "MPEG-4 part 2 Microsoft variant version 1."));
-	_allowed_video_codecs.push_back(VideoCodec("msmpeg4v2", "MPEG-4 part 2 Microsoft variant version 2."));
-	_allowed_video_codecs.push_back(VideoCodec("wmv1", "Windows Media Video 7."));
-	_allowed_video_codecs.push_back(VideoCodec("wmv2", "Windows Media Video 8."));
+	_allowed_video_codecs.emplace_back("flv", "Flash Video (FLV) / Sorenson Spark / Sorenson H.263.");
+	_allowed_video_codecs.emplace_back("h263p", "H.263+ / H.263-1998 / H.263 version 2.");
+	_allowed_video_codecs.emplace_back("huffyuv", "Huffyuv / HuffYUV.");
+	_allowed_video_codecs.emplace_back("libtheora", "libtheora Theora.");
+	_allowed_video_codecs.emplace_back("libx264", "H.264 / AVC / MPEG-4 AVC.");
+	_allowed_video_codecs.emplace_back("libx264-lossless", "H.264 / AVC / MPEG-4 AVC (LossLess).");
+	_allowed_video_codecs.emplace_back("mjpeg", "MJPEG (Motion JPEG).");
+	_allowed_video_codecs.emplace_back("mpeg1video", "Raw MPEG-1 video.");
+	_allowed_video_codecs.emplace_back("mpeg2video", "Raw MPEG-2 video.");
+	_allowed_video_codecs.emplace_back(VideoCodec("mpeg4", "MPEG-4 part 2 (XviD/DivX)."));
+	_allowed_video_codecs.emplace_back(VideoCodec("msmpeg4", "MPEG-4 part 2 Microsoft variant version 3."));
+	_allowed_video_codecs.emplace_back(VideoCodec("msmpeg4v1", "MPEG-4 part 2 Microsoft variant version 1."));
+	_allowed_video_codecs.emplace_back(VideoCodec("msmpeg4v2", "MPEG-4 part 2 Microsoft variant version 2."));
+	_allowed_video_codecs.emplace_back(VideoCodec("wmv1", "Windows Media Video 7."));
+	_allowed_video_codecs.emplace_back(VideoCodec("wmv2", "Windows Media Video 8."));
 
 }
 
@@ -425,7 +422,6 @@ void SynfigCommandLineParser::process_trivial_info_options()
 
 }
 
-//void OptionsProcessor::process_info_options()
 void SynfigCommandLineParser::process_info_options()
 {
 	if (show_layers_list)
@@ -510,13 +506,12 @@ void SynfigCommandLineParser::process_info_options()
 	}
 }
 
-//RendDesc OptionsProcessor::extract_renddesc(const RendDesc& renddesc)
 RendDesc SynfigCommandLineParser::extract_renddesc(const RendDesc& renddesc)
 {
 	RendDesc desc = renddesc;
 	int w, h;
 	float span;
-	span = w = h = 0;
+	span = 0.f;
 
 	w = set_width;
 
@@ -528,25 +523,17 @@ RendDesc SynfigCommandLineParser::extract_renddesc(const RendDesc& renddesc)
 		desc.set_antialias(a);
 		synfig::info(_("Antialiasing set to %d, "
 					"(%d samples per pixel)"), a, (a*a));
-		/*VERBOSE_OUT(1) << boost::format(_("Antialiasing set to %d, "
-										  "(%d samples per pixel)")) % a % (a*a)
-						<< std::endl;*/
 	}
 	if (set_span > 0)
 	{
 	    span = set_span;
 		synfig::info(_("Span set to %d units"), span);
-		/*VERBOSE_OUT(1) << boost::format(_("Span set to %d units")) % span
-                       << std::endl;*/
 	}
 	if (set_fps > 0)
 	{
 		float fps = (float)set_fps;
 		desc.set_frame_rate(fps);
-		synfig::info(_("Frame rate set to %d frames per "
-										   "second"), fps);
-		/*VERBOSE_OUT(1) << boost::format(_("Frame rate set to %d frames per "
-										   "second")) % fps << std::endl;*/
+		synfig::info(_("Frame rate set to %d frames per second"), fps);
 	}
 	if (set_dpi > 0)
 	{
@@ -555,10 +542,7 @@ RendDesc SynfigCommandLineParser::extract_renddesc(const RendDesc& renddesc)
 		dots_per_meter = dpi * 39.3700787402; // TODO: ???
 		desc.set_x_res(dots_per_meter);
 		desc.set_y_res(dots_per_meter);
-		synfig::info(_("Physical resolution set to %f "
-                                          "dpi"), dpi);
-		/*VERBOSE_OUT(1) << boost::format(_("Physical resolution set to %f "
-                                          "dpi")) % dpi << std::endl;*/
+		synfig::info(_("Physical resolution set to %f dpi"), dpi);
 	}
 	if (set_dpi_x)
 	{
@@ -566,10 +550,7 @@ RendDesc SynfigCommandLineParser::extract_renddesc(const RendDesc& renddesc)
 		dpi = (float)set_dpi_x;
 		dots_per_meter = dpi * 39.3700787402;
 		desc.set_x_res(dots_per_meter);
-		synfig::info(_("Physical X resolution set to %f "
-										  "dpi"), dpi);
-		/*VERBOSE_OUT(1) << boost::format(_("Physical X resolution set to %f "
-										  "dpi")) % dpi << std::endl;*/
+		synfig::info(_("Physical X resolution set to %f dpi"), dpi);
 	}
 	if (set_dpi_y)
 	{
@@ -577,10 +558,7 @@ RendDesc SynfigCommandLineParser::extract_renddesc(const RendDesc& renddesc)
 		dpi = (float)set_dpi_x;
 		dots_per_meter = dpi * 39.3700787402;
 		desc.set_y_res(dots_per_meter);
-		synfig::info(_("Physical Y resolution set to %f "
-                                          "dpi"), dpi);
-		/*VERBOSE_OUT(1) << boost::format(_("Physical Y resolution set to %f "
-                                          "dpi")) % dpi << std::endl;*/
+		synfig::info(_("Physical Y resolution set to %f dpi"), dpi);
 	}
 	if (!set_start_time.empty())
 	{

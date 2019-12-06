@@ -20,7 +20,6 @@ target_sources(synfig_bin
 
 target_link_libraries(synfig_bin synfig)
 target_link_libraries(synfig_bin
-    ${Boost_SYSTEM_LIBRARIES}
     ${GIOMM_LIBRARIES}
 )
 
