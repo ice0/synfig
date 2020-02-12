@@ -1,3 +1,5 @@
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/synfig/modules/)
+
 ##
 ## Includes
 ##
