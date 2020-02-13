@@ -8,6 +8,21 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 
+# Definitions for build types.
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    # Do not allow function inlining in debug mode.
+    add_compile_options(-fno-inline-functions -fno-inline -g -O0 -Wall)
+    add_definitions(-D_DEBUG)
+    add_definitions(-DSHOW_EXTRA_INFO) # Show extra info in the about dialog
+    # TODO(ice0): move to synfig-studio?
+    add_definitions(-DETL_VERSION="1.3.12" -DPACKAGE_VERSION="1.5.0" -DVERSION="1.5.0")
+    message(STATUS "Debug: On")
+
+elseif (${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    add_compile_options(-O3 -ffast-math -DNDEBUG=1)
+endif (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
