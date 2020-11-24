@@ -132,7 +132,7 @@ jobs:
       - name: Install dependencies (apt)
         run: |
           ./1-setup-linux-native.sh
-          sudo apt-get install ccache ninja
+          sudo apt-get install ccache ninja-build
 
       - name: Setup ccache parameters and show statistics
         run: |
