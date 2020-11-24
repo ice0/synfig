@@ -31,8 +31,8 @@ jobs:
         id: cache-bottles
         uses: actions/cache@v2.1.3
         with:
-          path: /Users/runner/Library/Caches/Homebrew/
-          key: ${{ runner.os }}-brew-bottles-3
+          path: ~/Library/Caches/Homebrew/
+          key: ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
 
       # Runs a single command using the runners shell
       - name: Install Dependencies (Brew)
