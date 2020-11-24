@@ -48,7 +48,6 @@ jobs:
 
       - name: Setup ccache parameters and show statistics
         run: |
-          sudo apt-get install ccache
           ccache --set-config=compression=true
           ccache --set-config=cache_dir=${GITHUB_WORKSPACE}/.ccache
           ccache --show-stats
@@ -66,7 +65,7 @@ jobs:
   build-ubuntu16:
     # The type of runner that the job will run on
     runs-on: ubuntu-16.04
-    name: Ubuntu 16.04
+    name: Ubuntu 16.04 Xenial
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -87,7 +86,9 @@ jobs:
             ${{ runner.os }}-ccache-
 
       - name: Install dependencies (apt)
-        run: ./1-setup-linux-native.sh
+        run: |
+          ./1-setup-linux-native.sh
+          sudo apt-get install ccache
 
       - name: Setup ccache parameters and show statistics
         run: |
