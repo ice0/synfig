@@ -47,7 +47,9 @@ jobs:
         run: ./1-setup-osx-brew.sh
 
       - name: ccache statistics (before build)
-        run: ccache -s
+        run: |
+          ccache --show-stats
+          ccache --show-config
 
       - name: Build (CMake+Ninja)
         run: |
