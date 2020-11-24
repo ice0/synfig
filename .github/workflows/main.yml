@@ -33,15 +33,15 @@ jobs:
         with:
           path: /Users/runner/Library/Caches/Homebrew/
           key: ${{ runner.os }}-brew-bottles-2
-      
+
       # Runs a single command using the runners shell
       - name: Install Dependencies (Brew)
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_ANALYTICS: 1
-        if: steps.cache-bottles.outputs.cache-hit != 'true'
-        run: echo "Hello world! (`date`)" >> $HOME/Library/Caches/Homebrew/testfile.txt
-        #run: ./1-setup-osx-brew.sh
+        #if: steps.cache-bottles.outputs.cache-hit != 'true'
+        #run: echo "Hello world! (`date`)" >> $HOME/Library/Caches/Homebrew/testfile.txt
+        run: ./1-setup-osx-brew.sh
 
       # Runs a set of commands using the runners shell
       - name: Build (CMake)
