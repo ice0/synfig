@@ -29,7 +29,7 @@ jobs:
     
       - name: Prepare ccache timestamp
         id: ccache_timestamp
-        run: date "+%Y%m%d-%H%M%S"
+        run: echo "::set-output name=timestamp::`date "+%Y%m%d-%H%M%S"`"
         
       - name: Cache brew bottles
         id: cache-bottles
