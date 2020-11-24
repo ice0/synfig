@@ -32,10 +32,12 @@ jobs:
         uses: actions/cache@v2.1.3
         with:
           path: ~/Library/Caches/Homebrew/testfile.txt
-          key: ${{ runner.os }}-brew-bottles-4
+          key: ${{ runner.os }}-brew-bottles-${{ hashFiles('*.txt') }}
           #key: ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
+          restore-keys:
+            ${{ runner.os }}-brew-bottles
           #restore-keys: |
-          #  ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
+          #  ${{ runner.os }}-brew-bottles-${{ hashFiles('*.txt') }}
           #  ${{ runner.os }}-brew-bottles-
 
       # Runs a single command using the runners shell
