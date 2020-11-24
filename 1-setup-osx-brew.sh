@@ -43,6 +43,7 @@ libxml++ \
 libxml2 \
 libxslt \
 mlt \
+ninja \
 pango \
 pkg-config \
 python \
