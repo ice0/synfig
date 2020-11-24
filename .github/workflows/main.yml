@@ -51,4 +51,4 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          cat $HOME/Library/Caches/Homebrew/testfile.txt
+       #cat $HOME/Library/Caches/Homebrew/testfile.txt
