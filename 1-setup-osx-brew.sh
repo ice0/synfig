@@ -30,7 +30,9 @@ automake \
 boost \
 cairo \
 ccache \
+cmake \
 fftw \
+fontconfig \
 gettext \
 glibmm \
 gtkmm3 \
