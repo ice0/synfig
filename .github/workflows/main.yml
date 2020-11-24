@@ -31,11 +31,12 @@ jobs:
         id: cache-bottles
         uses: actions/cache@v2.1.3
         with:
-          path: ~/Library/Caches/Homebrew/
-          key: ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
-          restore-keys: |
-            ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
-            ${{ runner.os }}-brew-bottles-
+          path: ~/Library/Caches/Homebrew/testfile.txt
+          key: ${{ runner.os }}-brew-bottles-4
+          #key: ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
+          #restore-keys: |
+          #  ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
+          #  ${{ runner.os }}-brew-bottles-
 
       # Runs a single command using the runners shell
       - name: Install Dependencies (Brew)
@@ -43,12 +44,14 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 0
           HOMEBREW_NO_ANALYTICS: 1
         #if: steps.cache-bottles.outputs.cache-hit != 'true'
-        #run: echo "Hello world! (`date`)" >> $HOME/Library/Caches/Homebrew/testfile.txt
-        run: ./1-setup-osx-brew.sh
+        run: test -f ~/Library/Caches/Homebrew/testfile.txt && cat ~/Library/Caches/Homebrew/testfile.txt
+        #run: echo "Hello world! (`date`)" >> ~/Library/Caches/Homebrew/testfile.txt
+        #run: ./1-setup-osx-brew.sh
 
       # Runs a set of commands using the runners shell
       - name: Build (CMake)
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-       #cat $HOME/Library/Caches/Homebrew/testfile.txt
+          #cat ~/Library/Caches/Homebrew/testfile.txt
+          echo "Hello world! (`date`)" >> ~/Library/Caches/Homebrew/testfile.txt
