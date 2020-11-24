@@ -44,7 +44,7 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 0
           HOMEBREW_NO_ANALYTICS: 1
         #if: steps.cache-bottles.outputs.cache-hit != 'true'
-        run: test -f ~/Library/Caches/Homebrew/testfile.txt && cat ~/Library/Caches/Homebrew/testfile.txt
+        run: test -f ~/Library/Caches/Homebrew/testfile.txt || cat ~/Library/Caches/Homebrew/testfile.txt
         #run: echo "Hello world! (`date`)" >> ~/Library/Caches/Homebrew/testfile.txt
         #run: ./1-setup-osx-brew.sh
 
