@@ -47,8 +47,10 @@ jobs:
         #run: ./1-setup-osx-brew.sh
         run: brew install ccache
 
-      - name: ccache statistics (before build)
+      - name: Setup ccache parameters and show statistics
         run: |
+          ccache --set-config=compression=true
+          ccache --directory $GITHUB_WORKSPACE}/.ccache
           ccache --show-stats
           ccache --show-config
 
