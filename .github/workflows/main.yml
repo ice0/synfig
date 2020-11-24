@@ -44,7 +44,8 @@ jobs:
         env:
           HOMEBREW_NO_AUTO_UPDATE: 0
           HOMEBREW_NO_ANALYTICS: 1
-        run: ./1-setup-osx-brew.sh
+        #run: ./1-setup-osx-brew.sh
+        run: brew install ccache
 
       - name: ccache statistics (before build)
         run: |
