@@ -89,7 +89,7 @@ add_subdirectory(resources)
 target_include_directories(synfigstudio PRIVATE ${MLT_INCLUDE_DIRS}) # required for widget_soundwave
 
 target_link_libraries(synfigstudio
-	${FONT_CONFIG_LIBRARIES}
+	${FONT_CONFIG_LDFLAGS}
 	${GTKMM_LIBRARIES}
 	${Gettext_LIBRARIES}
 	${MLT_LIBRARIES} # required for widget_soundwave
