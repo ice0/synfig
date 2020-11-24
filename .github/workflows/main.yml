@@ -40,14 +40,14 @@ jobs:
           restore-keys:
             ${{ runner.os }}-ccache-
 
-      - name: ccache statistics (before build)
-        run: ccache -s
-
       - name: Install dependencies (Brew)
         env:
           HOMEBREW_NO_AUTO_UPDATE: 0
           HOMEBREW_NO_ANALYTICS: 1
         run: ./1-setup-osx-brew.sh
+
+      - name: ccache statistics (before build)
+        run: ccache -s
 
       - name: Build (CMake+Ninja)
         run: |
