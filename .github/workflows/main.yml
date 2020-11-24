@@ -81,9 +81,9 @@ jobs:
         uses: actions/cache@v2.1.3
         with:
           path: .ccache
-          key: ${{ runner.os }}-ccache-${{ steps.ccache_timestamp.outputs.timestamp }}
+          key: ubuntu-16.04-ccache-${{ steps.ccache_timestamp.outputs.timestamp }}
           restore-keys:
-            ${{ runner.os }}-ccache-
+            ubuntu-16.04-ccache-
 
       - name: Install dependencies (apt)
         run: |
@@ -127,12 +127,12 @@ jobs:
           path: .ccache
           key: ubuntu-20.04-ccache-${{ steps.ccache_timestamp.outputs.timestamp }}
           restore-keys:
-            ${{ runner.os }}-ccache-
+            ubuntu-20.04-ccache-
 
       - name: Install dependencies (apt)
         run: |
           ./1-setup-linux-native.sh
-          sudo apt-get install ccache
+          sudo apt-get install ccache ninja
 
       - name: Setup ccache parameters and show statistics
         run: |
