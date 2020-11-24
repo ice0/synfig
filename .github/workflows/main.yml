@@ -18,7 +18,8 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: macos-10.15
+    #runs-on: macos-10.15
+    runs-on: macos-11.0
     name: MacOS 10.15 Catalina
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -47,4 +48,4 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          echo $HOME/Library/Caches/Homebrew/testfile.txt
+          cat $HOME/Library/Caches/Homebrew/testfile.txt
