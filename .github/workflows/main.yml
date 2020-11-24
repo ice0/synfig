@@ -33,6 +33,9 @@ jobs:
         with:
           path: ~/Library/Caches/Homebrew/
           key: ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
+          restore-keys: |
+            ${{ runner.os }}-brew-bottles-${{ hashFiles('downloads/*.tgz') }}
+            ${{ runner.os }}-brew-bottles-
 
       # Runs a single command using the runners shell
       - name: Install Dependencies (Brew)
