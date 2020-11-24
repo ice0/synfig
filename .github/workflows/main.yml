@@ -48,6 +48,7 @@ jobs:
 
       - name: Setup ccache parameters and show statistics
         run: |
+          sudo apt-get install ccache
           ccache --set-config=compression=true
           ccache --set-config=cache_dir=${GITHUB_WORKSPACE}/.ccache
           ccache --show-stats
