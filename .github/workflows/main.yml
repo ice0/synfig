@@ -95,7 +95,7 @@ jobs:
           ccache --set-config=compression=true
           ccache --set-config=cache_dir=${GITHUB_WORKSPACE}/.ccache
           ccache --show-stats
-          ccache --show-config
+          ccache --print-config
 
       - name: Build (Autotools+Make)
         run: |
