@@ -20,7 +20,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: macos-10.15
     #runs-on: macos-11.0
-    name: MacOS 10.15 Catalina
+    name: MacOS 10.15 Catalina (CMake+Ninja)
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -65,7 +65,7 @@ jobs:
   build-ubuntu16:
     # The type of runner that the job will run on
     runs-on: ubuntu-16.04
-    name: Ubuntu 16.04 Xenial
+    name: Ubuntu 16.04 Xenial (Autotools)
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -99,6 +99,8 @@ jobs:
 
       - name: Build (Autotools+Make)
         run: |
+          export PATH="/usr/lib/ccache/:${PATH}"
+          echo ${PATH}
           ./2-build-debug.sh
 
       - name: ccache statistics
