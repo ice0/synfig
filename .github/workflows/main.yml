@@ -40,6 +40,9 @@ jobs:
           restore-keys:
             ${{ runner.os }}-ccache-
 
+      - name: ccache statistics (before build)
+        run: ccache -s
+
       - name: Install dependencies (Brew)
         env:
           HOMEBREW_NO_AUTO_UPDATE: 0
