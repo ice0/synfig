@@ -35,12 +35,12 @@ jobs:
         id: ccache-archive
         uses: actions/cache@v2.1.3
         with:
-          path: ~/.ccache
+          path: .ccache
           key: ${{ runner.os }}-ccache-${{ steps.ccache_timestamp.outputs.timestamp }}
           restore-keys:
             ${{ runner.os }}-ccache-
 
-      - name: Install Dependencies (Brew)
+      - name: Install dependencies (Brew)
         env:
           HOMEBREW_NO_AUTO_UPDATE: 0
           HOMEBREW_NO_ANALYTICS: 1
@@ -52,3 +52,6 @@ jobs:
           mkdir build-cmake && cd build-cmake
           cmake -GNinja -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_BUILD_TYPE=Release ..
           ninja
+
+      - name: ccache statistics
+        run: ccache -s
