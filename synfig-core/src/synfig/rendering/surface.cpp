@@ -37,8 +37,10 @@
 
 #endif
 
-using namespace synfig;
-using namespace rendering;
+namespace synfig
+{
+namespace rendering
+{
 
 /* === M A C R O S ========================================================= */
 
@@ -351,3 +353,4 @@ SurfaceResource::reset()
 }
 
 /* === E N T R Y P O I N T ================================================= */
+}}

@@ -36,6 +36,8 @@ else()
 	add_executable(synfigstudio main.cpp)
 endif()
 
+target_precompile_headers(synfigstudio PUBLIC canvasview.h app.h pluginmanager.h workarea.h)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 target_sources(synfigstudio

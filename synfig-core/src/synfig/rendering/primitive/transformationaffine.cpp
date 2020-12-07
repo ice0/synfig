@@ -33,8 +33,10 @@
 
 #endif
 
-using namespace synfig;
-using namespace rendering;
+namespace synfig
+{
+namespace rendering
+{
 
 /* === M A C R O S ========================================================= */
 
@@ -65,7 +67,7 @@ TransformationAffine::calc_optimal_resolution(const Matrix2 &matrix) {
 	const Real max_overscale_sqr = 1.0*4.0;
 	const Real real_precision_sqr = real_precision<Real>() * real_precision<Real>();
 	const Real real_precision_sqrsqr = real_precision_sqr * real_precision_sqr;
-	
+
 	const Real a = matrix.m00 * matrix.m00;
 	const Real b = matrix.m01 * matrix.m01;
 	const Real c = matrix.m10 * matrix.m10;
@@ -74,7 +76,7 @@ TransformationAffine::calc_optimal_resolution(const Matrix2 &matrix) {
 	if (e < real_precision_sqr)
 		return Vector();
 	e = 1.0/e;
-	
+
 	const Real sum = a*d + b*c;
 	const Real ab2 = 2*a*b + real_precision_sqrsqr;
 	const Real cd2 = 2*c*d + real_precision_sqrsqr;
@@ -82,7 +84,7 @@ TransformationAffine::calc_optimal_resolution(const Matrix2 &matrix) {
 	bool cdgt = (cd2 >= sum);
 	if (abgt && cdgt) // when both is greater than sum select only lower of them
 		(ab2 > cd2 ? abgt : cdgt) = false;
-	
+
 	Vector scale;
 	if (abgt) {
 		scale[0] = sqrt(2*b)*e;
@@ -96,11 +98,11 @@ TransformationAffine::calc_optimal_resolution(const Matrix2 &matrix) {
 		scale[0] = sqrt(dif/(a - c))*e;
 		scale[1] = sqrt(dif/(d - b))*e;
 	}
-	
+
 	const Real sqr = scale[0]*scale[1]*(matrix.m00 + matrix.m10)*(matrix.m01 + matrix.m11);
 	if (sqr > max_overscale_sqr)
 		scale *= sqrt(max_overscale_sqr/sqr);
-	
+
 	return scale[0] <= real_precision<Real>() || scale[1] <= real_precision<Real>()
 		 ? Vector() : scale;
 }
@@ -110,10 +112,10 @@ TransformationAffine::transform_bounds_affine(const Matrix &matrix, const Bounds
 {
 	if (!bounds.is_valid())
 		return Bounds();
-	
+
 	const Real kx = 1/bounds.resolution[0];
 	const Real ky = 1/bounds.resolution[1];
-	
+
 	return Bounds(
 		   Rect( matrix.get_transformed( Vector(bounds.rect.minx, bounds.rect.miny) ) )
 		.expand( matrix.get_transformed( Vector(bounds.rect.minx, bounds.rect.maxy) ) )
@@ -146,3 +148,4 @@ TransformationAffine::merge_inner_vfunc(const Transformation &other)
 
 
 /* === E N T R Y P O I N T ================================================= */
+}}

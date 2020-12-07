@@ -33,9 +33,10 @@
 
 #endif
 
-using namespace synfig;
-using namespace rendering;
-
+namespace synfig
+{
+namespace rendering
+{
 /* === M A C R O S ========================================================= */
 
 /* === G L O B A L S ======================================================= */
@@ -57,15 +58,15 @@ Transformation::make_discrete_bounds(const Bounds &bounds)
 
 	if (!bounds.is_valid())
 		return DiscreteBounds();
-	
+
 	const Vector raster_size_orig = bounds.rect.get_size().multiply_coords( bounds.resolution );
-	
+
 	Vector raster_size_float = raster_size_orig;
 	if (raster_size_float[0] > max_width)
 		raster_size_float[0] = max_width;
 	if (raster_size_float[1] > max_height)
 		raster_size_float[1] = max_height;
-	
+
 	VectorInt raster_size(
 		std::max(1, (int)approximate_ceil(raster_size_float[0])),
 		std::max(1, (int)approximate_ceil(raster_size_float[1])) );
@@ -74,11 +75,11 @@ Transformation::make_discrete_bounds(const Bounds &bounds)
 		raster_size[0] = std::max(1, (int)approximate_floor(raster_size[0]*k));
 		raster_size[1] = std::max(1, (int)approximate_floor(raster_size[1]*k));
 	}
-	
+
 	const Vector border(
 		border_width*raster_size_orig[0]/(bounds.resolution[0]*raster_size[0]),
 		border_width*raster_size_orig[1]/(bounds.resolution[1]*raster_size[1]) );
-	
+
 	return DiscreteBounds(
 		Rect(
 			bounds.rect.get_min() - border,
@@ -268,3 +269,5 @@ Transformation::build_mesh(const Rect &target_rect, const Vector &precision) con
 }
 
 /* === E N T R Y P O I N T ================================================= */
+}
+}

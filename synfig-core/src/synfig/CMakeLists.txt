@@ -24,6 +24,8 @@ else()
     set(LTDL_LIBRARIES ltdl)
 endif()
 
+target_precompile_headers(synfig PUBLIC canvas.h layer.h surface.h)
+
 target_include_directories(synfig
 #    SYSTEM BEFORE PUBLIC
 SYSTEM PUBLIC
