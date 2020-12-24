@@ -54,15 +54,10 @@
 #include <gui/localization.h>
 
 #include <gui/progresslogger.h>
+#include <glib/gstdio.h>
 
 #endif
 
-#ifdef _MSC_VER
-#include  <io.h>
-#define access _access_s
-#define W_OK 2
-#pragma message("TODO: Move this to FileSystem class")
-#endif
 
 /* === U S I N G =========================================================== */
 
@@ -501,8 +496,7 @@ RenderSettings::submit_next_render_pass()
 			return;
 		}
 		// Test whether the output file is writable (path exists or has write permit)
-		if (access(dirname(pass_filename).c_str(),W_OK) == -1)
-		{
+		if (g_access(dirname(pass_filename).c_str(),W_OK) == -1) {
 			canvas_interface_->get_ui_interface()->error(_("Unable to create file for ")+pass_filename+": "+strerror( errno ));
 			return;
 		}
