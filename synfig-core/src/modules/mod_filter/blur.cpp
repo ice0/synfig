@@ -47,7 +47,6 @@
 #include <synfig/value.h>
 #include <synfig/valuenode.h>
 #include <synfig/segment.h>
-#include <synfig/cairo_renddesc.h>
 
 #include <synfig/rendering/common/task/taskblend.h>
 #include <synfig/rendering/common/task/taskblur.h>

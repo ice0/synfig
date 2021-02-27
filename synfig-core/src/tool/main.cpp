@@ -49,7 +49,6 @@
 
 #include <synfig/module.h>
 #include <synfig/importer.h>
-#include <synfig/cairoimporter.h>
 #include <synfig/layer.h>
 #include <synfig/canvas.h>
 #include <synfig/target.h>

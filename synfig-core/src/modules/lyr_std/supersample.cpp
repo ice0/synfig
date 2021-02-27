@@ -36,7 +36,6 @@
 #include <synfig/general.h>
 
 #include <synfig/context.h>
-#include <synfig/cairo_renddesc.h>
 #include <synfig/paramdesc.h>
 #include <synfig/renddesc.h>
 #include <synfig/render.h>

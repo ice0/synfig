@@ -37,7 +37,6 @@
 #include <synfig/general.h>
 #include <synfig/localization.h>
 
-#include <synfig/cairo_renddesc.h>
 #include <synfig/canvas.h>
 #include <synfig/context.h>
 #include <synfig/paramdesc.h>

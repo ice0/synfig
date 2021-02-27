@@ -42,7 +42,6 @@
 #include <synfig/surface.h>
 #include <synfig/value.h>
 #include <synfig/valuenode.h>
-#include <synfig/cairo_renddesc.h>
 
 #include <synfig/rendering/common/task/taskpixelprocessor.h>
 

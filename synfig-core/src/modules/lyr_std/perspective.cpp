@@ -47,7 +47,6 @@
 #include <synfig/value.h>
 #include <synfig/valuenode.h>
 #include <synfig/transform.h>
-#include <synfig/cairo_renddesc.h>
 
 #include <synfig/rendering/common/task/tasktransformation.h>
 #include <synfig/rendering/common/task/taskcontour.h>
