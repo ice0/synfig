@@ -121,11 +121,11 @@ Widget_Keyframe_List::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 
 	// TODO: hardcoded colors
 	// Colors
-	Color background(0.46, 0.55, 0.70, 1.0);
-	Color normal(0.0, 0.0, 0.0, 1.0);
-	Color selected(1.0, 1.0, 1.0, 1.0);
-	Color drag_old_position(1.0, 1.0, 1.0, 0.6);
-	Color drag_new_position(1.0, 1.0, 1.0, 1.0);
+	constexpr Color background(Color::create(0.46, 0.55, 0.70, 1.0));
+	Color normal(Color::create(0.0, 0.0, 0.0, 1.0));
+	Color selected(Color::create(1.0, 1.0, 1.0, 1.0));
+	Color drag_old_position(Color::create(1.0, 1.0, 1.0, 0.6));
+	Color drag_new_position(Color::create(1.0, 1.0, 1.0, 1.0));
 
 	if (!editable) {
 		normal.set_a(0.5);

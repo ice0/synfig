@@ -781,7 +781,7 @@ Dialog_Setup::on_apply_pressed()
 	// Set the background color
 	Gdk::RGBA m_color = def_background_color_button.get_rgba();
 
-	App::default_background_layer_color = synfig::Color(m_color.get_red(),
+	App::default_background_layer_color = synfig::Color::create(m_color.get_red(),
 														m_color.get_green(),
 														m_color.get_blue(),
 														m_color.get_alpha());
@@ -811,7 +811,7 @@ Dialog_Setup::on_apply_pressed()
 	// Set the preview background color
 	m_color = preview_background_color_button.get_rgba();
 
-	App::preview_background_color = synfig::Color(m_color.get_red(),
+	App::preview_background_color = synfig::Color::create(m_color.get_red(),
 												  m_color.get_green(),
 												  m_color.get_blue(),
 												  m_color.get_alpha());

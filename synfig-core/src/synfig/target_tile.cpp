@@ -262,7 +262,7 @@ synfig::Target_Tile::async_render_tile(
 			for(int i = 0; i< cnt; ++i)
 			{
 				float a = s[0][i].get_a();
-				s[0][i] = Color(a,a,a,a);
+				s[0][i] = Color::create(a,a,a,a);
 			}
 			break;
 		case TARGET_ALPHA_MODE_REDUCE:

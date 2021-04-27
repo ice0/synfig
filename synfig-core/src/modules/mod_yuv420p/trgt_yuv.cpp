@@ -140,7 +140,7 @@ yuv::end_frame()
 			if(dithering)
 			{
 				const float er(f-((float)i-Y_FLOOR)/Y_RANGE);
-				const Color error(er,er,er);
+				const Color error(Color::create(er,er,er));
 
 				if(surface.get_h()>y+1)
 				{

@@ -1238,7 +1238,7 @@ Svg_parser::newColorStop(String color,float opacity,float pos){
 
 Color
 Svg_parser::adjustGamma(float r,float g,float b,float a){
-	return gamma.apply(Color(r,g,b,a));
+	return gamma.apply(Color::create(r,g,b,a));
 }
 
 LinearGradient*

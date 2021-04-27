@@ -62,9 +62,9 @@ studio::render_color_to_window(const Cairo::RefPtr<Cairo::Context> &cr, const Gd
 		// In this case we need to render the alpha squares
 
 		const Color bg1 = gamma.apply(
-			Color::blend(color,Color(0.75, 0.75, 0.75),1.0).clamped() );
+			Color::blend(color,Color::create(0.75, 0.75, 0.75),1.0).clamped() );
 		const Color bg2 = gamma.apply(
-			Color::blend(color,Color(0.5, 0.5, 0.5),1.0).clamped() );
+			Color::blend(color,Color::create(0.5, 0.5, 0.5),1.0).clamped() );
 
 		bool toggle(false);
 		for(int i=0;i<width;i+=square_size)
@@ -119,7 +119,7 @@ studio::render_color_to_window(const Cairo::RefPtr<Cairo::Context> &cr, const Gd
 
 Widget_Color::Widget_Color()
 {
-	color=Color(0,0,0,0);
+	color=Color::create(0,0,0,0);
 	set_size_request(-1,16);
 	add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
 	App::signal_canvas_view_focus().connect(

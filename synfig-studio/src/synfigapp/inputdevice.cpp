@@ -169,7 +169,7 @@ public:
 				float r=0,g=0,b=0,a=1;
 				if(!strscanf(value,"%f %f %f %f",&r,&g,&b,&a))
 					return false;
-				input_device->set_outline_color(synfig::Color(r,g,b,a));
+				input_device->set_outline_color(synfig::Color::create(r,g,b,a));
 				return true;
 			}
 			if(key=="fill_color")
@@ -177,7 +177,7 @@ public:
 				float r=0,g=0,b=0,a=1;
 				if(!strscanf(value,"%f %f %f %f",&r,&g,&b,&a))
 					return false;
-				input_device->set_fill_color(synfig::Color(r,g,b,a));
+				input_device->set_fill_color(synfig::Color::create(r,g,b,a));
 				return true;
 			}
 			if(key=="mode")

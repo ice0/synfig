@@ -1123,7 +1123,7 @@ Perspective::build_rendering_task_vfunc(Context context) const
 		task_contour->contour->line_to( Vector(clip_rect.maxx, clip_rect.maxy) );
 		task_contour->contour->line_to( Vector(clip_rect.maxx, clip_rect.miny) );
 		task_contour->contour->close();
-		task_contour->contour->color = Color(1, 1, 1, 1);
+		task_contour->contour->color = Color::white();
 		task_contour->contour->antialias = interpolation != Color::INTERPOLATION_NEAREST;
 
 		rendering::TaskBlend::Handle task_blend(new rendering::TaskBlend());

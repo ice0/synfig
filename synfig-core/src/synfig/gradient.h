@@ -165,9 +165,9 @@ public:
 		Color color() const
 		{
 			// demult alpha
-			if (approximate_equal_lp(a, Real(0))) return Color();
+			if (approximate_equal_lp(a, Real(0))) return Color::create();
 			Real k = 1.0/a;
-			return Color((ColorReal)(k*r), (ColorReal)(k*g), (ColorReal)(k*b), (ColorReal)a);
+			return Color::create((ColorReal)(k*r), (ColorReal)(k*g), (ColorReal)(k*b), (ColorReal)a);
 		}
 
 		bool operator== (const Accumulator &x) const

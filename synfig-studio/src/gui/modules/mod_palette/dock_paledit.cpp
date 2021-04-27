@@ -442,11 +442,11 @@ Dock_PalEdit::set_default_palette()
 	palette_.push_back(Color::alpha());
 	for(int i=0;i<width-1;i++)
 	{
-		Color c(
+		Color c(Color::create(
 			float(i)/(float)(width-2),
 			float(i)/(float)(width-2),
 			float(i)/(float)(width-2)
-		);
+		));
 		palette_.push_back(c);
 	}
 
@@ -454,25 +454,25 @@ Dock_PalEdit::set_default_palette()
 	for(int i=0;i<width;i++)
 	{
 		float x(float(i)/(float)(width-1));
-		const Color tan1(0.2,0.05,0);
-		const Color tan2(0.85,0.64,0.20);
+		constexpr Color tan1(Color::create(0.2,0.05,0));
+		constexpr Color tan2(Color::create(0.85,0.64,0.20));
 
 		palette_.push_back(Color::blend(tan2,tan1,x));
 	}
 
 	// Solids
 	palette_.push_back(Color::red());
-	palette_.push_back(Color(1.0f,0.25f,0.0f));	// Orange
+	palette_.push_back(Color::create(1.0f,0.25f,0.0f));	// Orange
 	palette_.push_back(Color::yellow());
-	palette_.push_back(Color(0.25f,1.00f,0.0f));	// yellow-green
+	palette_.push_back(Color::create(0.25f,1.00f,0.0f));	// yellow-green
 	palette_.push_back(Color::green());
-	palette_.push_back(Color(0.0f,1.00f,0.25f));	// green-blue
+	palette_.push_back(Color::create(0.0f,1.00f,0.25f));	// green-blue
 	palette_.push_back(Color::cyan());
-	palette_.push_back(Color(0.0f,0.25f,1.0f));	// Sea Blue
+	palette_.push_back(Color::create(0.0f,0.25f,1.0f));	// Sea Blue
 	palette_.push_back(Color::blue());
-	palette_.push_back(Color(0.25f,0.0f,1.0f));
+	palette_.push_back(Color::create(0.25f,0.0f,1.0f));
 	palette_.push_back(Color::magenta());
-	palette_.push_back(Color(1.0f,0.0f,0.25f));
+	palette_.push_back(Color::create(1.0f,0.0f,0.25f));
 
 
 	const int levels(3);

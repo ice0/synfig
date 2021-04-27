@@ -222,7 +222,7 @@ ffmpeg_mptr::grab_frame(void)
 			ColorReal r = k*(unsigned char)fgetc(file);
 			ColorReal g = k*(unsigned char)fgetc(file);
 			ColorReal b = k*(unsigned char)fgetc(file);
-			frame[y][x] = Color(r, g, b);
+			frame[y][x] = Color::create(r, g, b);
 		}
 	cur_frame++;
 	return true;

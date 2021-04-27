@@ -115,8 +115,8 @@ Duckmatic::Duckmatic(etl::loose_handle<synfigapp::CanvasInterface> canvas_interf
 	grid_snap(false),
 	guide_snap(false),
 	grid_size(1.0/4.0,1.0/4.0),
-	grid_color(synfig::Color(159.0/255.0,159.0/255.0,159.0/255.0)),
-	guides_color(synfig::Color(111.0/255.0,111.0/255.0,1.0)),
+	grid_color(synfig::Color::create(159.0/255.0,159.0/255.0,159.0/255.0)),
+	guides_color(synfig::Color::create(111.0/255.0,111.0/255.0,1.0)),
 	zoom(1.0),
 	prev_zoom(1.0),
 	show_persistent_strokes(true),
@@ -1548,7 +1548,7 @@ Duckmatic::load_sketch(const synfig::String& filename)
 					synfig::warning("Bad color line \"%s\"",line.c_str());
 					r=0;g=0;b=0;
 				}
-				add_persistent_stroke(stroke_data, synfig::Color(r,g,b));
+				add_persistent_stroke(stroke_data, synfig::Color::create(r,g,b));
 			}
 			break;
 		case 'V':
@@ -1556,7 +1556,7 @@ Duckmatic::load_sketch(const synfig::String& filename)
 			if(!stroke_data)
 			{
 				stroke_data.spawn();
-				add_persistent_stroke(stroke_data, synfig::Color(0,0,0));
+				add_persistent_stroke(stroke_data, synfig::Color::black());
 			}
 			float x,y;
 			if(!strscanf(line,"V %f %f",&x, &y))

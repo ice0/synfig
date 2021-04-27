@@ -136,9 +136,7 @@ NoiseDistort::point_func(const Point &point)const
 inline Color
 NoiseDistort::color_func(const Point &point, float /*supersample*/,Context context)const
 {
-	Color ret(0,0,0,0);
-	ret=context.get_color(point_func(point));
-	return ret;
+	return context.get_color(point_func(point));
 }
 
 inline float

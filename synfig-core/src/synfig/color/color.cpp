@@ -34,12 +34,12 @@
 
 #include <ETL/angle>
 #include "color.h"
-#include <cstdio>
 #include <cassert>
 #include <sstream>
 #include <iostream>
 #include <iomanip>
 #include <synfig/general.h>
+#include <type_traits>
 
 #include "colorblendingfunctions.h"
 
@@ -52,6 +52,8 @@ using namespace std;
 #define COLOR_EPSILON	(0.000001f)
 
 /* === M E T H O D S ======================================================= */
+
+static_assert(std::is_trivial<Color>::value, "Color class should be trivial!");
 
 ColorReal
 Color::hex2real(String s)
@@ -211,7 +213,7 @@ Color::blend(Color a, Color b, float amount, Color::BlendMethod type)
 
 	assert(type<BLEND_END);
 
-	const static blendfunc vtable[BLEND_END]=
+	static constexpr blendfunc vtable[BLEND_END]=
 	{
         // WARNING: any change here must be coordinated with
         // other specializations of the functions, for example

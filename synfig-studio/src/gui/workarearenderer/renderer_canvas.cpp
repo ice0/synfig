@@ -367,10 +367,8 @@ Renderer_Canvas::build_onion_frames()
 	  && frame_duration
 	  && (past > 0 || future > 0) )
 	{
-		const Color color_past  (1.f, 0.f, 0.f, 0.2f);
-		const Color color_future(0.f, 1.f, 0.f, 0.2f);
-		const ColorReal base_alpha = 1.f;
-		const ColorReal current_alpha = 0.5f;
+		constexpr ColorReal base_alpha = 1.f;
+		constexpr ColorReal current_alpha = 0.5f;
 		// make onion levels
 		for(int i = past; i > 0; --i) {
 			Time time = base_time - frame_duration*i;

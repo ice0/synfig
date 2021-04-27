@@ -122,8 +122,8 @@ ColorSlider::draw_arrow(
 	bool fill)
 {
 	// hardcoded colors
-	Color dark(0, 0, 0);
-	Color light(1, 1, 1);
+	constexpr Color dark(Color::black());
+	constexpr Color light(Color::white());
 
 	// Upper black pointing down arrow
 	cr->set_source_rgb(dark.get_r(), dark.get_g(), dark.get_b());
@@ -192,8 +192,8 @@ ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 
 	Gdk::Rectangle ca(0,0,width,height);
 
-	const Color bg1(0.75, 0.75, 0.75);
-	const Color bg2(0.5, 0.5, 0.5);
+	constexpr Color bg1(Color::create(0.75, 0.75, 0.75));
+	constexpr Color bg2(Color::gray());
 	for(int i = width-1; i >= 0; --i)
 	{
 		Color c = color;
@@ -372,7 +372,7 @@ Widget_ColorEdit::Widget_ColorEdit():
 		notebook->append_page(*hvs_box,_("HSV"));
 	}
 
-	color=Color(0,0,0,0);
+	color=Color::create(0,0,0,0);
 
 	set_size_request(200,-1);
 	hold_signals=true;
@@ -494,10 +494,10 @@ Widget_ColorEdit::on_color_changed()
 	if (!colorHVSChanged)
 	{
 		Gdk::Color newColor = hvsColorWidget->get_current_color();
-		Color synfigColor(
+		Color synfigColor(Color::create(
 			newColor.get_red_p(),
 			newColor.get_green_p(),
-			newColor.get_blue_p() );
+			newColor.get_blue_p() ));
 		synfigColor = App::get_selected_canvas_gamma().apply(synfigColor);
 		set_value(synfigColor);
 		colorHVSChanged = true; //I reset the flag in setHVSColor(..)

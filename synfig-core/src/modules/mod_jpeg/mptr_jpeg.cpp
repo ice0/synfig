@@ -183,14 +183,14 @@ jpeg_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddes
 	}
 
 	surface.set_wh(cinfo.output_width, cinfo.output_height);
-	const ColorReal k = 1/255.0;
+	constexpr ColorReal k = 1/255.0;
 	switch(cinfo.output_components)
 	{
 	case 3:
 		for(int y = 0; y < surface.get_h(); ++y) {
 			jpeg_read_scanlines(&cinfo, buffer, 1);
 			for(int x = 0; x < surface.get_w(); ++x)
-				surface[y][x]=Color(
+				surface[y][x]=Color::create(
 					((unsigned char)buffer[0][x*3+0])*k,
 					((unsigned char)buffer[0][x*3+1])*k,
 					((unsigned char)buffer[0][x*3+2])*k );
@@ -201,7 +201,7 @@ jpeg_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddes
 			jpeg_read_scanlines(&cinfo, buffer, 1);
 			for(int x = 0; x < surface.get_w(); ++x) {
 				ColorReal gray = ((unsigned char)buffer[0][x])*k;
-				surface[y][x]=Color(gray, gray, gray);
+				surface[y][x]=Color::create(gray, gray, gray);
 			}
 		}
 		break;

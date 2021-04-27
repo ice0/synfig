@@ -256,12 +256,12 @@ synfig::Target_Scanline::render(ProgressCallback *cb)
 										for(int i = 0; i < s.get_w(); i++)
 										{
 											float a=s[y][i].get_a();
-											colordata[i] = Color(a,a,a,a);
+											colordata[i] = Color::create(a,a,a,a);
 										}
 										break;
 									case TARGET_ALPHA_MODE_REDUCE:
 										for(int i = 0; i < s.get_w(); i++)
-											colordata[i] = Color(s[y][i].get_r(), s[y][i].get_g(), s[y][i].get_b(), 1.f);
+											colordata[i] = Color::create(s[y][i].get_r(), s[y][i].get_g(), s[y][i].get_b(), 1.f);
 										break;
 									case TARGET_ALPHA_MODE_KEEP:
 										memcpy(colordata, s[y], rowspan);
@@ -412,12 +412,12 @@ synfig::Target_Scanline::render(ProgressCallback *cb)
 								for(int i = 0; i < s.get_w(); i++)
 								{
 									float a=s[y][i].get_a();
-									colordata[i] = Color(a,a,a,a);
+									colordata[i] = Color::create(a,a,a,a);
 								}
 								break;
 							case TARGET_ALPHA_MODE_REDUCE:
 								for(int i = 0; i < s.get_w(); i++)
-									colordata[i] = Color(s[y][i].get_r(), s[y][i].get_g(), s[y][i].get_b(), 1.0f);
+									colordata[i] = Color::create(s[y][i].get_r(), s[y][i].get_g(), s[y][i].get_b(), 1.0f);
 								break;
 							case TARGET_ALPHA_MODE_KEEP:
 								memcpy(colordata,s[y], rowspan);
@@ -530,12 +530,12 @@ Target_Scanline::add_frame(const synfig::Surface *surface, ProgressCallback *cb)
 				for(int i=0;i<surface->get_w();i++)
 				{
 					float a=(*surface)[y][i].get_a();
-					colordata[i] = Color(a,a,a,a);
+					colordata[i] = Color::create(a);
 				}
 				break;
 			case TARGET_ALPHA_MODE_REDUCE:
 				for(int i = 0; i < surface->get_w(); i++)
-					colordata[i] = Color((*surface)[y][i].get_r(),(*surface)[y][i].get_g(),(*surface)[y][i].get_b(),1.0f);
+					colordata[i] = Color::create((*surface)[y][i].get_r(),(*surface)[y][i].get_g(),(*surface)[y][i].get_b(),1.0f);
 				break;
 			case TARGET_ALPHA_MODE_KEEP:
 				memcpy(colordata,(*surface)[y],rowspan);

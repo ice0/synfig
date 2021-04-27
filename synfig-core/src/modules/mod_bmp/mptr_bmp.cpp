@@ -205,13 +205,13 @@ bmp_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddesc
 	}
 
 	surface.set_wh(w, h);
-	const ColorReal k = 1/255.0;
+	constexpr ColorReal k = 1/255.0;
 	for(int y = 0; y < surface.get_h(); ++y)
 		for(int x = 0; x < surface.get_w(); ++x) {
 			ColorReal b = ((unsigned char)stream->get())*k;
 			ColorReal g = ((unsigned char)stream->get())*k;
 			ColorReal r = ((unsigned char)stream->get())*k;
-			surface[h-y-1][x] = Color(r, g, b);
+			surface[h-y-1][x] = Color::create(r, g, b);
 			if (bit_count == 32)
 				stream->get();
 		}

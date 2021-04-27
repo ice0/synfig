@@ -233,7 +233,7 @@ png_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddesc
 	case PNG_COLOR_TYPE_RGB:
 		for(int y = 0; y < surface.get_h(); ++y)
 			for(int x = 0; x < surface.get_w(); ++x)
-				surface[y][x]=gamma.apply(Color(
+				surface[y][x]=gamma.apply(Color::create(
 					get_channel(row_pointers, bit_depth, y, x*3+0),
 					get_channel(row_pointers, bit_depth, y, x*3+1),
 					get_channel(row_pointers, bit_depth, y, x*3+2) ));
@@ -241,7 +241,7 @@ png_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddesc
 	case PNG_COLOR_TYPE_RGB_ALPHA:
 		for(int y = 0; y < surface.get_h(); ++y)
 			for(int x = 0; x < surface.get_w(); ++x)
-				surface[y][x]=gamma.apply(Color(
+				surface[y][x]=gamma.apply(Color::create(
 					get_channel(row_pointers, bit_depth, y, x*4+0),
 					get_channel(row_pointers, bit_depth, y, x*4+1),
 					get_channel(row_pointers, bit_depth, y, x*4+2),
@@ -252,7 +252,7 @@ png_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddesc
 			for(int x = 0; x < surface.get_w(); ++x)
 			{
 				ColorReal gray = get_channel(row_pointers, bit_depth, y, x);
-				surface[y][x] = gamma.apply(Color(gray, gray, gray));
+				surface[y][x] = gamma.apply(Color::create(gray, gray, gray));
 			}
 		break;
 	case PNG_COLOR_TYPE_GRAY_ALPHA:
@@ -261,7 +261,7 @@ png_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddesc
 			{
 				ColorReal gray = get_channel(row_pointers, bit_depth, y, x*2+0);
 				ColorReal a    = get_channel(row_pointers, bit_depth, y, x*2+1);
-				surface[y][x] = gamma.apply(Color(gray, gray, gray, a));
+				surface[y][x] = gamma.apply(Color::create(gray, gray, gray, a));
 			}
 		break;
 
@@ -289,7 +289,7 @@ png_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddesc
 				ColorReal a = 1;
                 if (has_alpha && num_trans > 0 && trans_alpha != NULL && row_pointers[y][x] < num_trans)
                     a = k*(unsigned char)trans_alpha[row_pointers[y][x]];
-				surface[y][x] = gamma.apply(Color(r, g, b, a));
+				surface[y][x] = gamma.apply(Color::create(r, g, b, a));
 			}
 		break;
 	}

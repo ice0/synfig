@@ -97,11 +97,11 @@ public:
 		m40(offset.get_r()), m41(offset.get_g()), m42(offset.get_b()), m43(offset.get_a()), m44(1.0)
 	{ }
 
-	Color get_axis_r()const { return Color(m00, m01, m02, m03); }
-	Color get_axis_g()const { return Color(m10, m11, m12, m13); }
-	Color get_axis_b()const { return Color(m20, m21, m22, m23); }
-	Color get_axis_a()const { return Color(m30, m31, m32, m33); }
-	Color get_offset()const { return Color(m40, m41, m42, m43); }
+	Color get_axis_r()const { return Color::create(m00, m01, m02, m03); }
+	Color get_axis_g()const { return Color::create(m10, m11, m12, m13); }
+	Color get_axis_b()const { return Color::create(m20, m21, m22, m23); }
+	Color get_axis_a()const { return Color::create(m30, m31, m32, m33); }
+	Color get_offset()const { return Color::create(m40, m41, m42, m43); }
 	Color get_constant()const { return get_offset(); }
 
 	//!set_identity member. Set an identity matrix

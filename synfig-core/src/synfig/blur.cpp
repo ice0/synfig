@@ -149,7 +149,7 @@ static inline T zero()
 }
 
 template <>
-inline Color zero<Color>()
+inline constexpr Color zero<Color>()
 {
 	return Color::alpha();
 }

@@ -36,14 +36,14 @@ namespace synfig {
 
 typedef float ColorReal;
 
-static const float EncodeYUV[3][3]=
+static constexpr float EncodeYUV[3][3]=
 {
 	{ 0.299f, 0.587f, 0.114f },
 	{ -0.168736f, -0.331264f, 0.5f },
 	{ 0.5f, -0.418688f, -0.081312f }
 };
 
-static const float DecodeYUV[3][3]=
+static constexpr float DecodeYUV[3][3]=
 {
 	{ 1.0f, 0.0f, 1.402f },
 	{ 1.0f, -0.344136f, -0.714136f },

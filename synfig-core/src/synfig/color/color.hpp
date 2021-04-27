@@ -94,7 +94,7 @@ Color Color::operator*(const float &rhs)const
 Color Color::operator/(const float &rhs)const
 { return Color(*this)/=rhs; }
 
-bool Color::operator<(const Color &rhs)const
+constexpr bool Color::operator<(const Color &rhs)const
 {
 	return r_<rhs.r_ ? true  : rhs.r_<r_ ? false
 		 : g_<rhs.g_ ? true  : rhs.g_<g_ ? false
@@ -102,54 +102,42 @@ bool Color::operator<(const Color &rhs)const
 		 : a_<rhs.a_;
 }
 
-bool Color::operator==(const Color &rhs)const
+constexpr bool Color::operator==(const Color &rhs)const
 { return r_==rhs.r_ && g_==rhs.g_ && b_==rhs.b_ && a_==rhs.a_; }
 
-bool Color::operator!=(const Color &rhs)const
+constexpr bool Color::operator!=(const Color &rhs)const
 { return r_!=rhs.r_ || g_!=rhs.g_ || b_!=rhs.b_ || a_!=rhs.a_; }
 
-Color Color::operator-()const
-{ return Color(-r_,-g_,-b_,-a_); }
+constexpr Color Color::operator-()const
+{ return {-r_,-g_,-b_,-a_}; }
 
 //! Effectively 1.0-color
-Color Color::operator~()const
-{ return Color(1.0f-r_,1.0f-g_,1.0f-b_,a_); }
+constexpr Color Color::operator~()const
+{ return {1.0f-r_,1.0f-g_,1.0f-b_,a_}; }
 
-bool Color::is_valid()const
+constexpr bool Color::is_valid()const
 { return !std::isnan(r_) && !std::isnan(g_) && !std::isnan(b_) && !std::isnan(a_); }
 
-Color Color::premult_alpha() const
+constexpr Color Color::premult_alpha() const
 {
-	return Color (r_*a_, g_*a_, b_*a_, a_);
+	return {r_*a_, g_*a_, b_*a_, a_};
 }
 
-Color Color::demult_alpha() const
+constexpr Color Color::demult_alpha() const
 {
-	if(a_)
-	{
-		const value_type inva = 1/a_;
-		return Color (r_*inva, g_*inva, b_*inva, a_);
-	}else return alpha();
+	return a_ ? Color{r_/a_, g_/a_, b_/a_, a_} : alpha();
 }
 
-Color::Color() :r_(0), g_(0), b_(0),a_(0) { }
-Color::Color(const value_type &f) :r_(f), g_(f), b_(f),a_(f) { }
-Color::Color(int f) :r_(f), g_(f), b_(f),a_(f) { }
+//Color::Color() :r_(0), g_(0), b_(0),a_(0) { }
+constexpr Color Color::create(const value_type &f) { return {f, f, f, f}; }
+constexpr Color Color::create(int f) { return {float(f), float(f), float(f), float(f)}; }
 
-Color::Color(const value_type& R,
+constexpr Color Color::create(const value_type& R,
              const value_type& G,
              const value_type& B,
-             const value_type& A):
-	r_(R),
-	g_(G),
-	b_(B),
-	a_(A) { }
+             const value_type& A) { return {R, G, B, A};}
 
-Color::Color(const Color& c, const value_type& A):
-	r_(c.r_),
-	g_(c.g_),
-	b_(c.b_),
-	a_(A) { }
+constexpr Color Color::create(const Color& c, const value_type& A) { return {c.r_, c.g_, c.b_, A}; }
 
 const String Color::get_hex()const
 {
@@ -158,7 +146,7 @@ const String Color::get_hex()const
 
 
 //! Returns color's luminance
-float Color::get_y() const
+constexpr float Color::get_y() const
 {
 	return
 		(float)get_r()*EncodeYUV[0][0]+
@@ -168,7 +156,7 @@ float Color::get_y() const
 
 
 //! Returns U component of chromanance
-float Color::get_u() const
+constexpr float Color::get_u() const
 {
 	return
 		(float)get_r()*EncodeYUV[1][0]+
@@ -178,7 +166,7 @@ float Color::get_u() const
 
 
 	//! Returns V component of chromanance
-float Color::get_v() const
+constexpr float Color::get_v() const
 {
 	return
 		(float)get_r()*EncodeYUV[2][0]+
@@ -189,10 +177,9 @@ float Color::get_v() const
 //! Returns the color's saturation
 /*!	This is is the magnitude of the U and V components.
 **	\see set_s() */
-float Color::get_s() const
+constexpr float Color::get_s() const
 {
-	const float u(get_u()), v(get_v());
-	return sqrt(u*u+v*v);
+	return sqrt(get_u()*get_u()+get_v()*get_v());
 }
 
 //! Sets the luminance (\a y) and chromanance (\a u and \a v)
@@ -233,7 +220,7 @@ Color& Color::set_s(const float &x)
 
 //! YUV Color constructor
 Color Color::YUV(const float& y, const float& u, const float& v, const value_type& a)
-	{ return Color().set_yuv(y,u,v).set_a(a); }
+	{ return create().set_yuv(y,u,v).set_a(a); }
 
 //! Returns the hue of the chromanance
 /*!	This is the angle of the U and V components.
@@ -278,7 +265,7 @@ Color& Color::set_yuv(const float& y, const float& s, const Angle& theta)
 }
 
 Color Color::YUV(const float& y, const float& s, const Angle& theta, const value_type& a)
-	{ return Color().set_yuv(y,s,theta).set_a(a); }
+	{ return create().set_yuv(y,s,theta).set_a(a); }
 
 
 } // synfig namespace

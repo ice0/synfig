@@ -107,7 +107,7 @@ public:
 	ColorReal apply_g(ColorReal x) const { return apply(1, x); }
 	ColorReal apply_b(ColorReal x) const { return apply(2, x); }
 	Color apply(const Color &x) const
-		{ return Color(apply_r(x.get_r()), apply_g(x.get_g()), apply_b(x.get_b()), x.get_a()); }
+		{ return Color::create(apply_r(x.get_r()), apply_g(x.get_g()), apply_b(x.get_b()), x.get_a()); }
 	
 	void invert() { *this = get_inverted(); }
 	Gamma get_inverted() const

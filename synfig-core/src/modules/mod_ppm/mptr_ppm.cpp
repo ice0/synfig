@@ -92,7 +92,7 @@ ppm_mptr::get_frame(synfig::Surface &surface, const synfig::RendDesc &/*renddesc
 			ColorReal r = ((unsigned char)fgetc(file.get()))*k;
 			ColorReal g = ((unsigned char)fgetc(file.get()))*k;
 			ColorReal b = ((unsigned char)fgetc(file.get()))*k;
-			surface[y][x] = Color(r, g, b);
+			surface[y][x] = Color::create(r, g, b);
 		}
 	return true;
 }

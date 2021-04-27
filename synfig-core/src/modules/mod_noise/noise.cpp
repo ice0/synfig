@@ -104,7 +104,7 @@ Noise::color_func(const Point &point, float pixel_size,Context /*context*/)const
 	bool super_sample=param_super_sample.get(bool());
 	
 
-	Color ret(0,0,0,0);
+	Color ret = Color::create(0,0,0,0);
 
 	float x(point[0]/size[0]*(1<<detail));
 	float y(point[1]/size[1]*(1<<detail));

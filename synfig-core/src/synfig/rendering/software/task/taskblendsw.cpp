@@ -167,7 +167,7 @@ public:
 						c.get_pen(fill[i].minx, fill[i].miny) );
 					ap.set_blend_method(blend_method);
 					ap.set_alpha(amount);
-					c.fill( Color(0, 0, 0, 0), ap,
+					c.fill( Color::create(0, 0, 0, 0), ap,
 							fill[i].maxx - fill[i].minx,
 							fill[i].maxy - fill[i].miny );
 				}

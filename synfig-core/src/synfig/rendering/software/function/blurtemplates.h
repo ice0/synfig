@@ -579,16 +579,18 @@ public:
 		assert(dst.count == src.count);
 		assert(dst.sub().count == src.sub().count);
 		assert(src.sub().sub().count == 4);
-		const ColorReal precision = 1e-10;
+		constexpr ColorReal precision = 1e-10;
 		Array<Color, 2>::Iterator rr(dst);
 		for(typename Array<T, 3>::Iterator r(src); r; ++r, ++rr)
 		{
 			Array<Color, 1>::Iterator cc(*rr);
 			for(typename Array<T, 2>::Iterator c(*r); c; ++c, ++cc)
 			{
-				Real a = (*c)[3];
+				ColorReal a = (*c)[3];
 				Real one_div_a = fabs(a) < precision ? 0.0 : 1.0/a;
-				Color color((*c)[0]*one_div_a, (*c)[1]*one_div_a, (*c)[2]*one_div_a, a);
+				Color color{ static_cast<ColorReal>((*c)[0]*one_div_a),
+				             static_cast<ColorReal>((*c)[1]*one_div_a),
+				             static_cast<ColorReal>((*c)[2]*one_div_a), a};
 				*cc = color;
 			}
 		}
@@ -604,7 +606,7 @@ public:
 		assert(dst.count == src.count);
 		assert(dst.sub().count == src.sub().count);
 		assert(src.sub().sub().count == 4);
-		const ColorReal precision = 1e-10;
+		constexpr ColorReal precision = 1e-10;
 		Array<Color, 2>::Iterator rr(dst);
 		for(typename Array<T, 3>::Iterator r(src); r; ++r, ++rr)
 		{
@@ -613,7 +615,9 @@ public:
 			{
 				ColorReal a = (*c)[3];
 				Real one_div_a = fabs(a) < precision ? 0.0 : 1.0/a;
-				Color color((*c)[0]*one_div_a, (*c)[1]*one_div_a, (*c)[2]*one_div_a, a);
+				Color color{ static_cast<ColorReal>((*c)[0]*one_div_a),
+				             static_cast<ColorReal>((*c)[1]*one_div_a),
+				             static_cast<ColorReal>((*c)[2]*one_div_a), a};
 				*cc = Color::blend(color, *cc, amount, blend_method);
 			}
 		}

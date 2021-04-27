@@ -142,8 +142,8 @@ WorkArea::WorkArea(etl::loose_handle<synfigapp::CanvasInterface> canvas_interfac
 	show_grid(false),
 	show_guides(true),
 	background_size(15,15),
-	background_first_color(0.88, 0.88, 0.88),  /* light gray */
-	background_second_color(0.65, 0.65, 0.65),  /* dark gray */
+	background_first_color(Color::create(0.88, 0.88, 0.88)),  /* light gray */
+	background_second_color(Color::create(0.65, 0.65, 0.65)),  /* dark gray */
 	jack_offset(0),
 	low_resolution(false),
 	meta_data_lock(false),
@@ -506,7 +506,7 @@ WorkArea::load_meta_data()
 			gb=atof(tokens.at(2).data());
 		}
 
-		set_grid_color(synfig::Color(gr,gg,gb));
+		set_grid_color(synfig::Color::create(gr,gg,gb));
 	}
 
 	data=canvas->get_meta_data("guide_color");
@@ -537,7 +537,7 @@ WorkArea::load_meta_data()
 			gb=atof(tokens.at(2).data());
 		}
 
-		set_guides_color(synfig::Color(gr,gg,gb));
+		set_guides_color(synfig::Color::create(gr,gg,gb));
 	}
 
 	data=canvas->get_meta_data("grid_show");
@@ -709,7 +709,7 @@ WorkArea::load_meta_data()
 			gb=atof(tokens.at(2).data());
 		}
 
-		set_background_first_color(synfig::Color(gr,gg,gb));
+		set_background_first_color(synfig::Color::create(gr,gg,gb));
 	}
 
 	data=canvas->get_meta_data("background_second_color");
@@ -740,7 +740,7 @@ WorkArea::load_meta_data()
 			gb=atof(tokens.at(2).data());
 		}
 
-		set_background_second_color(synfig::Color(gr,gg,gb));
+		set_background_second_color(synfig::Color::create(gr,gg,gb));
 	}
 
 	meta_data_lock=false;

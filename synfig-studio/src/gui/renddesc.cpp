@@ -125,10 +125,10 @@ public:
 		for(int i = 0; i < 3; ++i) {
 			ColorReal v = values[i];
 			Color *c = colors[i];
-			c[0] = Color(v, v, v);
-			c[1] = Color(v, 0, 0);
-			c[2] = Color(0, v, 0);
-			c[3] = Color(0, 0, v);
+			c[0] = Color::create(v, v, v);
+			c[1] = Color::create(v, 0, 0);
+			c[2] = Color::create(0, v, 0);
+			c[3] = Color::create(0, 0, v);
 			for(int j = 0; j < 4; ++j)
 				c[j] = gamma.apply(c[j]);
 		}
@@ -179,8 +179,8 @@ public:
 		for(int i = 0; i < 8; ++i)
 		{
 			level *= 0.5;
-			Color black = gamma.apply(Color(level, level, level));
-			Color white = gamma.apply(Color(1-level, 1-level, 1-level));
+			Color black = gamma.apply(Color::create(level, level, level));
+			Color white = gamma.apply(Color::create(1-level, 1-level, 1-level));
 			double x = tile_w*4*(i/8.0 + 1/16.0);
 			double yb = tile_h*2 + gradient_h/2.0;
 			double yw = yb + gradient_h;

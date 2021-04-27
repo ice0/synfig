@@ -113,7 +113,7 @@ Palette::Palette(const Surface& surface, int max_colors, const Gamma &gamma):
 			if(color.get_a()==0)
 			{
 				if(front().color.get_a()!=0)
-					insert(begin(),Color(1,0,1,0));
+					insert(begin(),Color::create(1,0,1,0));
 				front().weight+=400;
 				continue;
 			}
@@ -290,7 +290,7 @@ Palette::grayscale(int steps, ColorReal gamma)
 		ColorReal y = Gamma::calculate(amount, gamma);
 		ret.push_back(
 			PaletteItem(
-				Color(y, y, y),
+				Color::create(y, y, y),
 				strprintf(_("%0.2f%% Gray"), amount) ));
 	}
 	return ret;

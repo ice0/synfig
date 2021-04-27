@@ -116,10 +116,10 @@ XORPattern::get_color(Context context, const Point &point)const
 	unsigned char gindex=(a^(~b))*4;
 	unsigned char bindex=~(a^b)*2;
 
-	Color color((Color::value_type)rindex/(Color::value_type)255.0,
+	Color color{(Color::value_type)rindex/(Color::value_type)255.0,
 				(Color::value_type)gindex/(Color::value_type)255.0,
 				(Color::value_type)bindex/(Color::value_type)255.0,
-				1.0);
+				1.0};
 
 	if(get_amount() == 1 && get_blend_method() == Color::BLEND_STRAIGHT)
 		return color;

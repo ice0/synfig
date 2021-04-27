@@ -247,7 +247,7 @@ public:
 
 			if (getenv("SYNFIG_SHOW_TILE_OUTLINES"))
 			{
-				Color red(1,0,0);
+				constexpr Color red = Color::red();
 				tile.surface.fill(red, 0, 0, 1, tile.surface.get_h());
 				tile.surface.fill(red, 0, 0, tile.surface.get_w(), 1);
 			}

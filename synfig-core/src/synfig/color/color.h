@@ -40,8 +40,6 @@ class Color
 {
 public:
 	typedef ColorReal value_type;
-
-private:
 	value_type r_, g_, b_, a_;
 
 public:
@@ -60,52 +58,53 @@ public:
 	inline Color operator- (const Color &rhs) const;
 	inline Color operator* (const float &rhs) const;
 	inline Color operator/ (const float &rhs) const;
-	inline bool operator<  (const Color &rhs)const;
-	inline bool operator== (const Color &rhs) const;
-	inline bool operator!= (const Color &rhs) const;
-	inline Color operator- () const;
+	inline constexpr bool operator<  (const Color &rhs)const;
+	inline constexpr bool operator== (const Color &rhs) const;
+	inline constexpr bool operator!= (const Color &rhs) const;
+	inline constexpr Color operator- () const;
 	//! Effectively 1.0-color
-	inline Color operator~() const;
+	inline constexpr Color operator~() const;
 
-	inline bool is_valid() const;
+	inline constexpr bool is_valid() const;
 
-	inline Color premult_alpha() const;
-	inline Color demult_alpha() const;
+	inline constexpr Color premult_alpha() const;
+	inline constexpr Color demult_alpha() const;
 
 public:
 	// ETL/trunk/ETL/_gaussian.h does:
 	//   SR1=SR2=SR3=typename T::value_type();
 	// and expects that to give it initialized colors
 	// Otherwise the 'gaussian' blur type is random.
-	inline Color();
-	explicit inline Color(const value_type &f);
-	explicit inline Color(int f);
+	//inline Color();
+	static constexpr Color create() { return {0, 0, 0, 0}; }
+	static constexpr Color create(const value_type &f);
+	static constexpr Color create(int f);
 
 	/*!	\param R Red
 	**	\param G Green
 	**	\param B Blue
 	**	\param A Opacity(alpha) */
-	inline Color(const value_type& R, const value_type& G,
+	static constexpr Color create(const value_type& R, const value_type& G,
           const value_type& B, const value_type& A=1);
 
 	/*!	\param c Source for color components
 	**	\param A Opacity(alpha) */
-	inline Color(const Color& c, const value_type& A);
+	static constexpr Color create(const Color& c, const value_type& A);
 
 	//! Returns the RED component
-	const value_type& get_r()const { return r_; }
+	constexpr value_type get_r() const { return r_; }
 
 	//! Returns the GREEN component
-	const value_type& get_g()const { return g_; }
+	constexpr value_type get_g()const { return g_; }
 
 	//! Returns the BLUE component
-	const value_type& get_b()const { return b_; }
+	constexpr value_type get_b()const { return b_; }
 
 	//! Returns the amount of opacity (alpha)
-	const value_type& get_a()const { return a_; }
+	constexpr value_type get_a()const { return a_; }
 
 	//! Synonym for get_a(). \see get_a()
-	const value_type& get_alpha()const { return get_a(); }
+	constexpr value_type get_alpha() const { return get_a(); }
 
 	//! Converts a 2 character hex string \a s (00-ff) into a ColorReal (0.0-1.0)
 	static ColorReal hex2real(String s);
@@ -135,18 +134,18 @@ public:
 	Color& set_alpha(const value_type& x) { return set_a(x); }
 
 	//! Returns color's luminance
-	inline float get_y() const;
+	inline constexpr float get_y() const;
 
 	//! Returns U component of chromanance
-	inline float get_u() const;
+	inline constexpr float get_u() const;
 
 	//! Returns V component of chromanance
-	inline float get_v() const;
+	inline constexpr float get_v() const;
 
 	//! Returns the color's saturation
 	/*!	This is is the magnitude of the U and V components.
 	**	\see set_s() */
-	inline float get_s() const;
+	inline constexpr float get_s() const;
 
 	//! Sets the luminance (\a y) and chromanance (\a u and \a v)
 	inline Color& set_yuv(const float &y, const float &u, const float &v);
@@ -217,19 +216,19 @@ public:
 	//! Preset Color Constructors
 	//@{
 #ifdef HAS_VIMAGE
-	static inline Color alpha() { return Color(0,0,0,0.0000001f); }
+	static constexpr inline Color alpha() { return Color(0,0,0,0.0000001f); }
 #else
-	static inline Color alpha() { return Color(0,0,0,0); }
+	static constexpr Color alpha() { return {0,0,0,0}; }
 #endif
-	static inline Color black() { return Color(0,0,0); }
-	static inline Color white() { return Color(1,1,1); }
-	static inline Color gray() { return Color(0.5f,0.5f,0.5f); }
-	static inline Color magenta() { return Color(1,0,1); }
-	static inline Color red() { return Color(1,0,0); }
-	static inline Color green() { return Color(0,1,0); }
-	static inline Color blue() { return Color(0,0,1); }
-	static inline Color cyan() { return Color(0,1,1); }
-	static inline Color yellow() { return Color(1,1,0); }
+	static constexpr Color black() { return {0,0,0, 1}; }
+	static constexpr Color white() { return {1,1,1,1}; }
+	static constexpr Color gray() { return {0.5f,0.5f,0.5f, 1}; }
+	static constexpr Color magenta() { return { 1,0,1, 1}; }
+	static constexpr Color red() { return {1,0,0, 1}; }
+	static constexpr Color green() { return {0,1,0, 1}; }
+	static constexpr Color blue() { return { 0,0,1, 1} ; }
+	static constexpr Color cyan() { return {0,1,1, 1}; }
+	static constexpr Color yellow() { return {1,1,0,1}; }
 	//@}
 
 	enum Interpolation
@@ -321,11 +320,11 @@ public:
 	/* Other */
 	static Color blend(Color a, Color b, float amount, BlendMethod type=BLEND_COMPOSITE);
 
-	static bool is_onto(BlendMethod x)
+	static constexpr bool is_onto(BlendMethod x)
 		{ return BLEND_METHODS_ONTO & (1 << x); }
 
 	//! a blending method is considered 'straight' if transparent pixels in the upper layer can affect the result of the blend
-	static bool is_straight(BlendMethod x)
+	static constexpr bool is_straight(BlendMethod x)
 		{ return BLEND_METHODS_STRAIGHT & (1 << x); }
 }; // END of class Color
 

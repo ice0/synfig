@@ -145,7 +145,7 @@ protected:
 	int w_,h_;
 private:
 	int pitch_;
-	value_type value_;
+	value_type value_{};
 	value_type *data_;
 
 	typedef generic_pen<T,AT> self_type;

@@ -138,7 +138,7 @@ ValueNode_Random::operator()(Time t)const
 							random(Smooth(smooth), 0, 0, 0, speed, loop) * radius) > 0;
 	if (type == type_color)
 		return (((*link_)(t).get( Color()) +
-				 Color(random(Smooth(smooth), 0, 0, 0, speed, loop),
+				 Color::create(random(Smooth(smooth), 0, 0, 0, speed, loop),
 					   random(Smooth(smooth), 1, 0, 0, speed, loop),
 					   random(Smooth(smooth), 2, 0, 0, speed, loop), 0) * radius).clamped());
 	if (type == type_integer)

@@ -263,7 +263,7 @@ PackedSurface::set_channel(void *pixel, int offset, ChannelType type, Color::val
 Color
 PackedSurface::get_pixel(const void *pixel) const
 {
-	return Color(
+	return Color::create(
 		get_channel(pixel, channels[0], channel_type, constant.get_r(), discrete_to_float),
 		get_channel(pixel, channels[1], channel_type, constant.get_g(), discrete_to_float),
 		get_channel(pixel, channels[2], channel_type, constant.get_b(), discrete_to_float),

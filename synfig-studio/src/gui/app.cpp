@@ -292,10 +292,10 @@ String studio::App::workarea_renderer;
 
 String        studio::App::default_background_layer_type  = "none";
 synfig::Color studio::App::default_background_layer_color =
-	synfig::Color(1.000000, 1.000000, 1.000000, 1.000000);  //White
+	synfig::Color::white();  //White
 String        studio::App::default_background_layer_image = "undefined";
 synfig::Color studio::App::preview_background_color =
-	synfig::Color(0.742187, 0.742187, 0.742187, 1.000000);  //X11 Gray
+	synfig::Color::create(0.742187, 0.742187, 0.742187, 1.000000);  //X11 Gray
 
 bool   studio::App::enable_mainwin_menubar = true;
 bool   studio::App::enable_mainwin_toolbar = true;
@@ -756,7 +756,7 @@ public:
 			{
 				float r,g,b,a;
 				strscanf(value,"%f %f %f %f", &r,&g,&b,&a);
-				App::default_background_layer_color = synfig::Color(r,g,b,a);
+				App::default_background_layer_color = synfig::Color::create(r,g,b,a);
 				return true;
 			}
 			if (key == "default_background_layer_image")
@@ -768,7 +768,7 @@ public:
 			{
 				float r,g,b,a;
 				strscanf(value,"%f %f %f %f", &r,&g,&b,&a);
-				App::preview_background_color = synfig::Color(r,g,b,a);
+				App::preview_background_color = synfig::Color::create(r,g,b,a);
 				return true;
 			}
 			if(key=="use_render_done_sound")

@@ -83,7 +83,7 @@ Layer_Skeleton::Layer_Skeleton():
 	SET_STATIC_DEFAULTS();
 
 	set_exclude_from_rendering(true);
-	Layer_Shape::set_param("color", ValueBase(Color(0.5, 0.5, 1.0, 1.0)));
+	Layer_Shape::set_param("color", ValueBase(Color::create(0.5, 0.5, 1.0, 1.0)));
 	Layer_Composite::set_param("amount", ValueBase(Real(0.5)));
 }
 

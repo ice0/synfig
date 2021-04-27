@@ -138,7 +138,7 @@ Layer_MeshTransform::build_composite_fork_task_vfunc(ContextParams /* context_pa
 	rendering::TaskContour::Handle task_contour(new rendering::TaskContour());
 	task_contour->contour = new rendering::Contour();
 	task_contour->contour->assign(*mask);
-	task_contour->contour->color = Color(1, 1, 1, 1);
+	task_contour->contour->color = Color::white();
 	task_contour->contour->invert = !mask->invert;
 
 	rendering::TaskBlend::Handle task_blend(new rendering::TaskBlend());

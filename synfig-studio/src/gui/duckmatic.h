@@ -442,9 +442,9 @@ public:
 	etl::handle<Duck> find_similar_duck(etl::handle<Duck> duck);
 	etl::handle<Duck> add_similar_duck(etl::handle<Duck> duck);
 
-	void add_stroke(etl::smart_ptr<std::list<synfig::Point> > stroke_point_list, const synfig::Color& color=synfig::Color(0,0,0));
+	void add_stroke(etl::smart_ptr<std::list<synfig::Point> > stroke_point_list, const synfig::Color& color=synfig::Color::black());
 
-	void add_persistent_stroke(etl::smart_ptr<std::list<synfig::Point> > stroke_point_list, const synfig::Color& color=synfig::Color(0,0,0));
+	void add_persistent_stroke(etl::smart_ptr<std::list<synfig::Point> > stroke_point_list, const synfig::Color& color=synfig::Color::black());
 
 	void clear_persistent_strokes();
 

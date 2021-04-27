@@ -83,7 +83,7 @@ synfig::ValueNode_Add::ValueNode_Add(const ValueBase &value):
 	if (type == type_color)
 	{
 		set_link("lhs",ValueNode_Const::create(value.get(Color())));
-		set_link("rhs",ValueNode_Const::create(Color(0,0,0,0)));
+		set_link("rhs",ValueNode_Const::create(Color::create(0,0,0,0)));
 	}
 	else
 	if (type == type_gradient)

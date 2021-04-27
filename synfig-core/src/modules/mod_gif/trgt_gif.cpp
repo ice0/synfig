@@ -239,7 +239,7 @@ gif::end_frame()
 		synfig::info("curr_palette.size()=%d",curr_palette.size());
 	}
 
-	int transparent_index = curr_palette.find_closest(Color(1,0,1,0), Gamma()) - curr_palette.begin();
+	int transparent_index = curr_palette.find_closest(Color::create(1,0,1,0), Gamma()) - curr_palette.begin();
 	bool has_transparency = curr_palette[transparent_index].color.get_a()<=0.00001;
 
 	if(has_transparency)
@@ -294,7 +294,7 @@ gif::end_frame()
 		Palette out(curr_palette);
 
 		if(build_off_previous)
-			curr_palette.insert(curr_palette.begin(),Color(1,0,1,0));
+			curr_palette.insert(curr_palette.begin(),Color::create(1,0,1,0));
 		output_curr_palette();
 		curr_palette=out;
 	}

@@ -74,7 +74,7 @@ ValueNode_Linear::ValueNode_Linear(const ValueBase &value):
 	else
 	if (type == type_color)
 	{
-		set_link("slope",ValueNode_Const::create(Color(0,0,0,0)));
+		set_link("slope",ValueNode_Const::create(Color::create(0,0,0,0)));
 		set_link("offset",ValueNode_Const::create(value.get(Color())));
 	}
 	else

@@ -92,7 +92,7 @@ Layer_RenderingTask::get_color(Context /* context */, const Point &pos)const
 			}
 		}
 	}
-	return Color(0.0, 0.0, 0.0, 0.0);
+	return Color::create(0.0, 0.0, 0.0, 0.0);
 }
 
 bool
