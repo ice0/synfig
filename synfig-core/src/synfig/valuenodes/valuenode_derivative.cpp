@@ -153,11 +153,11 @@ ValueNode_Derivative::ValueNode_Derivative(const ValueBase &value):
 	set_children_vocab(ret);
 
 	ValueNode_Const::Handle val_acc;
-	val_acc = ValueNode_Const::Handle::cast_dynamic(ValueNode_Const::create((int)(NORMAL)));
+	val_acc = ValueNode_Const::Handle::cast_static(ValueNode_Const::create((int)(NORMAL)));
 	val_acc->set_static(true);
 
 	ValueNode_Const::Handle val_order;
-	val_order = ValueNode_Const::Handle::cast_dynamic(ValueNode_Const::create((int)(FIRST)));
+	val_order = ValueNode_Const::Handle::cast_static(ValueNode_Const::create((int)(FIRST)));
 	val_order->set_static(true);
 
 	set_link("interval",      ValueNode_Const::create(Real(0.01))); // Default interval

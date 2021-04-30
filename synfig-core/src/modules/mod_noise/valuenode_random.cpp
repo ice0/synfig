@@ -67,7 +67,7 @@ ValueNode_Random::ValueNode_Random(const ValueBase &value):
 	random.set_seed(time(NULL));
 
 	ValueNode_Const::Handle val_smooth;
-	val_smooth = ValueNode_Const::Handle::cast_dynamic(ValueNode_Const::create(int(RandomNoise::SMOOTH_CUBIC)));
+	val_smooth = ValueNode_Const::Handle::cast_static(ValueNode_Const::create(int(RandomNoise::SMOOTH_CUBIC)));
 	val_smooth->set_static(true);
 
 	set_link("radius",ValueNode_Const::create(Real(1)));
