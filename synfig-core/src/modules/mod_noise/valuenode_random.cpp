@@ -66,14 +66,10 @@ ValueNode_Random::ValueNode_Random(const ValueBase &value):
 	set_children_vocab(ret);
 	random.set_seed(time(NULL));
 
-	ValueNode_Const::Handle val_smooth;
-	val_smooth = ValueNode_Const::Handle::cast_static(ValueNode_Const::create(int(RandomNoise::SMOOTH_CUBIC)));
-	val_smooth->set_static(true);
-
 	set_link("radius",ValueNode_Const::create(Real(1)));
 	set_link("seed",ValueNode_Const::create(random.get_seed()));
 	set_link("speed",ValueNode_Const::create(Real(1)));
-	set_link("smooth",val_smooth);
+	set_link("smooth", ValueNode_Const::create(int(RandomNoise::SMOOTH_CUBIC), nullptr, true));
 	set_link("loop",ValueNode_Const::create(Real(0)));
 
 	Type &type(get_type());

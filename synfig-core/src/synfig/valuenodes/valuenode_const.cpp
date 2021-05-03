@@ -53,12 +53,7 @@ using namespace synfig;
 
 /* === M E T H O D S ======================================================= */
 
-ValueNode_Const::ValueNode_Const()
-{
-}
-
-
-ValueNode_Const::ValueNode_Const(const ValueBase &x, Canvas::LooseHandle canvas):
+ValueNode_Const::ValueNode_Const(const ValueBase &x, Canvas::LooseHandle canvas, bool is_static):
 	ValueNode	(x.get_type()),
 	value		(x)
 {
@@ -69,11 +64,14 @@ ValueNode_Const::ValueNode_Const(const ValueBase &x, Canvas::LooseHandle canvas)
 		add_child(x.get(ValueNode_Bone::Handle()).get());
 
 	set_parent_canvas(canvas);
+	if (is_static) {
+		value.set_static(is_static);
+	}
 }
 
 
 ValueNode*
-ValueNode_Const::create(const ValueBase &x, Canvas::LooseHandle canvas)
+ValueNode_Const::create(const ValueBase &x, Canvas::LooseHandle canvas, bool is_static)
 {
 	// this is nasty - shouldn't it be done somewhere else?
 	if (x.get_type() == type_bone_object)
@@ -96,7 +94,7 @@ ValueNode_Const::create(const ValueBase &x, Canvas::LooseHandle canvas)
 		return ValueNode_Composite::create(x, canvas);
 	}
 
-	return new ValueNode_Const(x, canvas);
+	return new ValueNode_Const(x, canvas, is_static);
 }
 
 
