@@ -70,8 +70,12 @@ fi
 
 for pkg in $PACKAGES;
 do
-    echo "Checking $pkg..."
-    brew info "$pkg" | grep 'Not installed' >/dev/null && brew install "$pkg"
+    printf "Checking $pkg... "
+    if brew info "$pkg" | grep "Not installed" >/dev/null; then
+        brew info "$pkg" | grep "bottled" && brew install "$pkg" || echo "not available"
+    else
+        echo "already installed"
+    fi
 done
 
 
