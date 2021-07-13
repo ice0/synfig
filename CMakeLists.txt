@@ -72,12 +72,12 @@ endif()
 
 include(SynfigFindGit)
 
-add_subdirectory(ETL)
-include_directories(ETL)
-include_directories(${PROJECT_BINARY_DIR}/ETL) # to find the generated etl_profile.h
+#add_subdirectory(ETL)
+#include_directories(ETL)
+#include_directories(${PROJECT_BINARY_DIR}/ETL) # to find the generated etl_profile.h
 
 # Manually setting ETL Version.
-set(ETL_VERSION "1.5.0")
+#set(ETL_VERSION "1.5.0")
 
 add_subdirectory(synfig-core)
 
