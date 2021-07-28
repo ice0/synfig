@@ -1346,11 +1346,15 @@ App::get_default_accel_map()
 
 	return default_accel_map;
 }
+Glib::RefPtr<App> App::create() {
+	return Glib::RefPtr<App>(new App("", nullptr, nullptr));
+}
 
 /* === M E T H O D S ======================================================= */
+App::App(const synfig::String& basepath, int *argc, char ***argv) :
+	Gtk::Application("org.synfig.SynfigStudio") {}
 
-App::App(const synfig::String& basepath, int *argc, char ***argv):
-	Gtk::Main(argc,argv)
+void App::init(const synfig::String& basepath, int *argc, char ***argv)
 {
 
 	Glib::init(); // need to use Gio functions before app is started
@@ -1761,6 +1765,7 @@ App::App(const synfig::String& basepath, int *argc, char ***argv):
 		SoundProcessor::Sound(ResourceHelper::get_sound_path("renderdone.wav")));
 
 	App::dock_info_ = dock_info;
+	add_window(*main_window);
 }
 
 StateManager* App::get_state_manager() { return state_manager; }
@@ -4389,12 +4394,12 @@ studio::App::setup_changed()
 void
 studio::App::process_all_events(long unsigned int us)
 {
-	Glib::usleep(us);
+	/*Glib::usleep(us);
 	while(studio::App::events_pending()) {
 		while(studio::App::events_pending())
 			studio::App::iteration(false);
 		Glib::usleep(us);
-	}
+	}*/
 }
 
 bool

@@ -120,7 +120,7 @@ class StateManager;
 
 class WorkspaceHandler;
 
-class App : public Gtk::Main, private IconController
+class App : public Gtk::Application, private IconController
 {
 	friend class Preferences;
 	friend class Dialog_Setup;
@@ -130,6 +130,8 @@ class App : public Gtk::Main, private IconController
 	*/
 
 public:
+	static Glib::RefPtr<App> create();
+	void init(const synfig::String& basepath, int *argc, char ***argv);
 
 	struct Busy
 	{
