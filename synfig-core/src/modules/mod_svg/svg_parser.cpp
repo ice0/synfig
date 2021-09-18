@@ -2113,40 +2113,35 @@ Style::get(const std::string &property, std::string default_value) const
 	return item->second;
 }
 
+bool parse_number_or_percent(const std::string& value, double& out) {
+	std::size_t pos;
+	try {
+		out = std::stod(value, &pos);
+		if (pos && value[pos] == '%') {
+			out = out * 0.01;
+		}
+		return true;
+	} catch (...) {
+		return false;
+	}
+}
+
 double
 Style::compute(const std::string &property, std::string default_value, double reference_value) const
 {
 	std::string value = get(property, default_value);
 
-	if (value.empty()) {
-		// It would only happen if default_value is empty, as push() forbids empty value
-
-		error("Layer_Svg: %s",
-			  etl::strprintf(_("Value to be computed for '%s' is empty. Assuming zero. Internal error."), property.c_str()).c_str());
-		return 0;
+	double d_value;
+	if (parse_number_or_percent(value, d_value)) {
+		return d_value * reference_value;
 	}
 
-	try {
-		if (value.back() != '%')
-			return std::stod(value);
-		else
-			return reference_value * std::stod(value) / 100.;
-	} catch(...) {
+	warning("Layer_Svg: %s",
+		etl::strprintf(_("Invalid number for '%s': %s. Trying default value..."), property.c_str(), value.c_str()).c_str());
+
+	if (parse_number_or_percent(default_value, d_value)) {
+		return d_value * reference_value;
 	}
-
-	if (value != default_value) {
-		warning("Layer_Svg: %s",
-				etl::strprintf(_("Invalid number for '%s': %s. Trying default value..."), property.c_str(), value.c_str()).c_str());
-
-		try {
-			if (default_value.back() != '%')
-				return std::stod(default_value);
-			else
-				return reference_value * std::stod(default_value) / 100.;
-		} catch(...) {
-		}
-	}
-
 	error("Layer_Svg: %s", etl::strprintf(_("... No, invalid number for '%s': %s"), property.c_str(), default_value.c_str()).c_str());
 	return 0;
 }
