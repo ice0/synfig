@@ -359,8 +359,8 @@ Action::LayerDuplicate::export_dup_nodes(synfig::Layer::Handle layer, Canvas::Ha
 			{
 				Canvas::Handle subcanvas(iter->second.get(Canvas::Handle()));
 				if (subcanvas && subcanvas->is_inline())
-					for (IndependentContext iter = subcanvas->get_independent_context(); iter != subcanvas->end(); iter++)
-						export_dup_nodes(*iter, canvas, index);
+					for (Layer::Handle iter : subcanvas->get_layers())
+						export_dup_nodes(iter, canvas, index);
 			}
 
 		for (Layer::DynamicParamList::const_iterator iter(layer->dynamic_param_list().begin())
@@ -390,7 +390,7 @@ traverse_layers(synfig::Layer::Handle layer, synfig::Layer::Handle cloned_layer,
 			Canvas::Handle subcanvas(iter->second.get(Canvas::Handle()));
 			auto cloned_subcanvas = cloned_layer->get_param_list().find(iter->first)->second.get(Canvas::Handle());
 			if (subcanvas && subcanvas->is_inline())
-				for (IndependentContext iter = subcanvas->get_independent_context(), cloned_iter = cloned_subcanvas->get_independent_context(); iter != subcanvas->end(); ++iter, ++cloned_iter)
+				for (auto iter = subcanvas->begin(), cloned_iter = cloned_subcanvas->begin(); iter != subcanvas->end(); ++iter, ++cloned_iter)
 					traverse_layers(*iter, *cloned_iter, cloned_layer_map);
 		}
 

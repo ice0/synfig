@@ -1419,12 +1419,8 @@ CanvasInterface::find_important_value_descs(synfig::Canvas::Handle canvas,std::v
 			ret+=_process_value_desc(ValueDesc(canvas,(*iter)->get_id()),out,guid_set);
 	}
 
-	IndependentContext iter;
-
-	for(iter=canvas->get_independent_context();iter!=canvas->end();++iter)
+	for(const auto& layer : canvas->get_layers())
 	{
-		Layer::Handle layer(*iter);
-
 		Layer::DynamicParamList::const_iterator iter;
 		for(
 			iter=layer->dynamic_param_list().begin();

@@ -1586,7 +1586,7 @@ Canvas::get_string()const
 void
 Canvas::fill_sound_processor(SoundProcessor &soundProcessor) const
 {
-	for(IndependentContext c(begin(), end()); *c; ++c)
-		if ((*c)->active())
-			(*c)->fill_sound_processor(soundProcessor);
+	for(const auto layer : layers_)
+		if (layer->active())
+			layer->fill_sound_processor(soundProcessor);
 }

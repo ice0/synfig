@@ -608,6 +608,8 @@ public:
 	//! Creates sorted context and builds task for rendering based on it with applied gamma
 	rendering::Task::Handle build_rendering_task(const ContextParams &context_params) const;
 
+	const CanvasBase& get_layers() const { return layers_; };
+
 	int indexof(const const_iterator &iter) const;
 	iterator byindex(int index);
 	const_iterator byindex(int index) const;

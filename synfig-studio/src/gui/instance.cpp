@@ -129,11 +129,11 @@ Instance::layer_inside_switch(synfig::Layer_Switch::Handle paste) const
 	active_layer = paste->get_param("layer_name").get(synfig::String());
 	if(canvas)
 	{
-		for(IndependentContext i = canvas->get_independent_context(); *i; i++)
+		for(Layer::Handle i : canvas->get_layers())
 		{
-			if((*i)->get_description()==active_layer)
+			if(i->get_description()==active_layer)
 			{
-				child_layer = (*i);
+				child_layer = i;
 			}
 		}
 	}

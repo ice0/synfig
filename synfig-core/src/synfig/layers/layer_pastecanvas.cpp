@@ -266,9 +266,9 @@ Layer_PasteCanvas::update_renddesc()
 	if(!get_canvas() || !sub_canvas || !sub_canvas->is_inline()) return;
 
 	sub_canvas->rend_desc()=get_canvas()->rend_desc();
-	for (IndependentContext iter = sub_canvas->get_independent_context(); !iter->empty(); iter++)
+	for (Layer::Handle iter : sub_canvas->get_layers())
 	{
-		etl::handle<Layer_PasteCanvas> paste = etl::handle<Layer_PasteCanvas>::cast_dynamic(*iter);
+		etl::handle<Layer_PasteCanvas> paste = etl::handle<Layer_PasteCanvas>::cast_dynamic(iter);
 		if (paste) paste->update_renddesc();
 	}
 }

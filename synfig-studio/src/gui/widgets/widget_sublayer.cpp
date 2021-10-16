@@ -82,10 +82,10 @@ Widget_Sublayer::set_value_desc(const synfigapp::ValueDesc &x)
 			Gtk::TreeModel::Row row = *(enum_TreeModel->append());
 			row[enum_model.value] = "";
 			row[enum_model.name] = _("<empty>");
-			for(IndependentContext i = canvas->get_independent_context(); *i; i++)
+			for(Layer::Handle i : canvas->get_layers())
 			{
 				Gtk::TreeModel::Row row = *(enum_TreeModel->append());
-				std::string desc = (*i)->get_description();
+				std::string desc = i->get_description();
 				row[enum_model.value] = desc;
 				row[enum_model.name] = desc;
 			}

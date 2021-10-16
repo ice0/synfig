@@ -167,8 +167,8 @@ void Action::ValueDescExport::scan_canvas(synfig::Canvas::Handle prev_canvas, sy
 	}
 
 	{ // scan layers
-		for(IndependentContext i = canvas->get_independent_context(); *i; i++)
-			scan_layer(prev_canvas, new_canvas, *i);
+		for(Layer::Handle i : canvas->get_layers())
+			scan_layer(prev_canvas, new_canvas, i);
 	}
 
 	{ // scan values

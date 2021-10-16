@@ -530,8 +530,8 @@ LayerActionManager::export_dup_nodes(synfig::Layer::Handle layer, Canvas::Handle
 			{
 				Canvas::Handle subcanvas(iter->second.get(Canvas::Handle()));
 				if (subcanvas && subcanvas->is_inline())
-					for (IndependentContext iter = subcanvas->get_independent_context(); iter != subcanvas->end(); iter++)
-						export_dup_nodes(*iter, canvas, index);
+					for (Layer::Handle iter : subcanvas->get_layers())
+						export_dup_nodes(iter, canvas, index);
 			}
 
 		for (Layer::DynamicParamList::const_iterator iter(layer->dynamic_param_list().begin())

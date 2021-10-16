@@ -190,9 +190,9 @@ Instance::import_external_canvas(Canvas::Handle canvas, std::map<Canvas*, Canvas
 {
 	etl::handle<CanvasInterface> canvas_interface;
 
-	for(IndependentContext i = canvas->get_independent_context(); *i; i++)
+	for(Layer::Handle i : canvas->get_layers())
 	{
-		etl::handle<Layer_PasteCanvas> paste_canvas = etl::handle<Layer_PasteCanvas>::cast_dynamic(*i);
+		etl::handle<Layer_PasteCanvas> paste_canvas = etl::handle<Layer_PasteCanvas>::cast_dynamic(i);
 		if (!paste_canvas) continue;
 
 		Canvas::Handle sub_canvas = paste_canvas->get_sub_canvas();
