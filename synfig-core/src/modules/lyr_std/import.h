@@ -74,7 +74,7 @@ public:
 	virtual void on_canvas_set();
 
 	virtual void set_time_vfunc(IndependentContext context, Time time)const;
-	virtual void load_resources_vfunc(IndependentContext context, Time time)const;
+	virtual void load_resources_vfunc(Time time) const override;
 };
 
 }; // END of namespace lyr_std

@@ -110,24 +110,6 @@ IndependentContext::set_time(Time time, bool force)const
 	layer->set_time(context, time);
 }
 
-void
-IndependentContext::load_resources(Time time, bool /*force*/)const
-{
-	IndependentContext context(*this);
-	while(*context)
-	{
-		if ( (*context)->active() )
-			break;
-		++context;
-	}
-	if (!*context) return;
-
-	Layer::Handle layer(*context);
-	++context;
-	//Glib::Threads::RWLock::WriterLock lock(layer->get_rw_lock());
-	layer->load_resources(context, time);
-}
-
 Color
 Context::get_color(const Point &pos)const
 {

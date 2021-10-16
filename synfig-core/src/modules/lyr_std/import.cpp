@@ -219,11 +219,10 @@ Import::set_time_vfunc(IndependentContext context, Time time)const
 }
 
 void
-Import::load_resources_vfunc(IndependentContext context, Time time)const
+Import::load_resources_vfunc(Time time)const
 {
 	Time time_offset=param_time_offset.get(Time());
 	if(get_amount() && importer && importer->is_animated())
 		rendering_surface = new rendering::SurfaceResource(
 			importer->get_frame(get_canvas()->rend_desc(), time+time_offset) );
-	context.load_resources(time);
 }

@@ -317,10 +317,8 @@ Layer_PasteCanvas::set_time_vfunc(IndependentContext context, Time time)const
 }
 
 void
-Layer_PasteCanvas::load_resources_vfunc(IndependentContext context, Time time)const
+Layer_PasteCanvas::load_resources_vfunc(Time time)const
 {
-	context.load_resources(time);
-
 	if (!sub_canvas)
 		return;
 	if (depth == MAX_DEPTH)

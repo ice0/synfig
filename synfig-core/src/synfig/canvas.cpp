@@ -493,7 +493,11 @@ Canvas::set_time(Time t)const
 void
 Canvas::load_resources(Time t)const
 {
-	get_independent_context().load_resources(t);
+	for (auto layer : layers_) {
+		if (layer->active()) {
+			layer->load_resources(t);
+		}
+	}
 }
 
 Canvas::LooseHandle

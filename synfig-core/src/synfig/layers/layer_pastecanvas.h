@@ -192,7 +192,7 @@ protected:
 	//! Sets the time of the Paste Canvas Layer and those under it
 	virtual void set_time_vfunc(IndependentContext context, Time time)const;
 	//! Loads external resources (frames) for child layers of the Paste Canvas Layer
-	virtual void load_resources_vfunc(IndependentContext context, Time time)const;
+	virtual void load_resources_vfunc(Time time) const override;
 	//! Sets the outline_grow of the Paste Canvas Layer and those under it
 	virtual void set_outline_grow_vfunc(Real outline_grow) const override;
 	//!	Function to be overloaded that fills the Time Point Set with
