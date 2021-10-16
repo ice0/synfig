@@ -333,10 +333,8 @@ Layer_PasteCanvas::load_resources_vfunc(IndependentContext context, Time time)co
 }
 
 void
-Layer_PasteCanvas::set_outline_grow_vfunc(IndependentContext context, Real outline_grow)const
+Layer_PasteCanvas::set_outline_grow_vfunc(Real outline_grow) const
 {
-	context.set_outline_grow(outline_grow);
-
 	if (!sub_canvas)
 		return;
 	if (depth == MAX_DEPTH)

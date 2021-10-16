@@ -637,16 +637,10 @@ Layer::load_resources_vfunc(IndependentContext context, Time time)const
 }
 
 void
-Layer::set_outline_grow(IndependentContext context, Real outline_grow)const
+Layer::set_outline_grow(Real outline_grow) const
 {
 	set_outline_grow_mark(outline_grow);
-	set_outline_grow_vfunc(context, outline_grow);
-}
-
-void
-Layer::set_outline_grow_vfunc(IndependentContext context, Real outline_grow)const
-{
-	context.set_outline_grow(outline_grow);
+	set_outline_grow_vfunc(outline_grow);
 }
 
 Color

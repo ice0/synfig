@@ -128,27 +128,6 @@ IndependentContext::load_resources(Time time, bool /*force*/)const
 	layer->load_resources(context, time);
 }
 
-void
-IndependentContext::set_outline_grow(Real outline_grow)const
-{
-	IndependentContext context(*this);
-	while(*context)
-	{
-		if ( (*context)->active()
-		  && fabs((*context)->get_outline_grow_mark() - outline_grow) > 1e-8 )
-			break;
-		++context;
-	}
-	if (!*context) return;
-
-	// Set up a writer lock
-	
-	Layer::Handle layer(*context);
-	++context;
-	Glib::Threads::RWLock::WriterLock lock(layer->get_rw_lock());
-	layer->set_outline_grow(context, outline_grow);
-}
-
 Color
 Context::get_color(const Point &pos)const
 {

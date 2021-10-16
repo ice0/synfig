@@ -447,7 +447,13 @@ Canvas::set_outline_grow(Real x)
 	if (fabs(outline_grow - x) > 1e-8)
 	{
 		outline_grow = x;
-		get_independent_context().set_outline_grow(outline_grow);
+		for (auto layer : layers_) {
+			if ( layer->active() && fabs(layer->get_outline_grow_mark() - outline_grow) > 1e-8 ) {
+				// Set up a writer lock
+				Glib::Threads::RWLock::WriterLock lock(layer->get_rw_lock());
+				layer->set_outline_grow(outline_grow);
+			}
+		}
 	}
 }
 

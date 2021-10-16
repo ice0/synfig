@@ -577,7 +577,7 @@ public:
 	**	\param outline_grow	writeme
 	**	\see Context::set_outline_grow()
 	*/
-	void set_outline_grow(IndependentContext context, Real outline_grow)const;
+	void set_outline_grow(Real outline_grow)const;
 
 	//! Gets the blend color of the Layer in the context at \a pos
 	/*!	\param context		Context iterator referring to next Layer.
@@ -603,7 +603,7 @@ public:
 protected:
 	virtual void set_time_vfunc(IndependentContext context, Time time) const;
 	virtual void load_resources_vfunc(IndependentContext context, Time time) const;
-	virtual void set_outline_grow_vfunc(IndependentContext context, Real outline_grow) const;
+	virtual void set_outline_grow_vfunc(Real outline_grow) const {};
 	virtual rendering::Task::Handle build_rendering_task_vfunc(Context context) const;
 
 	virtual RendDesc get_sub_renddesc_vfunc(const RendDesc &renddesc) const;
