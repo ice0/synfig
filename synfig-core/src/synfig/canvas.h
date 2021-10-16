@@ -157,7 +157,7 @@ class SoundProcessor;
 * Note: the last list element is always a null Layer. It helps iterative
 * methods to know when it reaches end of layer list.
 */
-class Canvas : private CanvasBase, public Node
+class Canvas : public Node
 {
 	/*
  --	** -- T Y P E S -----------------------------------------------------------
@@ -263,6 +263,7 @@ private:
 	/*! \see get_grow_value set_grow_value */
 	Real outline_grow;
 
+	CanvasBase layers_;
 
 	/*
  -- ** -- S I G N A L S -------------------------------------------------------

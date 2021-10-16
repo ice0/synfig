@@ -60,15 +60,35 @@ class Rect;
 **	\see Layer, Canvas, CanvasBase, Context */
 class IndependentContext: public CanvasBase::const_iterator
 {
+protected:
+	CanvasBase::const_iterator end_;
 public:
 	IndependentContext() { }
 
 	//! Constructor based on other CanvasBase iterator
-	IndependentContext(const CanvasBase::const_iterator &x):CanvasBase::const_iterator(x) { }
+	IndependentContext(const CanvasBase::const_iterator &x, const CanvasBase::const_iterator &end):CanvasBase::const_iterator(x), end_(end) { }
+
+	static const CanvasBase::value_type& get_empty() {
+		static auto empty = CanvasBase::value_type();
+		return empty;
+	}
+
+	const CanvasBase::value_type& operator*() const {
+		const CanvasBase::const_iterator* base = this;
+		if (*base == end_) return get_empty();
+
+		return CanvasBase::const_iterator::operator*();
+	}
+
+	const CanvasBase::value_type* operator->() const {
+		const CanvasBase::const_iterator* base = this;
+		if (*base == end_) return &get_empty();
+		return CanvasBase::const_iterator::operator->();
+	}
 
 	//! Assignation operator
-	IndependentContext operator=(const CanvasBase::const_iterator &x)
-	{ return CanvasBase::const_iterator::operator=(x); }
+	//IndependentContext operator=(const CanvasBase::const_iterator &x)
+	//{ return CanvasBase::const_iterator::operator=(x); }
 
 	//! Sets the context to the Time \time. It is done recursively.
 	void set_time(Time time, bool force = false) const;
@@ -131,22 +151,22 @@ public:
 		IndependentContext(x), params(context.params) { }
 
 	//! Constructor based on other CanvasBase iterator and other Context (to get parameters).
-	Context(const CanvasBase::const_iterator &x, const ContextParams &params):
-		IndependentContext(x), params(params) { }
+	Context(const CanvasBase::const_iterator &x, const CanvasBase::const_iterator& end, const ContextParams &params):
+		IndependentContext(x, end), params(params) { }
 
-	Context(const CanvasBase::const_iterator &x, const Context &context):
-		IndependentContext(x), params(context.params) { }
+	Context(const CanvasBase::const_iterator &x, const CanvasBase::const_iterator& end, const Context &context):
+		IndependentContext(x, end), params(context.params) { }
 
 	//! Returns next iterator.
 	Context get_next() const {
-		IndependentContext c(*this);
-		return Context(++c, params);
+		IndependentContext c(*this, end_);
+		return Context(++c, end_, params);
 	}
 
 	//! Returns previous iterator.
 	Context get_previous() const {
 		IndependentContext c(*this);
-		return Context(--c, params);
+		return Context(--c, end_, params);
 	}
 
 	//! Get rendering parameters.

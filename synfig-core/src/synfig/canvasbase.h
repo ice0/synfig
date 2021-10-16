@@ -27,7 +27,8 @@
 
 /* === H E A D E R S ======================================================= */
 
-#include <list>
+//#include <list>
+#include <vector>
 #include <ETL/handle>
 
 /* === M A C R O S ========================================================= */
@@ -38,7 +39,7 @@ namespace synfig {
 
 class Layer;
 
-typedef std::list< etl::handle< Layer > > CanvasBase;
+typedef std::vector< etl::handle< Layer > > CanvasBase;
 
 }; // END of namespace synfig
 

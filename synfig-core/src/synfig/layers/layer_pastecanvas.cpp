@@ -505,5 +505,5 @@ Layer_PasteCanvas::build_context_queue(Context context, CanvasBase &out_queue)co
 		return sub_canvas->get_context_sorted(params, out_queue);
 
 	out_queue.push_back(Layer::Handle());
-	return Context(out_queue.begin(), params);
+	return Context(out_queue.begin(), out_queue.cend(), params);
 }

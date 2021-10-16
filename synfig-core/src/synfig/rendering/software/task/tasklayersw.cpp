@@ -86,7 +86,7 @@ public:
 		fake_canvas_base.push_back(sub_layer);
 		fake_canvas_base.push_back(Layer::Handle());
 
-		Context context(fake_canvas_base.begin(), ContextParams());
+		Context context(fake_canvas_base.begin(), fake_canvas_base.cend(), ContextParams());
 
 		LockWrite ldst(this);
 		if (!ldst)

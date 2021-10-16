@@ -187,83 +187,79 @@ Canvas::find_index(const etl::handle<Layer> &layer, int &index) const
 Canvas::iterator
 Canvas::begin() noexcept
 {
-	return CanvasBase::begin();
+	return layers_.begin();
 }
 
 Canvas::const_iterator
 Canvas::begin() const noexcept
 {
-	return CanvasBase::begin();
+	return layers_.begin();
 }
 
 Canvas::const_iterator
 Canvas::cbegin() const noexcept
 {
-	return CanvasBase::begin();
+	return layers_.cbegin();
 }
 
 Canvas::iterator
 Canvas::end() noexcept
 {
-	Canvas::iterator i = CanvasBase::end();
-	return --i;
+	return layers_.end();
 }
 
 Canvas::const_iterator
 Canvas::end() const noexcept
 {
-	Canvas::const_iterator i = CanvasBase::cend();
-	return --i;
+	return layers_.cend();
 }
 
 Canvas::const_iterator
 Canvas::cend() const noexcept
 {
-	return end();
+	return layers_.cend();
 }
 
 Canvas::reverse_iterator
 Canvas::rbegin() noexcept
 {
-	Canvas::reverse_iterator i = CanvasBase::rbegin();
-	return ++i;
+	return layers_.rbegin();
 }
 
 Canvas::const_reverse_iterator
 Canvas::rbegin() const noexcept
 {
-	Canvas::const_reverse_iterator i = CanvasBase::rbegin();
-	return ++i;
+	return layers_.crbegin();
 }
 
 Canvas::const_reverse_iterator
 Canvas::crbegin() const noexcept
 {
-	return rbegin();
+	return layers_.crbegin();
 }
 
 Canvas::reverse_iterator
 Canvas::rend() noexcept
 {
-	return CanvasBase::rend();
+	return layers_.rend();
 }
 
 Canvas::const_reverse_iterator
 Canvas::rend() const noexcept
 {
-	return CanvasBase::rend();
+	return layers_.rend();
 }
 
 Canvas::const_reverse_iterator
 Canvas::crend() const noexcept
 {
-	return CanvasBase::rend();
+	return layers_.crend();
 }
 
 int
 Canvas::size() const noexcept
 {
-	return CanvasBase::size()-1;
+	return layers_.size();
 }
 
 void
@@ -274,53 +270,43 @@ Canvas::clear() noexcept
 		erase(begin());
 	}
 
-	// We need to keep a blank handle at the
-	// end of the image list, and acts at
-	// the bottom. Without it, the layers
-	// would just continue going when polled
-	// for a color.
-	if (CanvasBase::empty())
-		CanvasBase::push_back(Layer::Handle());
-
 	changed();
 }
 
 bool
 Canvas::empty() const noexcept
 {
-	return CanvasBase::size()<=1;
+	return layers_.empty();
 }
 
 Layer::Handle &
 Canvas::front()
 {
-	return CanvasBase::front();
+	return layers_.front();
 }
 
 const Layer::Handle &
 Canvas::front() const
 {
-	return CanvasBase::front();
+	return layers_.front();
 }
 
 Layer::Handle &
 Canvas::back()
 {
-	iterator i = end();
-	return *--i;
+	return layers_.back();
 }
 
 const Layer::Handle &
 Canvas::back()const
 {
-	const_iterator i = end();
-	return *--i;
+	return layers_.back();
 }
 
 IndependentContext
 Canvas::get_independent_context()const
 {
-	return IndependentContext(begin());
+	return IndependentContext(begin(), cend());
 }
 
 Context
@@ -353,7 +339,7 @@ Canvas::get_context_sorted(const ContextParams &params, CanvasBase &out_list) co
 		out_list.push_back(i->second);
 	out_list.push_back(Layer::Handle());
 
-	return Context(out_list.begin(), params);
+	return Context(out_list.begin(), out_list.cend(), params);
 }
 
 rendering::Task::Handle
@@ -925,7 +911,7 @@ void
 Canvas::insert(iterator iter,etl::handle<Layer> x)
 {
 //	int i(x->count());
-	CanvasBase::insert(iter,x);
+	layers_.insert(iter,x);
 
 	/*if(x->count()!=i+1)
 	{
@@ -949,7 +935,7 @@ Canvas::insert(iterator iter,etl::handle<Layer> x)
 void
 Canvas::push_back_simple(etl::handle<Layer> x)
 {
-	CanvasBase::insert(end(),x);
+	layers_.insert(layers_.end(),x);
 	changed();
 }
 
@@ -975,7 +961,7 @@ Canvas::erase(iterator iter)
 
 	remove_child(iter->get());
 
-	CanvasBase::erase(iter);
+	layers_.erase(iter);
 	changed();
 }
 
@@ -1170,7 +1156,7 @@ Canvas::on_parent_set()
 	// so assume that canvas replaced for layers
 	for(std::list<Handle>::iterator i = children().begin(); i != children().end(); ++i)
 		(*i)->on_parent_set();
-	for(iterator i = begin(); *i; ++i)
+	for(iterator i = begin(); i != end(); ++i)
 		(*i)->on_canvas_set();
 }
 
@@ -1600,7 +1586,7 @@ Canvas::get_string()const
 void
 Canvas::fill_sound_processor(SoundProcessor &soundProcessor) const
 {
-	for(IndependentContext c = begin(); *c; ++c)
+	for(IndependentContext c(begin(), end()); *c; ++c)
 		if ((*c)->active())
 			(*c)->fill_sound_processor(soundProcessor);
 }

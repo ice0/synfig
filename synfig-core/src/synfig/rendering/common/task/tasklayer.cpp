@@ -67,7 +67,7 @@ TaskLayer::calc_bounds() const
 	fake_canvas_base.push_back(sub_layer);
 	fake_canvas_base.push_back(Layer::Handle());
 
-	Context context(fake_canvas_base.begin(), ContextParams());
+	Context context(fake_canvas_base.begin(), fake_canvas_base.cend(), ContextParams());
 	return context.get_full_bounding_rect();
 }
 

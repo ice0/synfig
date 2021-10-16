@@ -117,5 +117,5 @@ Layer_FilterGroup::build_context_queue(Context context, CanvasBase &out_queue)co
 	for(Context c = context; *c; ++c)
 		out_queue.push_back(*c);
 	out_queue.push_back(Layer::Handle());
-	return Context(out_queue.begin(), context.get_params());
+	return Context(out_queue.begin(), out_queue.cend(), context.get_params());
 }
