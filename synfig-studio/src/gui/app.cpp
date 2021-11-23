@@ -2343,7 +2343,7 @@ gint Signal_Open_Ok    (GtkWidget */*widget*/, int *val){*val=1; return 0;}
 gint Signal_Open_Cancel(GtkWidget */*widget*/, int *val){*val=2; return 0;}
 
 bool
-App::dialog_open_file(const std::string &title, std::string &filename, std::string preference)
+App::dialog_open_file(const std::string &title, std::vector<std::string> &filenames, std::string preference)
 {
 	// info("App::dialog_open_file('%s', '%s', '%s')", title.c_str(), filename.c_str(), preference.c_str());
 	// TODO: Win32 native dialod not ready yet
@@ -2402,6 +2402,7 @@ App::dialog_open_file(const std::string &title, std::string &filename, std::stri
 	dialog->set_current_folder(prev_path);
 	dialog->add_button(_("Cancel"), Gtk::RESPONSE_CANCEL)->set_image_from_icon_name("gtk-cancel", Gtk::ICON_SIZE_BUTTON);
 	dialog->add_button(_("Import"), Gtk::RESPONSE_ACCEPT)->set_image_from_icon_name("gtk-open",   Gtk::ICON_SIZE_BUTTON);
+	dialog->set_select_multiple(true);
 
 	// 0 All supported files
 	// 0.1 Synfig documents. sfg is not supported to import
@@ -2506,17 +2507,12 @@ App::dialog_open_file(const std::string &title, std::string &filename, std::stri
 	
 	dialog->set_extra_widget(*scale_imported_box());
 
-	if (filename.empty())
-		dialog->set_filename(prev_path);
-	else if (is_absolute_path(filename))
-		dialog->set_filename(filename);
-	else
-		dialog->set_filename(prev_path + ETL_DIRECTORY_SEPARATOR + filename);
-
 	if(dialog->run() == Gtk::RESPONSE_ACCEPT) {
-		filename = dialog->get_filename();
-		// info("Saving preference %s = '%s' in App::dialog_open_file()", preference.c_str(), dirname(filename).c_str());
-		_preferences.set_value(preference, dirname(filename));
+		filenames = dialog->get_filenames();
+		for(std::string filename : filenames){
+			// info("Saving preference %s = '%s' in App::dialog_open_file()", preference.c_str(), dirname(filename).c_str());
+			_preferences.set_value(preference, dirname(filename));
+		}
 		delete dialog;
 		return true;
 	}
