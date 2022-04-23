@@ -1,73 +1,66 @@
+#include <cmath>
+#include <iostream>
 
-#include <synfig/blinepoint.h>
-#include <synfig/real.h>
-#include <ETL/hermite>
+struct Vector {
+    double _x, _y;
+    Vector(double x, double y) : _x(x), _y(y) {};
+};
 
-#include <vector>
+template <class T=Vector, class K=float>
+K distance_func2 (const T &a,const T &b) {
+        T delta=T(b._x-a._x, b._y - a._y);
+        return static_cast<K>(delta._x*delta._x + delta._y*delta._y);
+};
 
-#include "test_base.h"
+template <class K=float>
+K uncook(const K &x) { return sqrt(x); }
 
-using namespace synfig;
 
-void fill_list(std::vector<BLinePoint>& list) {
-	BLinePoint p;
-	list.push_back(p);
-	p.set_vertex(Point(0.0,1.0));
-	list.push_back(p);
-	p.set_vertex(Point(0.0,2.0));
-	list.push_back(p);
+double bezier_y(float t) {
+    double _coeff[4] = {0.l, 0.l, 3.l, -2.l};
+
+    double result = _coeff[0]+(_coeff[1]+(_coeff[2]+(_coeff[3]*t))*t)*t;
+    return result;
 }
 
-Real
-bline_length(const std::vector<BLinePoint>& bline, bool bline_loop, std::vector<Real> *lengths)
+float find_distance(float r, float s, int steps = 7)
 {
-	if (lengths)
-		lengths->clear();
-	const std::vector<BLinePoint> list(bline);
-	if (list.empty())
-		return 0;
-	size_t max_vertex_index(list.size());
-	if(!bline_loop) max_vertex_index--;
-	if(max_vertex_index < 1) return Real();
 
-	if (lengths)
-		lengths->reserve(max_vertex_index);
+    const float inc(s/steps);
+    std::cout << "Inc: " << inc << "\n";
+    float ret(0);
+    Vector last(0, bezier_y(r));
+    std::cout << "x: " << last._x << " y: " << last._y << "\n";
 
-	// Calculate the lengths and the total length
-	Real total_length = 0;
-	for(size_t i0 = 0; i0 < max_vertex_index; ++i0) {
-		size_t i1 = (i0 + 1)%list.size();
-		const BLinePoint &blinepoint0 = list[i0];
-		const BLinePoint &blinepoint1 = list[i1];
-		etl::hermite<Vector> curve(blinepoint0.get_vertex(),   blinepoint1.get_vertex(),
-								   blinepoint0.get_tangent2(), blinepoint1.get_tangent1());
-		Real l=curve.length();
-		if(lengths) lengths->push_back(l);
-		total_length+=l;
-	}
+    for(int i = steps - 1; i > 0; --i)
+    {
+        r += inc;
+        const Vector n(0, bezier_y(r));
+        std::cout << "n.x: " << n._x << " n.y: " << n._y << " r: " << r << "\n";
+        ret+=uncook(distance_func2(last,n));
+        last=n;
+    }
+    ret+=uncook(distance_func2(last, Vector(0, bezier_y(s))));
 
-	return total_length;
+    return ret;
 }
 
+template<typename T>
+inline T real_precision()
+{ return T(1e-8); }
 
-void test_bline_length() {
-	std::vector<BLinePoint> list;
-	fill_list(list);
-	
-	bool loop = false;
-	std::vector<Real> lengths;
-
-	Real l = bline_length(list, loop, &lengths);
-	ASSERT_EQUAL(2, lengths.size());
-	ASSERT_APPROX_EQUAL(1.0, lengths[0]);
-	ASSERT_APPROX_EQUAL(1.0, lengths[1]);
-	ASSERT_APPROX_EQUAL(2.0, l);
-}
+template<typename T>
+inline bool approximate_equal(const T &a, const T &b)
+{ return a < b ? b - a < real_precision<T>() : a - b < real_precision<T>(); }
 
 int main() {
-	TEST_SUITE_BEGIN()
-		TEST_FUNCTION(test_bline_length)
-	TEST_SUITE_END()
+    std::cout.precision(20);
+    double l = find_distance(0, 1, 7);
+    if (approximate_equal(1.0, l)) {
+        std::cout << "\nOK\n\n";
+    } else {
+        std::cout << "\nError. Expected: " << 1.0 << ", but got: " << l << "\n\n";
+    }
 
-	return tst_exit_status;
+	return 0;
 }

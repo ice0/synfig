@@ -3,6 +3,7 @@ target_include_directories(bline-test2 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../sr
 
 set_target_properties(bline-test2 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 target_compile_options(bline-test2 PRIVATE -O2)
+#target_compile_options(bline-test2 PRIVATE -O2 -mno-fp-ret-in-387)
 
 add_executable(bline-test bline.cpp)
 target_include_directories(bline-test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
