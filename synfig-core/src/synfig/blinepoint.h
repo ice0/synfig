@@ -64,7 +64,11 @@ private:
 	// Used to store the tangent2 when split_radius=false && split_angle==true
 	Vector	tangent2_angle_split_;
 
-	void	update_flags();
+	void update_flags() {
+		split_tangent_both_= split_tangent_radius_ && split_tangent_angle_;
+		merge_tangent_both_= !split_tangent_radius_ && !split_tangent_angle_;
+	}
+
 	void	update_tangent2();
 
 public:

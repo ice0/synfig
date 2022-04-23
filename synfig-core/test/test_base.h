@@ -211,20 +211,20 @@ std::ostream& operator<<(std::ostream& os, const synfig::Vector& v)
 		std::cout << std::endl; \
 		for (const auto& err : tst_statistics__.errors) { \
 			if (err.line < 0) \
-				synfig::error("ERROR:\n %s", err.function.c_str()); \
+				printf("ERROR:\n %s", err.function.c_str()); \
 			else \
-				synfig::warning("FAILURE:\n %s:%i", err.function.c_str(), err.line); \
+				printf("FAILURE:\n %s:%i", err.function.c_str(), err.line); \
 			std::cerr << err.message << std::endl; \
 		} \
 		std::cerr << std::endl << "========================================================================" << std::endl; \
 		if (tst_statistics__.exception_thrown) \
-			synfig::error("Statistics:\n %i tests were interrupted by unexpected exceptions thrown.\n %i tests failed.\n %i successful tests)", \
+			printf("Statistics:\n %i tests were interrupted by unexpected exceptions thrown.\n %i tests failed.\n %i successful tests)", \
 				tst_statistics__.exception_thrown, tst_statistics__.failures, tst_statistics__.successes); \
 		else if (tst_statistics__.failures) \
-			synfig::warning("Statistics:\n %i tests failed.\n %i successful tests", \
+			printf("Statistics:\n %i tests failed.\n %i successful tests", \
 				tst_statistics__.failures, tst_statistics__.successes); \
 		else \
-			synfig::info("Success (%i tests)", tst_statistics__.successes); \
+			printf("Success (%i tests)", tst_statistics__.successes); \
 		std::cerr << "========================================================================" << std::endl; \
 		tst_exit_status = tst_statistics__.exception_thrown? 2 : (tst_statistics__.failures ? 1 : 0); \
 	}

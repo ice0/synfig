@@ -92,9 +92,9 @@ synfig::BLinePoint::update_tangent2()
 	return;
 }
 
-void
+/*void
 synfig::BLinePoint::update_flags()
 {
 	split_tangent_both_= split_tangent_radius_ && split_tangent_angle_;
 	merge_tangent_both_= !split_tangent_radius_ && !split_tangent_angle_;
-}
+}*/
