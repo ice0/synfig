@@ -68,7 +68,7 @@
 
 namespace etl {
 
-template<typename V,typename T> class bezier;
+template<typename V, typename D, typename T> class bezier;
 
 //! Cubic Bezier Curve Base Class
 // This generic implementation uses the DeCasteljau algorithm.
@@ -440,17 +440,17 @@ public:
 
 };
 
-template <typename V,typename T=float>
+template <typename V, typename T=float, typename D=double>
 class bezier : public bezier_base<V,T>
 {
 public:
 	typedef V value_type;
 	typedef T time_type;
-	typedef float distance_type;
+	typedef D distance_type;
 	typedef bezier_iterator<V,T> iterator;
 	typedef bezier_iterator<V,T> const_iterator;
 
-	distance_func<value_type> dist;
+	distance_func<value_type, distance_type> dist;
 
 	using bezier_base<V,T>::get_r;
 	using bezier_base<V,T>::get_s;
@@ -498,17 +498,17 @@ public:
 	distance_type find_distance(time_type r, time_type s, int steps=7)const
 	{
 		const time_type inc((s-r)/steps);
-		if (!inc) return 0;
 		distance_type ret(0);
 		value_type last(this->operator()(r));
 
-		for(r+=inc;r<s;r+=inc)
+		for(int i = steps - 1; i > 0; --i)
 		{
+			r += inc;
 			const value_type n(this->operator()(r));
 			ret+=dist.uncook(dist(last,n));
 			last=n;
 		}
-		ret+=dist.uncook(dist(last,this->operator()(r)))*(s-(r-inc))/inc;
+		ret+=dist.uncook(dist(last, this->operator()(s)));
 
 		return ret;
 	}

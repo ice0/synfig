@@ -138,8 +138,9 @@ public:
 
 */
 
-template <typename V,typename T=float>
-class hermite : public bezier<V,T>
+// D - is for Distance
+template <typename V,typename T=float, typename D=double>
+class hermite : public bezier<V, T, D>
 {
 public:
 	typedef V value_type;
@@ -163,12 +164,12 @@ public:
 
 	void sync()
 	{
-		bezier<V,T>::operator[](0)=P1;
-		bezier<V,T>::operator[](1)=P1+T1/3;
-		bezier<V,T>::operator[](2)=P2-T2/3;
-		bezier<V,T>::operator[](3)=P2;
+		bezier<V,T,D>::operator[](0)=P1;
+		bezier<V,T,D>::operator[](1)=P1+T1/3;
+		bezier<V,T,D>::operator[](2)=P2-T2/3;
+		bezier<V,T,D>::operator[](3)=P2;
 
-		bezier<V,T>::sync();
+		bezier<V,T,D>::sync();
 	}
 };
 
