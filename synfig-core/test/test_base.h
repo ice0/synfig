@@ -50,7 +50,7 @@ std::ostream& operator<<(std::ostream& os, const synfig::Vector& v)
 
 #define ERROR_MESSAGE_TWO_VALUES(a, b) \
 	std::ostringstream oss; \
-	oss.precision(8); \
+	oss.precision(11); \
 	oss << "\t - expected " << a << ", but got " << b << std::endl; \
 	throw SynfigTestException{__FUNCTION__, __LINE__, oss.str()}; \
 

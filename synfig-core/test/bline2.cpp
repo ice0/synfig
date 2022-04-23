@@ -1,8 +1,6 @@
 
 #include <synfig/blinepoint.h>
 #include <synfig/real.h>
-//#include <synfig/value.h>
-//#include <synfig/valuenodes/valuenode_bline.h>
 #include <ETL/hermite>
 
 #include <vector>

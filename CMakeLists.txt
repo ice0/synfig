@@ -60,6 +60,9 @@ else()
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-inline-functions -fno-inline -g -O0 -Wall -D_GLIBCXX_ASSERTIONS -U_GLIBCXX_USE_DEPRECATED")
 endif(MSVC)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
+
 # This can be enabled once the address sanitization related errors are resolved.
 #set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fsanitize=undefined  -fsanitize=address -fno-omit-frame-pointer")
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined  -fsanitize=address  -fno-omit-frame-pointer")
