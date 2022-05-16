@@ -143,19 +143,25 @@ MainWindow::show_dialog_input()
 	App::dialog_input->present();
 }
 
+void add_action2(Glib::RefPtr<Gtk::ActionGroup> action_group, const Glib::ustring& name,
+				const Glib::ustring& icon_name, const Glib::ustring& label,
+				const Glib::ustring& tooltip, const Gtk::Action::SlotActivate& slot) {
+	action_group->add( Gtk::Action::create_with_icon_name(name, icon_name, label, tooltip), slot);
+}
+
 void
 MainWindow::init_menus()
 {
 	Glib::RefPtr<Gtk::ActionGroup> action_group = Gtk::ActionGroup::create("mainwindow");
 
 	// file
-	action_group->add( Gtk::Action::create("new", Gtk::StockID("synfig-new_doc"), _("New"), _("Create a new document")),
+	add_action2(action_group, "new", "action_doc_new_icon", _("New"), _("Create a new document"),
 		sigc::hide_return(sigc::ptr_fun(&studio::App::new_instance))
 	);
-	action_group->add( Gtk::Action::create("open", Gtk::StockID("synfig-open"), _("Open"), _("Open an existing document")),
+	add_action2(action_group, "open", "action_doc_open_icon", _("Open"), _("Open an existing document"),
 		sigc::hide_return(sigc::bind(sigc::ptr_fun(&studio::App::dialog_open), ""))
 	);
-	action_group->add( Gtk::Action::create("quit", Gtk::StockID("gtk-quit"), _("Quit")),
+	add_action2(action_group, "quit", "application-quit", _("Quit"), "",
 		sigc::hide_return(sigc::ptr_fun(&studio::App::quit))
 	);
 
@@ -186,7 +192,7 @@ MainWindow::init_menus()
 	action_group->add( Gtk::Action::create("workspace-default", _("Default")),
 		sigc::ptr_fun(App::set_workspace_default)
 	);
-	action_group->add( Gtk::Action::create("save-workspace", Gtk::StockID("synfig-save_as"), _("Save workspace...")),
+	add_action2(action_group, "save-workspace", "action_doc_saveas_icon", _("Save workspace..."), "",
 		sigc::ptr_fun(App::save_custom_workspace)
 	);
 

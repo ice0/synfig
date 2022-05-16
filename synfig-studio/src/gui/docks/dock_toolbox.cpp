@@ -223,6 +223,13 @@ Dock_Toolbox::change_state_(const Smach::state_base *state)
 	changing_state_=false;
 }
 
+std::string get_tool_icon_name(const std::string& tool_name) {
+	if (tool_name == "polygon") return "tool_polyline_icon";
+	if (tool_name == "bline") return "tool_spline_icon";
+	if (tool_name == "bone") return "tool_skeleton_icon";
+	if (tool_name == "lasso") return "tool_cutout_icon";
+	return "tool_" + tool_name + "_icon";
+}
 
 /*! \fn Dock_Toolbox::add_state(const Smach::state_base *state)
  *  \brief Add and connect a toggle button to the toolbox defined by a state
@@ -237,10 +244,11 @@ Dock_Toolbox::add_state(const Smach::state_base *state)
 
 	Gtk::StockItem stock_item;
 	Gtk::Stock::lookup(Gtk::StockID("synfig-"+name),stock_item);
+	std::cout << "Toolbox: " << "synfig-"+name << "\n";
 
 	Gtk::ToggleToolButton *tool_button = manage(new class Gtk::ToggleToolButton(
 		*manage(new Gtk::Image(
-			stock_item.get_stock_id(),
+			Gio::Icon::create(get_tool_icon_name(name)),
 			Gtk::IconSize::from_name("synfig-small_icon_16x16") )),
 		stock_item.get_label() ));
 
