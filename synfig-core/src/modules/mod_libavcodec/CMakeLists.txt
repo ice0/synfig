@@ -7,7 +7,7 @@ target_sources(mod_libavcodec
         "${CMAKE_CURRENT_LIST_DIR}/main.cpp"
 )
 
-target_link_libraries(mod_libavcodec synfig)
+target_link_libraries(mod_libavcodec synfig PkgConfig::LIBAVFORMAT)
 
 install (
     TARGETS mod_libavcodec

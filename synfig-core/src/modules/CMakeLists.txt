@@ -32,7 +32,7 @@ set(MODS_ENABLED
     mod_gradient
     mod_imagemagick
     mod_jpeg
-#    mod_libavcodec # - build failure
+    mod_libavcodec
 #    mod_magickpp # - made optional
     mod_noise
     mod_openexr
