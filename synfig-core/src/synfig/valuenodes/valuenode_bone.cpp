@@ -98,7 +98,7 @@ struct compare_bones
 void
 ValueNode_Bone::show_bone_map(Canvas::LooseHandle canvas, const char *file, int line, String text, Time t)
 {
-	if (!getenv("SYNFIG_DEBUG_BONE_MAP")) return;
+	//if (!getenv("SYNFIG_DEBUG_BONE_MAP")) return;
 
 	BoneMap bone_map(canvas_map[canvas]);
 
@@ -147,17 +147,17 @@ ValueNode_Bone::get_ordered_bones(etl::handle<const Canvas> canvas)
 			BoneSet ref(get_bones_referenced_by(user, false));
 			if (ref.empty())
 			{
-				if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d %s doesn't need anybody\n", __FILE__, __LINE__,
-					   user->get_bone_name(0).c_str());
+				//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d %s doesn't need anybody\n", __FILE__, __LINE__,
+				//	   user->get_bone_name(0).c_str());
 				current_list.push_back(user);
 			}
 			else
 				for(BoneSet::iterator iter=ref.begin();iter!=ref.end();++iter)
 				{
 					ValueNode_Bone::Handle used(*iter);
-					if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d %s is used by %s\n", __FILE__, __LINE__,
-																				   used->get_bone_name(0).c_str(),
-																				   user->get_bone_name(0).c_str());
+					//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d %s is used by %s\n", __FILE__, __LINE__,
+					//															   used->get_bone_name(0).c_str(),
+					//															   user->get_bone_name(0).c_str());
 					is_used_by.insert(std::make_pair(used, user));
 					uses.insert(std::make_pair(user, used));
 				}
@@ -170,12 +170,12 @@ ValueNode_Bone::get_ordered_bones(etl::handle<const Canvas> canvas)
 
 	while (current_list.size())
 	{
-		if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d current_list has %zd members; we have %zd in is_used_by and %zd in uses\n",
-																	   __FILE__, __LINE__, current_list.size(), is_used_by.size(), uses.size());
+		//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d current_list has %zd members; we have %zd in is_used_by and %zd in uses\n",
+		//															   __FILE__, __LINE__, current_list.size(), is_used_by.size(), uses.size());
 		for(BoneList::iterator iter=current_list.begin();iter!=current_list.end();++iter)
 		{
 			ValueNode_Bone::Handle bone(*iter);
-			if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d bone: %s\n", __FILE__, __LINE__, bone->get_bone_name(0).c_str());
+			//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d bone: %s\n", __FILE__, __LINE__, bone->get_bone_name(0).c_str());
 			ret.push_back(bone);
 
 			std::multimap<ValueNode_Bone::Handle, ValueNode_Bone::Handle>::iterator begin(is_used_by.lower_bound(bone));
@@ -183,10 +183,10 @@ ValueNode_Bone::get_ordered_bones(etl::handle<const Canvas> canvas)
 			for (std::multimap<ValueNode_Bone::Handle, ValueNode_Bone::Handle>::iterator iter = begin; iter != end; iter++)
 			{
 				ValueNode_Bone::Handle user(iter->second);
-				if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("\t\t\t%s:%d user: %s\n", __FILE__, __LINE__, user->get_bone_name(0).c_str());
+				//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("\t\t\t%s:%d user: %s\n", __FILE__, __LINE__, user->get_bone_name(0).c_str());
 
 				// erase (user,bone) from uses
-				if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d trying to erase - searching %zd\n", __FILE__, __LINE__, uses.count(user));
+				//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d trying to erase - searching %zd\n", __FILE__, __LINE__, uses.count(user));
 				std::multimap<ValueNode_Bone::Handle, ValueNode_Bone::Handle>::iterator begin2(uses.lower_bound(user));
 				std::multimap<ValueNode_Bone::Handle, ValueNode_Bone::Handle>::iterator end2(uses.upper_bound(user));
 				std::multimap<ValueNode_Bone::Handle, ValueNode_Bone::Handle>::iterator iter2;
@@ -195,24 +195,24 @@ ValueNode_Bone::get_ordered_bones(etl::handle<const Canvas> canvas)
 					if (iter2->second == bone)
 					{
 						uses.erase(iter2);
-						if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d found it\n", __FILE__, __LINE__);
+						//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d found it\n", __FILE__, __LINE__);
 						break;
 					}
 					else
 					{
-						if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("no\n");
+						//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("no\n");
 					}
 				}
 				if (iter2 == end2)
 				{
-					if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d didn't find it?!?\n", __FILE__, __LINE__);
+					//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d didn't find it?!?\n", __FILE__, __LINE__);
 					assert(0);
 				}
 
-				if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d now there are %zd\n", __FILE__, __LINE__, uses.count(user));
+				//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("%s:%d now there are %zd\n", __FILE__, __LINE__, uses.count(user));
 				if (uses.count(user) == 0)
 				{
-					if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("\t\t\t%s:%d adding %s\n", __FILE__, __LINE__, user->get_bone_name(0).c_str());
+					//if (getenv("SYNFIG_DEBUG_ORDER_BONES_FOR_SAVE_CANVAS")) printf("\t\t\t%s:%d adding %s\n", __FILE__, __LINE__, user->get_bone_name(0).c_str());
 					new_list.push_back(user);
 				}
 			}
@@ -234,19 +234,19 @@ ValueNode_Bone::ValueNode_Bone():
 {
 	Vocab ret(get_children_vocab());
 	set_children_vocab(ret);
-	if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
-		printf("%s:%d ValueNode_Bone::ValueNode_Bone() this line should only appear once guid %s\n", __FILE__, __LINE__, get_guid().get_string().c_str());
+	//if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
+	//	printf("%s:%d ValueNode_Bone::ValueNode_Bone() this line should only appear once guid %s\n", __FILE__, __LINE__, get_guid().get_string().c_str());
 }
 
 ValueNode_Bone::ValueNode_Bone(const ValueBase &value, etl::loose_handle<Canvas> canvas):
 	LinkableValueNode(value.get_type())
 {
-	if (getenv("SYNFIG_DEBUG_BONE_CONSTRUCTORS"))
+	/*if (getenv("SYNFIG_DEBUG_BONE_CONSTRUCTORS"))
 	{
 		printf("\n%s:%d ------------------------------------------------------------------------\n", __FILE__, __LINE__);
 		printf("%s:%d --- ValueNode_Bone() for %s at %p---\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), this);
 		printf("%s:%d ------------------------------------------------------------------------\n\n", __FILE__, __LINE__);
-	}
+	}*/
 	Vocab ret(get_children_vocab());
 	set_children_vocab(ret);
 	Type &type = value.get_type();
@@ -275,12 +275,12 @@ ValueNode_Bone::ValueNode_Bone(const ValueBase &value, etl::loose_handle<Canvas>
 		if (!parent) parent = get_root_bone();
 		set_link("parent",ValueNode_Const::create(ValueNode_Bone::Handle::cast_const(parent)));
 
-		if (getenv("SYNFIG_DEBUG_BONE_MAP"))
-			printf("%s:%d adding to canvas_map\n", __FILE__, __LINE__);
+		//if (getenv("SYNFIG_DEBUG_BONE_MAP"))
+		//	printf("%s:%d adding to canvas_map\n", __FILE__, __LINE__);
 		canvas_map[get_root_canvas()][get_guid()] = this;
 
-		if (getenv("SYNFIG_DEBUG_SET_PARENT_CANVAS"))
-			printf("%s:%d set parent canvas for bone %p to %p\n", __FILE__, __LINE__, this, canvas.get());
+		//if (getenv("SYNFIG_DEBUG_SET_PARENT_CANVAS"))
+		//	printf("%s:%d set parent canvas for bone %p to %p\n", __FILE__, __LINE__, this, canvas.get());
 		set_parent_canvas(canvas);
 
 		show_bone_map(get_root_canvas(), __FILE__, __LINE__, strprintf("in constructor of %s at %p", GET_GUID_CSTR(get_guid()), this));
@@ -293,8 +293,8 @@ ValueNode_Bone::ValueNode_Bone(const ValueBase &value, etl::loose_handle<Canvas>
 
 void ValueNode_Bone::on_changed()
 {
-	if (getenv("SYNFIG_DEBUG_ON_CHANGED"))
-		printf("%s:%d ValueNode_Bone::on_changed()\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_ON_CHANGED"))
+	//	printf("%s:%d ValueNode_Bone::on_changed()\n", __FILE__, __LINE__);
 
 	LinkableValueNode::on_changed();
 }
@@ -313,15 +313,15 @@ ValueNode_Bone::create(const ValueBase& x, Canvas::LooseHandle canvas)
 
 ValueNode_Bone::~ValueNode_Bone()
 {
-	if (getenv("SYNFIG_DEBUG_BONE_CONSTRUCTORS"))
+	/*if (getenv("SYNFIG_DEBUG_BONE_CONSTRUCTORS"))
 	{
 		printf("\n%s:%d ------------------------------------------------------------------------\n", __FILE__, __LINE__);
 		printf("%s:%d --- ~ValueNode_Bone() for %s at %p---\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), this);
 		printf("%s:%d ------------------------------------------------------------------------\n\n", __FILE__, __LINE__);
-	}
+	}*/
 
-	if (getenv("SYNFIG_DEBUG_BONE_MAP"))
-		printf("%s:%d removing from canvas_map\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_BONE_MAP"))
+	//	printf("%s:%d removing from canvas_map\n", __FILE__, __LINE__);
 	canvas_map[get_root_canvas()].erase(get_guid());
 
 	show_bone_map(get_root_canvas(), __FILE__, __LINE__, "in destructor");
@@ -358,9 +358,9 @@ ValueNode_Bone::set_root_canvas(etl::loose_handle<Canvas> canvas)
 		canvas_map[old_canvas].erase(guid);
 		show_bone_map(new_canvas, __FILE__, __LINE__, strprintf("after changing canvas from %p to %p", old_canvas.get(), new_canvas.get()));
 	}
-	else
+	/*else
 		if (getenv("SYNFIG_DEBUG_BONE_MAP"))
-			printf("%s:%d canvases are the same\n", __FILE__, __LINE__);
+			printf("%s:%d canvases are the same\n", __FILE__, __LINE__);*/
 }
 
 //!Animated Transformation matrix.
@@ -391,7 +391,7 @@ ValueNode_Bone::get_animated_matrix(Time t, Real scalex, Real scaley, Angle angl
 			   * Matrix().set_rotate(angle)
 			   * Matrix().set_scale(scalex,scaley);
 
-	if (getenv("SYNFIG_DEBUG_ANIMATED_MATRIX_CALCULATION"))
+	/*if (getenv("SYNFIG_DEBUG_ANIMATED_MATRIX_CALCULATION"))
 	{
 		printf("%s  *\n", Matrix().set_scale(scalex, scaley).get_string(18, "animated_matrix = ",
 																		strprintf("scale(%7.2f, %7.2f) (%s)", scalex, scaley,
@@ -399,7 +399,7 @@ ValueNode_Bone::get_animated_matrix(Time t, Real scalex, Real scaley, Angle angl
 		printf("%s  *\n", Matrix().set_rotate(angle).get_string(18, "", strprintf("rotate(%.2f)", Angle::deg(angle).get())).c_str());
 		printf("%s  =\n", parent_matrix.get_string(18, "", "parent").c_str());
 		printf("%s\n",	  ret.get_string(18).c_str());
-	}
+	}*/
 
 	return ret;
 }
@@ -431,8 +431,8 @@ ValueNode_Bone::get_parent(Time t)const
 ValueBase
 ValueNode_Bone::operator()(Time t)const
 {
-	if (getenv("SYNFIG_DEBUG_VALUENODE_OPERATORS"))
-		printf("%s:%d operator()\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_VALUENODE_OPERATORS"))
+	//	printf("%s:%d operator()\n", __FILE__, __LINE__);
 
 //	show_bone_map(get_root_canvas(), __FILE__, __LINE__, strprintf("in op() at %s", t.get_string().c_str()), t);
 
@@ -447,9 +447,9 @@ ValueNode_Bone::operator()(Time t)const
 	Real   bone_width			((*width_	)(t).get(Real()));
 	Real   bone_tipwidth		((*tipwidth_)(t).get(Real()));
 	Real   bone_depth			((*depth_)(t).get(Real()));
-	if (getenv("SYNFIG_DEBUG_ANIMATED_MATRIX_CALCULATION")) printf("\n***\n*** %s:%d get_animated_matrix() for %s\n***\n\n", __FILE__, __LINE__, get_bone_name(t).c_str());
+	//if (getenv("SYNFIG_DEBUG_ANIMATED_MATRIX_CALCULATION")) printf("\n***\n*** %s:%d get_animated_matrix() for %s\n***\n\n", __FILE__, __LINE__, get_bone_name(t).c_str());
 	Matrix bone_animated_matrix	(get_animated_matrix(t, bone_scalex, 1.0, bone_angle, bone_origin, bone_parent));
-	if (getenv("SYNFIG_DEBUG_ANIMATED_MATRIX_CALCULATION")) printf("\n***\n*** %s:%d get_animated_matrix() for %s done\n***\n\n", __FILE__, __LINE__, get_bone_name(t).c_str());
+	//if (getenv("SYNFIG_DEBUG_ANIMATED_MATRIX_CALCULATION")) printf("\n***\n*** %s:%d get_animated_matrix() for %s done\n***\n\n", __FILE__, __LINE__, get_bone_name(t).c_str());
 #endif
 
 	Bone ret;
@@ -727,34 +727,34 @@ ValueNode_Bone::is_ancestor_of(ValueNode_Bone::ConstHandle bone, Time t)const
 	ValueNode_Bone::ConstHandle ancestor(this);
 	std::set<ValueNode_Bone::ConstHandle> seen;
 
-	if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
-		printf("%s:%d checking whether %s is ancestor of %s\n", __FILE__, __LINE__, GET_NODE_DESC_CSTR(ancestor,t), GET_NODE_DESC_CSTR(bone,t));
+	//if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
+	//	printf("%s:%d checking whether %s is ancestor of %s\n", __FILE__, __LINE__, GET_NODE_DESC_CSTR(ancestor,t), GET_NODE_DESC_CSTR(bone,t));
 
 	while (bone != get_root_bone())
 	{
 		if (bone == ancestor)
 		{
-			if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
-				printf("%s:%d bone reached us - so we are its ancestor - return true\n", __FILE__, __LINE__);
+			//if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
+			//	printf("%s:%d bone reached us - so we are its ancestor - return true\n", __FILE__, __LINE__);
 			return bone;
 		}
 
 		if (seen.count(bone))
 		{
-			if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
-				printf("%s:%d stuck in a loop - return true\n", __FILE__, __LINE__);
+			//if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
+			//	printf("%s:%d stuck in a loop - return true\n", __FILE__, __LINE__);
 			return bone;
 		}
 
 		seen.insert(bone);
 		bone=GET_NODE_PARENT_NODE(bone,t);
 
-		if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
-			printf("%s:%d step on to parent %s\n", __FILE__, __LINE__, GET_NODE_DESC_CSTR(bone,t));
+		//if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
+		//	printf("%s:%d step on to parent %s\n", __FILE__, __LINE__, GET_NODE_DESC_CSTR(bone,t));
 	}
 
-	if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
-		printf("%s:%d reached root - return false\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_ANCESTOR_CHECK"))
+	//	printf("%s:%d reached root - return false\n", __FILE__, __LINE__);
 	return nullptr;
 }
 
@@ -821,8 +821,8 @@ ValueNode_Bone::get_bones_referenced_by(ValueNode::Handle value_node, bool recur
 	{
 		// todo: while loading we might be setting up an ancestry loop by ignoring the placeholder valuenode here
 		// can we check for loops in badly formatted .sifz files somehow?
-		if (getenv("SYNFIG_DEBUG_PLACEHOLDER_VALUENODE"))
-			printf("%s:%d found a placeholder - skipping loop check\n", __FILE__, __LINE__);
+		//if (getenv("SYNFIG_DEBUG_PLACEHOLDER_VALUENODE"))
+		//	printf("%s:%d found a placeholder - skipping loop check\n", __FILE__, __LINE__);
 		return ret;
 	}
 
@@ -839,10 +839,10 @@ ValueNode_Bone::get_bones_affected_by(ValueNode::Handle value_node)
 	int generation = 0;
 	bool debug(false);
 
-	if (getenv("SYNFIG_DEBUG_SUITABLE_PARENTS"))
-		debug = true;
+	//if (getenv("SYNFIG_DEBUG_SUITABLE_PARENTS"))
+	//	debug = true;
 
-	if (debug) printf("getting bones affected by %p %s\n", value_node.get(), value_node->get_string().c_str());
+	//if (debug) printf("getting bones affected by %p %s\n", value_node.get(), value_node->get_string().c_str());
 
 	// initialise current_nodes with the node we're editing
 	current_nodes.insert(value_node.get());
@@ -879,7 +879,7 @@ ValueNode_Bone::get_bones_affected_by(ValueNode::Handle value_node)
 		new_nodes.clear();
 	} while (current_nodes.size());
 
-	if (debug) printf("%s:%d got %zd affected bones\n", __FILE__, __LINE__, ret.size());
+	//if (debug) printf("%s:%d got %zd affected bones\n", __FILE__, __LINE__, ret.size());
 	return ret;
 }
 
@@ -889,16 +889,16 @@ ValueNode_Bone::get_possible_parent_bones(ValueNode::Handle value_node)
 	BoneSet ret;
 	bool debug(false);
 
-	if (getenv("SYNFIG_DEBUG_SUITABLE_PARENTS"))
-		debug = true;
+	//if (getenv("SYNFIG_DEBUG_SUITABLE_PARENTS"))
+	//	debug = true;
 
-	if (debug) printf("%s:%d which bones can be parents of %p (%s)\n", __FILE__, __LINE__, value_node.get(), value_node->get_string().c_str());
+	//if (debug) printf("%s:%d which bones can be parents of %p (%s)\n", __FILE__, __LINE__, value_node.get(), value_node->get_string().c_str());
 
 	// which bones are we currently editing the parent of - it can be more than one due to linking
 	ValueNode_Bone::BoneSet affected_bones(ValueNode_Bone::get_bones_affected_by(value_node));
-	if (debug) printf("%s:%d got %zd affected bones\n", __FILE__, __LINE__, affected_bones.size());
+	//if (debug) printf("%s:%d got %zd affected bones\n", __FILE__, __LINE__, affected_bones.size());
 	Canvas::LooseHandle canvas(value_node->get_root_canvas());
-	if (debug) printf("%s:%d canvas %p\n", __FILE__, __LINE__, canvas.get());
+	//if (debug) printf("%s:%d canvas %p\n", __FILE__, __LINE__, canvas.get());
 	for (ValueNode_Bone::BoneSet::iterator iter = affected_bones.begin(); iter != affected_bones.end(); iter++)
 	{
 		if (!canvas)
@@ -939,7 +939,7 @@ ValueNode_Bone::get_possible_parent_bones(ValueNode::Handle value_node)
 		}
 	}
 
-	if (debug) printf("%s:%d returning %zd possible parents\n", __FILE__, __LINE__, ret.size());
+	//if (debug) printf("%s:%d returning %zd possible parents\n", __FILE__, __LINE__, ret.size());
 	return ret;
 }
 
@@ -954,8 +954,8 @@ ValueNode_Bone::get_root_bone()
 void
 ValueNode_Bone::ref()const
 {
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%s:%d %s   ref valuenode_bone %*s -> %2d\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), (count()*2), "", count()+1);
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%s:%d %s   ref valuenode_bone %*s -> %2d\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), (count()*2), "", count()+1);
 
 	LinkableValueNode::ref();
 }
@@ -963,8 +963,8 @@ ValueNode_Bone::ref()const
 bool
 ValueNode_Bone::unref()const
 {
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%s:%d %s unref valuenode_bone %*s%2d <-\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), ((count()-1)*2), "", count()-1);
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%s:%d %s unref valuenode_bone %*s%2d <-\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), ((count()-1)*2), "", count()-1);
 
 	return LinkableValueNode::unref();
 }
@@ -972,25 +972,25 @@ ValueNode_Bone::unref()const
 void
 ValueNode_Bone::rref()const
 {
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%s:%d %s               rref valuenode_bone %d -> ", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), rcount());
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%s:%d %s               rref valuenode_bone %d -> ", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), rcount());
 
 	LinkableValueNode::rref();
 
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%d\n", rcount());
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%d\n", rcount());
 }
 
 void
 ValueNode_Bone::runref()const
 {
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%s:%d %s             runref valuenode_bone %d -> ", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), rcount());
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%s:%d %s             runref valuenode_bone %d -> ", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), rcount());
 
 	LinkableValueNode::runref();
 
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%d\n", rcount());
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%d\n", rcount());
 }
 #endif
 
@@ -998,14 +998,14 @@ ValueNode_Bone::runref()const
 
 ValueNode_Bone_Root::ValueNode_Bone_Root()
 {
-	if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
-		printf("%s:%d ValueNode_Bone_Root::ValueNode_Bone_Root()\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
+	//	printf("%s:%d ValueNode_Bone_Root::ValueNode_Bone_Root()\n", __FILE__, __LINE__);
 }
 
 ValueNode_Bone_Root::~ValueNode_Bone_Root()
 {
-	if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
-		printf("%s:%d ValueNode_Bone_Root::~ValueNode_Bone_Root()\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
+	//	printf("%s:%d ValueNode_Bone_Root::~ValueNode_Bone_Root()\n", __FILE__, __LINE__);
 }
 
 ValueBase
@@ -1020,16 +1020,16 @@ ValueNode_Bone_Root::operator()(Time /*t*/)const
 void
 ValueNode_Bone_Root::set_guid(const GUID& new_guid)
 {
-	if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
-		printf("%s:%d bypass set_guid() for root bone\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
+	//	printf("%s:%d bypass set_guid() for root bone\n", __FILE__, __LINE__);
 	LinkableValueNode::set_guid(new_guid);
 }
 
 void
 ValueNode_Bone_Root::set_root_canvas(etl::loose_handle<Canvas> canvas)
 {
-	if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
-		printf("%s:%d bypass set_root_canvas() for root bone\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_ROOT_BONE"))
+	//	printf("%s:%d bypass set_root_canvas() for root bone\n", __FILE__, __LINE__);
 	LinkableValueNode::set_root_canvas(canvas);
 }
 
@@ -1076,8 +1076,8 @@ ValueNode_Bone_Root::check_type(Type &/*type*/)
 void
 ValueNode_Bone_Root::ref()const
 {
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%s:%d %s   ref valuenode_bone_root %*s -> %2d\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), (count()*2), "", count()+1);
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%s:%d %s   ref valuenode_bone_root %*s -> %2d\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), (count()*2), "", count()+1);
 
 	LinkableValueNode::ref();
 }
@@ -1085,8 +1085,8 @@ ValueNode_Bone_Root::ref()const
 bool
 ValueNode_Bone_Root::unref()const
 {
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%s:%d %s unref valuenode_bone_root %*s%2d <-\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), ((count()-1)*2), "", count()-1);
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%s:%d %s unref valuenode_bone_root %*s%2d <-\n", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), ((count()-1)*2), "", count()-1);
 
 	return LinkableValueNode::unref();
 }
@@ -1094,24 +1094,24 @@ ValueNode_Bone_Root::unref()const
 void
 ValueNode_Bone_Root::rref()const
 {
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%s:%d %s               rref valuenode_bone_root %d -> ", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), rcount());
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%s:%d %s               rref valuenode_bone_root %d -> ", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), rcount());
 
 	LinkableValueNode::rref();
 
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%d\n", rcount());
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%d\n", rcount());
 }
 
 void
 ValueNode_Bone_Root::runref()const
 {
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%s:%d %s             runref valuenode_bone_root %d -> ", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), rcount());
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%s:%d %s             runref valuenode_bone_root %d -> ", __FILE__, __LINE__, GET_GUID_CSTR(get_guid()), rcount());
 
 	LinkableValueNode::runref();
 
-	if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
-		printf("%d\n", rcount());
+	//if (getenv("SYNFIG_DEBUG_BONE_REFCOUNT"))
+	//	printf("%d\n", rcount());
 }
 #endif

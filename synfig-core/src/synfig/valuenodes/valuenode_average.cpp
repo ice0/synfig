@@ -91,8 +91,8 @@ ValueNode_Average::create(const ValueBase& value, Canvas::LooseHandle canvas)
 ValueBase
 ValueNode_Average::operator()(Time t)const
 {
-	if (getenv("SYNFIG_DEBUG_VALUENODE_OPERATORS"))
-		printf("%s:%d operator()\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_VALUENODE_OPERATORS"))
+	//	printf("%s:%d operator()\n", __FILE__, __LINE__);
 	return ValueAverage::average( ValueNode_DynamicList::operator()(t), ValueBase(), ValueBase(get_type()));
 }
 

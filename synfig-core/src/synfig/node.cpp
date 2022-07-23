@@ -236,16 +236,16 @@ Node::add_parent(Node* new_parent)
 {
 	std::lock_guard<std::mutex> lock(parent_set_mutex_);
 
-	if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
+	/*if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
 		printf("%s:%d adding %p (%s) as parent of %p (%s) (%zu -> ", __FILE__, __LINE__,
 			   new_parent, new_parent->get_string().c_str(),
 			   this, get_string().c_str(),
-			   parent_set.size());
+			   parent_set.size());*/
 
 	parent_set.insert(new_parent);
 
-	if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
-		printf("%zu)\n", parent_set.size());
+	//if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
+	//	printf("%zu)\n", parent_set.size());
 }
 
 void
@@ -264,24 +264,24 @@ Node::remove_parent(Node* parent)
 
 	if(parent_set.count(parent) == 0)
 	{
-		if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
+		/*if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
 			warning("%s:%d %p (%s) isn't in parent set of %p (%s)\n", __FILE__, __LINE__,
 				   parent, parent->get_string().c_str(),
-				   this, get_string().c_str());
+				   this, get_string().c_str());*/
 
 		return;
 	}
 
-	if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
+	/*if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
 		printf("%s:%d removing %p (%s) from parent set of %p (%s) (%zu -> ", __FILE__, __LINE__,
 			   parent, parent->get_string().c_str(),
 			   this, get_string().c_str(),
-			   parent_set.size());
+			   parent_set.size());*/
 
 	parent_set.erase(parent);
 
-	if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
-		printf("%zu)\n", parent_set.size());
+	//if (getenv("SYNFIG_DEBUG_NODE_PARENT_SET"))
+	//	printf("%zu)\n", parent_set.size());
 }
 
 void
@@ -357,13 +357,13 @@ Node::begin_delete()
 void
 Node::on_changed()
 {
-	if (getenv("SYNFIG_DEBUG_ON_CHANGED"))
+	/*if (getenv("SYNFIG_DEBUG_ON_CHANGED"))
 	{
 		std::lock_guard<std::mutex> lock(parent_set_mutex_);
 		printf("%s:%d Node::on_changed() for %p (%s); signalling these %zd parents:\n", __FILE__, __LINE__, this, get_string().c_str(), parent_set.size());
 		for (std::set<Node*>::iterator iter = parent_set.begin(); iter != parent_set.end(); ++iter) printf(" %p (%s)\n", *iter, (*iter)->get_string().c_str());
 		printf("\n");
-	}
+	}*/
 
 	bchanged = true;
 	signal_changed()();

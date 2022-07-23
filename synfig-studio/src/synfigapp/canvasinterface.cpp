@@ -111,8 +111,8 @@ CanvasInterface::CanvasInterface(etl::loose_handle<Instance> instance,etl::handl
 
 CanvasInterface::~CanvasInterface()
 {
-	if (getenv("SYNFIG_DEBUG_DESTRUCTORS"))
-		synfig::info("CanvasInterface::~CanvasInterface(): Deleted");
+	//if (getenv("SYNFIG_DEBUG_DESTRUCTORS"))
+	//	synfig::info("CanvasInterface::~CanvasInterface(): Deleted");
 }
 
 void

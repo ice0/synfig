@@ -90,8 +90,8 @@ Layer_Skeleton::Layer_Skeleton():
 #ifdef _DEBUG
 Layer_Skeleton::~Layer_Skeleton()
 {
-	if (getenv("SYNFIG_DEBUG_DESTRUCTORS"))
-		printf("%s:%d ~Layer_Skeleton()\n", __FILE__, __LINE__);
+	//if (getenv("SYNFIG_DEBUG_DESTRUCTORS"))
+	//	printf("%s:%d ~Layer_Skeleton()\n", __FILE__, __LINE__);
 }
 #endif
 
