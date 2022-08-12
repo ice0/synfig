@@ -147,6 +147,8 @@ Dialog_Color::on_set_fc_pressed()
 bool
 Dialog_Color::on_close_pressed()
 {
+	synfigapp::Action::System::block_new_history=false;
+	std::cout << "Dialog_Color::on_close_pressed()" << std::endl;
 	grab_focus();
 	reset();
 	hide();

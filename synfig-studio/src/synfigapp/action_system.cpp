@@ -53,6 +53,8 @@ using namespace synfigapp;
 
 /* === P R O C E D U R E S ================================================= */
 
+bool Action::System::block_new_history = false;
+
 namespace {
 	class Lock {
 	private:
@@ -85,9 +87,16 @@ Action::System::request_redraw(etl::handle<CanvasInterface> x)
 	x->signal_dirty_preview()();
 }
 
+void Action::System::set_preview(bool preview_action)
+{
+	Action::System::block_new_history = preview_action;
+	if (!preview_action && preview_mode_) preview_mode_ = false;
+}
+
 bool
 Action::System::perform_action(etl::handle<Action::Base> action)
 {
+	std::cout << " -> perform_action (preview: " << Action::System::block_new_history << ")" << std::endl;
 	assert(action);
 	if (getenv("SYNFIG_DEBUG_ACTIONS"))
 		synfig::info("%s:%d perform_action: '%s'", __FILE__, __LINE__, action->get_name().c_str());
@@ -158,6 +167,20 @@ Action::System::perform_action(etl::handle<Action::Base> action)
 	// Clear the redo stack
 	if (clear_redo_stack_on_new_action_)
 		clear_redo_stack();
+
+	if(Action::System::block_new_history) /*for rapid repeated actions we only need the last action to be registered and the middle ones just performed*/
+	{
+		if (canvas_specific && canvas_specific->is_dirty())
+			request_redraw(canvas_specific->get_canvas_interface());
+
+		if (preview_mode_) return true;
+		preview_mode_ = true;
+	} else {
+		if (preview_mode_) {
+			preview_mode_ = false;
+			//undoable_action->undo();
+		}
+	}
 
 	if (!group_stack_.empty())
 		group_stack_.front()->inc_depth();

@@ -427,7 +427,7 @@ Widget_ColorEdit::Widget_ColorEdit():
 		//I use Gtk::ColorSelection widget here.
 		hvsColorWidget = manage(new Gtk::ColorSelection());
 		setHVSColor(get_value());
-		hvsColorWidget->signal_color_changed().connect(sigc::mem_fun(*this, &studio::Widget_ColorEdit::on_color_changed));
+		hvsColorWidget->signal_color_changed().connect(sigc::mem_fun(*this, &studio::Widget_ColorEdit::on_hsv_color_changed));
 		//TODO: Anybody knows how to set min size for this widget? I've tried use set_size_request(..). But it doesn't works.
 		hvs_grid->attach(*(hvsColorWidget), 0, 4, 1, 1);
 	}
@@ -488,8 +488,9 @@ void Widget_ColorEdit::setHVSColor(const synfig::Color& color)
 }
 
 void
-Widget_ColorEdit::on_color_changed()
+Widget_ColorEdit::on_hsv_color_changed()
 {
+	synfigapp::Action::System::block_new_history=hvsColorWidget->is_adjusting();
 	//Spike! Gtk::ColorSelection emits this signal when I use
 	//set_current_color(...). It calls recursion. Used a flag to fix it.
 	if (!colorHVSChanged)

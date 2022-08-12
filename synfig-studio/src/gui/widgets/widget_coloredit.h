@@ -182,7 +182,7 @@ public:
 
 	sigc::signal<void>& signal_value_changed() { return signal_value_changed_; }
 	
-	void on_color_changed();
+	void on_hsv_color_changed();
 
 	void activated() { signal_activated_(); }
 	void activate() { signal_activated_(); }

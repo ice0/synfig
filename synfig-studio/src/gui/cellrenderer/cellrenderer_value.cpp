@@ -583,10 +583,14 @@ CellRenderer_ValueBase::gradient_edited(synfig::Gradient gradient, Glib::ustring
 void
 CellRenderer_ValueBase::color_edited(synfig::Color color, Glib::ustring path)
 {
+	std::cout << "CellRenderer_ValueBase::color_edited: " << color.get_string() << " preview(block): " << synfigapp::Action::System::block_new_history;
 	ValueBase old_value(property_value_.get_value());
 	ValueBase value(color);
-	if (old_value != value)
+	if (old_value != value) {
+		std::cout << " signal_edited_";
 		signal_edited_(path, value);
+	}
+	std::cout << std::endl;
 }
 
 Gtk::CellEditable*

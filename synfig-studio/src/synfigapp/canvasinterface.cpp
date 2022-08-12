@@ -1262,8 +1262,11 @@ bool CanvasInterface::change_value_at_time(ValueDesc value_desc, ValueBase new_v
 	old_value = value_desc.get_value(time);
 
 	// If this isn't really a change, then don't bother
-	if(new_value==old_value)
+	// here
+	if(new_value==old_value) {
+		get_instance()->set_preview(synfigapp::Action::System::block_new_history);
 		return true;
+	}
 
 	// New value should inherit all properties of original ValueBase (static, etc...)
 	new_value.copy_properties_of(old_value);

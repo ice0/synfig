@@ -105,6 +105,9 @@ class System : public etl::shared_object, public sigc::trackable
 	*/
 
 public:
+	void set_preview(bool preview_mode);
+	static bool block_new_history;
+	bool preview_mode_ = false;
 
 	/*
  -- ** -- P U B L I C  D A T A ------------------------------------------------
