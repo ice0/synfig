@@ -145,9 +145,9 @@ WorkArea::WorkArea(etl::loose_handle<synfigapp::CanvasInterface> canvas_interfac
 	drag_mode(DRAG_NONE),
 	active_bone_(0),
 	highlight_active_bone(false),
+	show_rulers(true),
 	show_grid(false),
 	show_guides(true),
-	show_rulers(true),
 	background_size(15,15),
 	background_first_color(0.88, 0.88, 0.88),  /* light gray */
 	background_second_color(0.65, 0.65, 0.65),  /* dark gray */
@@ -647,7 +647,7 @@ WorkArea::load_meta_data()
 	    ChangeLocale change_locale(LC_NUMERIC, "C");
 
 		if(!guide.empty())
-			get_guide_list_x().push_back(stratof(guide));
+			get_guide_list_x().push_back(GuideInfo(stratof(guide), true));
 
 		if(iter==data.end())
 			data.clear();
@@ -665,7 +665,7 @@ WorkArea::load_meta_data()
 	    ChangeLocale change_locale(LC_NUMERIC, "C");
 
 		if(!guide.empty())
-			get_guide_list_y().push_back(stratof(guide));
+			get_guide_list_y().push_back(GuideInfo(stratof(guide), false));
 
 		if(iter==data.end())
 			data.clear();
@@ -1512,9 +1512,9 @@ WorkArea::on_drawing_area_event(GdkEvent *event)
 		}
 		case DRAG_GUIDE: {
 			if(curr_guide_is_x)
-				*curr_guide = mouse_pos[0];
+				*curr_guide = GuideInfo(mouse_pos[0], true);
 			else
-				*curr_guide = mouse_pos[1];
+				*curr_guide = GuideInfo(mouse_pos[1], false);
 			drawing_area->queue_draw();
 	        break;
 		}
@@ -1798,7 +1798,7 @@ WorkArea::on_hruler_event(GdkEvent *event)
 	case GDK_BUTTON_PRESS:
 		if (get_drag_mode() == DRAG_NONE && show_guides) {
 			set_drag_mode(DRAG_GUIDE);
-			curr_guide = get_guide_list_y().insert(get_guide_list_y().begin(), 0.0);
+			curr_guide = get_guide_list_y().insert(get_guide_list_y().begin(), GuideInfo(0.0, false));
 			curr_guide_is_x = false;
 		}
 		return true;
@@ -1835,7 +1835,7 @@ WorkArea::on_vruler_event(GdkEvent *event)
 	case GDK_BUTTON_PRESS:
 		if (get_drag_mode() == DRAG_NONE && show_guides) {
 			set_drag_mode(DRAG_GUIDE);
-			curr_guide=get_guide_list_x().insert(get_guide_list_x().begin(),0.0);
+			curr_guide=get_guide_list_x().insert(get_guide_list_x().begin(), GuideInfo(0.0, true));
 			curr_guide_is_x=true;
 		}
 		return true;

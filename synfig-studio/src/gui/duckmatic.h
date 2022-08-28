@@ -148,8 +148,12 @@ public:
 
 	typedef Duck::Type Type;
 
-	typedef std::list<float> GuideList;
-
+	struct GuideInfo {
+		GuideInfo(float pos, bool horizontal) : pos(pos), is_horizontal(horizontal) {}
+		float pos = 0.f;
+		bool is_horizontal = false;
+	};
+	typedef std::vector<GuideInfo> GuideList;
 	/*
  -- ** -- P R I V A T E   D A T A ---------------------------------------------
 	*/

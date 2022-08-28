@@ -62,13 +62,13 @@ Renderer_Guides::get_enabled_vfunc()const
 	return get_work_area()->get_show_guides();
 }
 
-std::list<float>&
+Duckmatic::GuideList&
 Renderer_Guides::get_guide_list_x()
 {
 	return get_work_area()->get_guide_list_x();
 }
 
-std::list<float>&
+Duckmatic::GuideList&
 Renderer_Guides::get_guide_list_y()
 {
 	return get_work_area()->get_guide_list_y();
@@ -122,7 +122,7 @@ Renderer_Guides::render_vfunc(
 		// vertical
 		for(iter=get_guide_list_x().begin();iter!=get_guide_list_x().end();++iter)
 		{
-			const float x((*iter-window_startx)/pw);
+			const float x((iter->pos - window_startx)/pw);
 
 			if(iter==get_work_area()->curr_guide)
 				cr->set_source_rgb(GDK_COLOR_TO_RGB(GUIDE_COLOR_CURRENT));
@@ -142,7 +142,7 @@ Renderer_Guides::render_vfunc(
 		// horizontal
 		for(iter=get_guide_list_y().begin();iter!=get_guide_list_y().end();++iter)
 		{
-			const float y((*iter-window_starty)/ph);
+			const float y((iter->pos - window_starty)/ph);
 			if(iter==get_work_area()->curr_guide)
 				cr->set_source_rgb(GDK_COLOR_TO_RGB(GUIDE_COLOR_CURRENT));
 			else

@@ -31,6 +31,7 @@
 /* === H E A D E R S ======================================================= */
 
 #include "workarearenderer.h"
+#include "duckmatic.h"
 
 /* === M A C R O S ========================================================= */
 
@@ -45,8 +46,8 @@ class Renderer_Guides : public studio::WorkAreaRenderer
 public:
 	~Renderer_Guides();
 
-	std::list<float>& get_guide_list_x();
-	std::list<float>& get_guide_list_y();
+	Duckmatic::GuideList& get_guide_list_x();
+	Duckmatic::GuideList& get_guide_list_y();
 
 protected:
 	void render_vfunc(const Glib::RefPtr<Gdk::Window>& drawable, const Gdk::Rectangle& expose_area);
