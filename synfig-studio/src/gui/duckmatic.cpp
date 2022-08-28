@@ -814,10 +814,11 @@ Duckmatic::set_guides_color(const synfig::Color &c)
 Duckmatic::GuideList::iterator
 Duckmatic::find_guide_x(synfig::Point pos, float radius)
 {
-	GuideList::iterator iter,best(guide_list_x_.end());
+	GuideList::iterator iter, best(guide_list_.end());
 	float dist(radius);
-	for(iter=guide_list_x_.begin();iter!=guide_list_x_.end();++iter)
+	for(iter=guide_list_.begin();iter!=guide_list_.end();++iter)
 	{
+		if (!iter->is_horizontal) continue;
 		float amount(std::fabs(iter->pos-pos[0]));
 		if(amount<dist)
 		{
@@ -831,10 +832,11 @@ Duckmatic::find_guide_x(synfig::Point pos, float radius)
 Duckmatic::GuideList::iterator
 Duckmatic::find_guide_y(synfig::Point pos, float radius)
 {
-	GuideList::iterator iter,best(guide_list_y_.end());
+	GuideList::iterator iter,best(guide_list_.end());
 	float dist(radius);
-	for(iter=guide_list_y_.begin();iter!=guide_list_y_.end();++iter)
+	for(iter=guide_list_.begin();iter!=guide_list_.end();++iter)
 	{
+		if (iter->is_horizontal) continue;
 		float amount(std::fabs(iter->pos-pos[1]));
 		if(amount<=dist)
 		{
@@ -855,11 +857,11 @@ Duckmatic::snap_point_to_grid(const synfig::Point& x)const
 	bool has_guide_x(false), has_guide_y(false);
 
 	guide_x=find_guide_x(ret,radius);
-	if(guide_x!=guide_list_x_.end())
+	if(guide_x!=guide_list_.end())
 		has_guide_x=true;
 
 	guide_y=find_guide_y(ret,radius);
-	if(guide_y!=guide_list_y_.end())
+	if(guide_y!=guide_list_.end())
 		has_guide_y=true;
 
 	if(get_grid_snap())

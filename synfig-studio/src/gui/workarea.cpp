@@ -394,11 +394,12 @@ WorkArea::save_meta_data()
 	{
 		String data;
 		GuideList::const_iterator iter;
-		for(iter=get_guide_list_x().begin();iter!=get_guide_list_x().end();++iter)
+		for(iter=get_guide_list().begin();iter!=get_guide_list().end();++iter)
 		{
+			if (!iter->is_horizontal) continue;
 			if(!data.empty())
 				data+=' ';
-			data+=strprintf("%f",*iter);
+			data+=strprintf("%f", iter->pos);
 		}
 		if(!data.empty())
 			canvas_interface->set_meta_data("guide_x",data);
@@ -406,11 +407,12 @@ WorkArea::save_meta_data()
 			canvas_interface->erase_meta_data("guide_x");
 
 		data.clear();
-		for(iter=get_guide_list_y().begin();iter!=get_guide_list_y().end();++iter)
+		for(iter=get_guide_list().begin();iter!=get_guide_list().end();++iter)
 		{
+			if (iter->is_horizontal) continue;
 			if(!data.empty())
 				data+=' ';
-			data+=strprintf("%f",*iter);
+			data+=strprintf("%f", iter->pos);
 		}
 		if(!data.empty())
 			canvas_interface->set_meta_data("guide_y",data);
@@ -639,7 +641,7 @@ WorkArea::load_meta_data()
 		set_background_rendering(false);
 
 	data=canvas->get_meta_data("guide_x");
-	get_guide_list_x().clear();
+	get_guide_list().clear();
 	while(!data.empty())
 	{
 		String::iterator iter(find(data.begin(),data.end(),' '));
@@ -647,7 +649,7 @@ WorkArea::load_meta_data()
 	    ChangeLocale change_locale(LC_NUMERIC, "C");
 
 		if(!guide.empty())
-			get_guide_list_x().push_back(GuideInfo(stratof(guide), true));
+			get_guide_list().push_back(GuideInfo(stratof(guide), true));
 
 		if(iter==data.end())
 			data.clear();
@@ -657,7 +659,6 @@ WorkArea::load_meta_data()
 	//sort(get_guide_list_x());
 
 	data=canvas->get_meta_data("guide_y");
-	get_guide_list_y().clear();
 	while(!data.empty())
 	{
 		String::iterator iter(find(data.begin(),data.end(),' '));
@@ -665,7 +666,7 @@ WorkArea::load_meta_data()
 	    ChangeLocale change_locale(LC_NUMERIC, "C");
 
 		if(!guide.empty())
-			get_guide_list_y().push_back(GuideInfo(stratof(guide), false));
+			get_guide_list().push_back(GuideInfo(stratof(guide), false));
 
 		if(iter==data.end())
 			data.clear();
@@ -1368,14 +1369,14 @@ WorkArea::on_drawing_area_event(GdkEvent *event)
 				// Check for a guide click
 				if (show_guides) {
 					GuideList::iterator iter = find_guide_x(mouse_pos,radius);
-					if (iter == get_guide_list_x().end()) {
+					if (iter == get_guide_list().end()) {
 						curr_guide_is_x = false;
 						iter = find_guide_y(mouse_pos,radius);
 					} else {
 						curr_guide_is_x = true;
 					}
 
-					if (iter != get_guide_list_x().end() && iter != get_guide_list_y().end()) {
+					if (iter != get_guide_list().end()) {
 						set_drag_mode(DRAG_GUIDE);
 						curr_guide = iter;
 						return true;
@@ -1461,7 +1462,7 @@ WorkArea::on_drawing_area_event(GdkEvent *event)
 		switch(get_drag_mode()) {
 		case DRAG_NONE: {
             GuideList::iterator iter = find_guide_x(mouse_pos,radius);
-            if (iter == get_guide_list_x().end())
+            if (iter == get_guide_list().end())
                 iter = find_guide_y(mouse_pos, radius);
 
             if (iter != curr_guide) {
@@ -1556,10 +1557,10 @@ WorkArea::on_drawing_area_event(GdkEvent *event)
 
 			// Erase the guides if dragged into the rulers
 			if(curr_guide_is_x && !std::isnan(x) && x<0.0 )
-				get_guide_list_x().erase(curr_guide);
+				get_guide_list().erase(curr_guide);
 			else
 			if(!curr_guide_is_x && !std::isnan(y) && y<0.0 )
-				get_guide_list_y().erase(curr_guide);
+				get_guide_list().erase(curr_guide);
 
 			drawing_area->queue_draw();
 			set_drag_mode(DRAG_NONE);
@@ -1798,7 +1799,7 @@ WorkArea::on_hruler_event(GdkEvent *event)
 	case GDK_BUTTON_PRESS:
 		if (get_drag_mode() == DRAG_NONE && show_guides) {
 			set_drag_mode(DRAG_GUIDE);
-			curr_guide = get_guide_list_y().insert(get_guide_list_y().begin(), GuideInfo(0.0, false));
+			curr_guide = get_guide_list().insert(get_guide_list().begin(), GuideInfo(0.0, false));
 			curr_guide_is_x = false;
 		}
 		return true;
@@ -1835,7 +1836,7 @@ WorkArea::on_vruler_event(GdkEvent *event)
 	case GDK_BUTTON_PRESS:
 		if (get_drag_mode() == DRAG_NONE && show_guides) {
 			set_drag_mode(DRAG_GUIDE);
-			curr_guide=get_guide_list_x().insert(get_guide_list_x().begin(), GuideInfo(0.0, true));
+			curr_guide=get_guide_list().insert(get_guide_list().begin(), GuideInfo(0.0, true));
 			curr_guide_is_x=true;
 		}
 		return true;

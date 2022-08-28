@@ -63,15 +63,9 @@ Renderer_Guides::get_enabled_vfunc()const
 }
 
 Duckmatic::GuideList&
-Renderer_Guides::get_guide_list_x()
+Renderer_Guides::get_guide_list()
 {
-	return get_work_area()->get_guide_list_x();
-}
-
-Duckmatic::GuideList&
-Renderer_Guides::get_guide_list_y()
-{
-	return get_work_area()->get_guide_list_y();
+	return get_work_area()->get_guide_list();
 }
 
 bool
@@ -119,43 +113,25 @@ Renderer_Guides::render_vfunc(
 		dashes[1]=5.0;
 		cr->set_dash(dashes, 0);
 
-		// vertical
-		for(iter=get_guide_list_x().begin();iter!=get_guide_list_x().end();++iter)
+		for(iter=get_guide_list().begin();iter!=get_guide_list().end();++iter)
 		{
-			const float x((iter->pos - window_startx)/pw);
-
 			if(iter==get_work_area()->curr_guide)
 				cr->set_source_rgb(GDK_COLOR_TO_RGB(GUIDE_COLOR_CURRENT));
 			else
 				cr->set_source_rgb(guides_color.get_r(),guides_color.get_g(),guides_color.get_b());
 
-			cr->move_to(
-				x,
-				0
-				);
-			cr->line_to(
-				x,
-				drawable_h
-			);
-			cr->stroke();
-		}
-		// horizontal
-		for(iter=get_guide_list_y().begin();iter!=get_guide_list_y().end();++iter)
-		{
-			const float y((iter->pos - window_starty)/ph);
-			if(iter==get_work_area()->curr_guide)
-				cr->set_source_rgb(GDK_COLOR_TO_RGB(GUIDE_COLOR_CURRENT));
-			else
-				cr->set_source_rgb(guides_color.get_r(),guides_color.get_g(),guides_color.get_b());
+			// vertical
+			if (iter->is_horizontal) {
+				const float x((iter->pos - window_startx)/pw);
 
-			cr->move_to(
-				0,
-				y
-				);
-			cr->line_to(
-				drawable_w,
-				y
-			);
+				cr->move_to(x, 0);
+				cr->line_to(x, drawable_h);
+			} else { // horizontal
+				const float y((iter->pos - window_starty)/ph);
+
+				cr->move_to(0, y);
+				cr->line_to(drawable_w, y);
+			}
 			cr->stroke();
 		}
 

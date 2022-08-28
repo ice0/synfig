@@ -46,8 +46,7 @@ class Renderer_Guides : public studio::WorkAreaRenderer
 public:
 	~Renderer_Guides();
 
-	Duckmatic::GuideList& get_guide_list_x();
-	Duckmatic::GuideList& get_guide_list_y();
+	Duckmatic::GuideList& get_guide_list();
 
 protected:
 	void render_vfunc(const Glib::RefPtr<Gdk::Window>& drawable, const Gdk::Rectangle& expose_area);

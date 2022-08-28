@@ -194,8 +194,7 @@ private:
 
 	mutable sigc::signal<void> signal_sketch_saved_;
 
-	GuideList guide_list_x_;
-	GuideList guide_list_y_;
+	GuideList guide_list_;
 
 	mutable synfig::String sketch_filename_;
 
@@ -272,10 +271,7 @@ public:
 	sigc::signal<void>& signal_grid_changed() { return signal_grid_changed_; }
 	sigc::signal<void>& signal_sketch_saved() { return signal_sketch_saved_; }
 
-	GuideList& get_guide_list_x() { return guide_list_x_; }
-	GuideList& get_guide_list_y() { return guide_list_y_; }
-	const GuideList& get_guide_list_x()const { return guide_list_x_; }
-	const GuideList& get_guide_list_y()const { return guide_list_y_; }
+	GuideList& get_guide_list() { return guide_list_; }
 
 	void set_guide_snap(bool x=true);
 	bool get_guide_snap()const { return guide_snap; }
