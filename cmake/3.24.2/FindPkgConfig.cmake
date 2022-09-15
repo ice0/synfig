@@ -33,17 +33,6 @@ for how these variables are initialized.
 
 #]========================================]
 
-if("${CMAKE_VERSION}" VERSION_GREATER_EQUAL "3.22")
-  message(STATUS "CMake version >= 3.22. Falling back to default FindPkgConfig")
-  set(__CMAKE_MODULE_PATH_OLD ${CMAKE_MODULE_PATH})
-  set(CMAKE_MODULE_PATH "")
-  include(FindPkgConfig)
-  set(CMAKE_MODULE_PATH ${__CMAKE_MODULE_PATH_OLD})
-  return()
-else()
-  message(STATUS "CMake version < 3.22. Using custom FindPkgConfig")
-endif()
-
 cmake_policy(PUSH)
 cmake_policy(SET CMP0054 NEW) # if() quoted variables not dereferenced
 cmake_policy(SET CMP0057 NEW) # if IN_LIST
@@ -66,7 +55,7 @@ endif()
 
 set(PKG_CONFIG_NAMES "pkg-config")
 if(CMAKE_HOST_WIN32)
-  set(PKG_CONFIG_NAMES "pkg-config.bat" ${PKG_CONFIG_NAMES})
+  list(PREPEND PKG_CONFIG_NAMES "pkg-config.bat")
 endif()
 list(APPEND PKG_CONFIG_NAMES "pkgconf")
 
@@ -106,9 +95,10 @@ if (PKG_CONFIG_EXECUTABLE)
   unset(_PKG_CONFIG_VERSION_RESULT)
 endif ()
 
-include(FindPackageHandleStandardArgs)
+include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
 find_package_handle_standard_args(PkgConfig
                                   REQUIRED_VARS PKG_CONFIG_EXECUTABLE
+                                  REASON_FAILURE_MESSAGE "${_PKG_CONFIG_FAILURE_MESSAGE}"
                                   VERSION_VAR PKG_CONFIG_VERSION_STRING)
 
 # This is needed because the module name is "PkgConfig" but the name of
@@ -994,4 +984,3 @@ Variables Affecting Behavior
 ### End:
 
 cmake_policy(POP)
-

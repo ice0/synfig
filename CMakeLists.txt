@@ -4,6 +4,12 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.14")
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+# CMake prior to version 3.22 cannot find PkgConfig in the vcpkg toolchain because they use
+# `pkgconf` instead of `pkg-config`. In this case, we use the updated FindPkgConfig.cmake from 3.24.2
+if(VCPKG_TOOLCHAIN AND WIN32 AND "${CMAKE_VERSION}" VERSION_LESS "3.22")
+	list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/3.24.2")
+	message(STATUS "CMake version < 3.22. Using updated FindPkgConfig...")
+endif()
 
 project(synfig-studio)
 set(STUDIO_VERSION_MAJOR 1)
