@@ -39,9 +39,11 @@
 #include <synfig/localization.h>
 #include "type.h"
 #include <glibmm.h>
+#include <glibmm/module.h>
+#include <gmodule.h>
 
 #ifndef USE_CF_BUNDLES
-#include <ltdl.h>
+//#include <ltdl.h>
 #endif
 
 #endif
@@ -53,12 +55,10 @@
 using namespace etl;
 using namespace synfig;
 
-Module::Book *synfig::Module::book_;
-
 /* === P R O C E D U R E S ================================================= */
 
 static void add_search_dir(const char* dir) {
-	lt_dladdsearchdir(dir);
+	//lt_dladdsearchdir(dir);
 #ifdef _MSC_VER
 	const char* path = getenv("PATH");
 	std::string new_path = strprintf("PATH=%s;%s", path, dir);
@@ -71,12 +71,12 @@ Module::subsys_init(const String &prefix)
 {
 #ifndef USE_CF_BUNDLES
 
-	if(lt_dlinit())
+	/*if(lt_dlinit())
 	{
 		error(_("Errors on lt_dlinit()"));
 		error(lt_dlerror());
 		return false;
-	}
+	}*/
 
 	// user's synfig library path
 #ifdef _WIN32
@@ -108,17 +108,14 @@ Module::subsys_init(const String &prefix)
 	// current working path...
 	add_search_dir(".");
 #endif
-	book_=new Book;
 	return true;
 }
 
 bool
 Module::subsys_stop()
 {
-	delete book_;
-
 #ifndef USE_CF_BUNDLES
-	lt_dlexit();
+	//lt_dlexit();
 #endif
 	return true;
 }
@@ -137,7 +134,8 @@ Module::register_default_modules(ProgressCallback *callback)
 Module::Book&
 Module::book()
 {
-	return *book_;
+	static Module::Book book_;
+	return book_;
 }
 
 void
@@ -151,19 +149,21 @@ synfig::Module::Register(const String &module_name, ProgressCallback *callback)
 {
 #ifndef USE_CF_BUNDLES
 	// reset error string
-	lt_dlerror();
+	//lt_dlerror();
 
-	lt_dlhandle module;
+	//lt_dlhandle module;
 
 	if(callback)callback->task(strprintf(_("Attempting to register \"%s\""),module_name.c_str()));
 
-	module=lt_dlopenext((std::string("lib")+module_name).c_str());
-	if(!module)module=lt_dlopenext(module_name.c_str());
+	//module=lt_dlopenext((std::string("lib")+module_name).c_str());
+	//if(!module)module=lt_dlopenext(module_name.c_str());
 	Type::initialize_all();
+	GModule* module = g_module_open((std::string("/home/az/projects/synfig/synfig-replace-ltdl/synfig/cmake-build-debug/output/Debug/lib/synfig/modules/lib")+module_name).c_str(), G_MODULE_BIND_LAZY);
+	if (!module) module = g_module_open(module_name.c_str(), G_MODULE_BIND_LAZY);
 
 	if(!module)
 	{
-		if(callback)callback->warning(strprintf(_("Unable to find module \"%s\" (%s)"), module_name.c_str(), lt_dlerror()));
+		if(callback)callback->warning(strprintf(_("Unable to find module \"%s\" (%s)"), module_name.c_str(), g_module_error()));
 		return false;
 	}
 
@@ -175,9 +175,11 @@ synfig::Module::Register(const String &module_name, ProgressCallback *callback)
 	const std::vector<const char*> symbol_prefixes = {"", "lib", "_lib", "_"};
 	for (const char * symbol_prefix : symbol_prefixes)
 	{
-		constructor=(Module::constructor_type )lt_dlsym(module,(symbol_prefix+module_name+"_LTX_new_instance").c_str());
-		if (constructor)
+		//constructor=(Module::constructor_type )
+		if (g_module_symbol(module,(symbol_prefix+module_name+"_LTX_new_instance").c_str(), (gpointer*)&constructor))
 			break;
+		//else
+		//	std::cout << "gmod: " << g_module_error() << std::endl;
 	}
 
 	if(constructor)
@@ -186,7 +188,7 @@ synfig::Module::Register(const String &module_name, ProgressCallback *callback)
 	}
 	else
 	{
-		if(callback)callback->error(strprintf(_("Unable to find entrypoint in module \"%s\" (%s)"),module_name.c_str(),lt_dlerror()));
+		if(callback)callback->error(strprintf(_("Unable to find entrypoint in module \"%s\" (%s)"),module_name.c_str(), g_module_error()));
 		return false;
 	}
 
