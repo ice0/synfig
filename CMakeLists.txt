@@ -99,5 +99,5 @@ if(MSYS)
 	include(InstallMSYS2)
 endif()
 
-include(SynfigVcpkg)
+#include(SynfigVcpkg)
 include(CPackConfig)

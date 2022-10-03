@@ -1,5 +1,4 @@
 {
-
   "name": "synfig",
   "version": "1.5.1",
   "dependencies": [
@@ -8,6 +7,7 @@
     "gettext",
     "fftw3",
     "freetype",
+    "libtool",
     "zlib",
     "libpng",
     "libjpeg-turbo",

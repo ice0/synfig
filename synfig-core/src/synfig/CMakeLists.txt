@@ -25,7 +25,7 @@ else()
     set(LTDL_LIBRARIES ltdl)
 endif()
 
-target_include_directories(libsynfig PUBLIC ${LTDL_INCLUDE_DIRS})
+#target_include_directories(libsynfig PUBLIC ${LTDL_INCLUDE_DIRS})
 
 target_sources(libsynfig
     PRIVATE
@@ -123,10 +123,10 @@ target_link_libraries(libsynfig PUBLIC
 	PkgConfig::XMLPP
 	PkgConfig::FFTW
 	ZLIB::ZLIB
-	${LTDL_LIBRARIES}
 	${CMAKE_THREAD_LIBS_INIT}
 	${Intl_LIBRARIES}
 )
+#hello
 
 if (MLT_FOUND)
 	target_link_libraries(libsynfig PUBLIC PkgConfig::MLT)

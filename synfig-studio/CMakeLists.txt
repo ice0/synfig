@@ -61,3 +61,4 @@ if(TARGET desktop_file)
     add_dependencies(synfigstudio desktop_file)
 endif()
 endif()
+
