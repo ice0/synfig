@@ -161,6 +161,7 @@ class Widget_ColorEdit : public Gtk::Grid
 	Glib::RefPtr<Gtk::Adjustment> A_adjustment;
 
 	synfig::Color color;
+	bool preview_ = false;
 
 	Gtk::Notebook* notebook;
 
@@ -183,6 +184,7 @@ public:
 	sigc::signal<void>& signal_value_changed() { return signal_value_changed_; }
 	
 	void on_color_changed();
+	bool preview() { return preview_; }
 
 	void activated() { signal_activated_(); }
 	void activate() { signal_activated_(); }

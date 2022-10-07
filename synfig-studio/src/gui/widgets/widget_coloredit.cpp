@@ -490,6 +490,7 @@ void Widget_ColorEdit::setHVSColor(const synfig::Color& color)
 void
 Widget_ColorEdit::on_color_changed()
 {
+	preview_ = hvsColorWidget->is_adjusting();
 	//Spike! Gtk::ColorSelection emits this signal when I use
 	//set_current_color(...). It calls recursion. Used a flag to fix it.
 	if (!colorHVSChanged)
