@@ -7,3 +7,8 @@
 	box-shadow: none;
 	margin    : 0;
 }
+
+#timetrack {
+  font-size: 11px;
+  font-weight: 300;
+}
