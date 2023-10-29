@@ -86,7 +86,7 @@ local FILEDEST_SHORT="$2"
 		install_name_tool -add_rpath ./ "$FILEDEST" > /dev/null 2>&1 || true
 		
 		
-		echo "Relinking ${FILEDEST_SHORT} ..."
+		printf 'Relinking %s ... ' "${FILEDEST_SHORT}"
 		local FIRST=true
 		local LINE=
 		local LINE2=
@@ -105,7 +105,7 @@ local FILEDEST_SHORT="$2"
 					if [ ! -z "$LINE2" ]; then
 					#if [ ! -z "$FILE_PARENT" ]; then
 						#echo "   install_name_tool -change \"$LINE\" \"@rpath/$LINE2\" \"$FILEDEST\""
-						install_name_tool -change "$LINE" "@rpath/$LINE2" "$FILEDEST"
+						install_name_tool -change "$LINE" "@rpath/$LINE2" "$FILEDEST" &>/dev/null
 						process_lib "$LINE" "$LINE2"
 					#fi
 					
@@ -115,6 +115,7 @@ local FILEDEST_SHORT="$2"
 			fi
     	done
 		#echo "... finished ${FILEDEST_SHORT}"
+		codesign --force -s - "${FILEDEST}"
 	fi
 
 

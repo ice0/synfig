@@ -27,7 +27,7 @@ export MAGICK_DIR=`ls -1 -d ${CWD}/lib/ImageMagick* | head -n 1`
 export MAGICK_DIR=`basename $MAGICK_DIR`
 export MAGICK_DIR_CONFIG=`ls -1 -d ${CWD}/lib/${MAGICK_DIR}/config-* | head -n 1`
 export MAGICK_DIR_CONFIG=`basename $MAGICK_DIR_CONFIG`
-export MAGICK_DIR_MODULES=`ls -1 -d ${CWD}/lib/${MAGICK_DIR}/modules-* | head -n 1`
+export MAGICK_DIR_MODULES=`ls -1 -d ${CWD}/imagemagick/lib/${MAGICK_DIR}/modules-* | head -n 1`
 export MAGICK_DIR_MODULES=`basename $MAGICK_DIR_MODULES`
 export MAGICK_CONFIGURE_PATH="${CWD}/lib/${MAGICK_DIR}/${MAGICK_DIR_CONFIG}/"
 export MAGICK_CODER_MODULE_PATH="${CWD}/lib/${MAGICK_DIR}/${MAGICK_DIR_MODULES}/coders/"
@@ -37,7 +37,7 @@ export XDG_DATA_DIRS="$CWD/share/:$XDG_DATA_DIRS"
 export GDK_PIXBUF_MODULEDIR="$CWD/lib/gdk-pixbuf-2.0/2.10.0/loaders/"
 export GDK_PIXBUF_MODULE_FILE=$HOME/.synfig-gdk-loaders
 [ ! -f $HOME/.synfig-gdk-loaders ] || rm -f  $HOME/.synfig-gdk-loaders
-"$CWD/bin/gdk-pixbuf-query-loaders" > "$GDK_PIXBUF_MODULE_FILE"
+"$CWD/gdk-pixbuf/bin/gdk-pixbuf-query-loaders" > "$GDK_PIXBUF_MODULE_FILE"
 
 cd "$CWD"
 exec "$SYNFIG_ROOT/bin/synfigstudio" "$@"

@@ -165,7 +165,7 @@ mkapp()
 		PKG_PREFIX=""
 	fi
 	pushd "${MACPORTS}${PKG_PREFIX}/lib/cairo/"
-	for FILE in `ls -1 *.so`; do
+	for FILE in $(ls -1 *.so *.dylib); do
 		"$SCRIPTPATH/autobuild/osx/relocate-binary.sh" "${MACPORTS}${PKG_PREFIX}/lib/cairo/$FILE" "$MACPORTS" "$APPCONTENTS"
 	done
 
@@ -196,16 +196,20 @@ mkapp()
 	pushd "${MACPORTS}${PKG_PREFIX}/Frameworks/Python.framework/Versions/"
 	PYTHON_VERSION=`ls -1 | head -n 1`
 	popd
+	PYTHON_LIB_PATH="Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/python${PYTHON_VERSION}"
+	#SYS_PYTHON_PATH=${MACPORTS}${PKG_PREFIX}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}
+	SYS_PYTHON_PATH=${MACPORTS}${PKG_PREFIX}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}
+	SYS_PYTHON_LIB_PATH=${MACPORTS}${PKG_PREFIX}/${PYTHON_LIB_PATH}
 	"$SCRIPTPATH/autobuild/osx/relocate-binary.sh" "`smart_find $MACPORTS/python3/bin/python3`" "$MACPORTS" "$APPCONTENTS"
-	"$SCRIPTPATH/autobuild/osx/relocate-binary.sh" "${MACPORTS}${PKG_PREFIX}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Resources/Python.app/Contents/MacOS/Python" "$MACPORTS" "$APPCONTENTS"
-	mkdir -p "${APPCONTENTS}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/python${PYTHON_VERSION}/"
-	rsync -av --exclude "__pycache__" "${MACPORTS}${PKG_PREFIX}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/python${PYTHON_VERSION}/" "${APPCONTENTS}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/python${PYTHON_VERSION}/"
-	pushd "${APPCONTENTS}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/python${PYTHON_VERSION}/" > /dev/null
+	"$SCRIPTPATH/autobuild/osx/relocate-binary.sh" "${SYS_PYTHON_PATH}/Resources/Python.app/Contents/MacOS/Python" "$MACPORTS" "$APPCONTENTS"
+	mkdir -p "${APPCONTENTS}/${PYTHON_LIB_PATH}/"
+	rsync -a --exclude "__pycache__" "${SYS_PYTHON_LIB_PATH}/" "${APPCONTENTS}/${PYTHON_LIB_PATH}/"
+	pushd "${APPCONTENTS}/${PYTHON_LIB_PATH}/" > /dev/null
 	mkdir -p ../../../../../../lib/python${PYTHON_VERSION}/site-packages
 	ln -sf ../../../../../../lib/python${PYTHON_VERSION}/site-packages site-packages
 	popd > /dev/null
-	rsync -av --exclude "__pycache__" /usr/local/lib/python${PYTHON_VERSION}/site-packages/lxml* "${APPCONTENTS}/lib/python${PYTHON_VERSION}/site-packages/"
-	#cp -R "${MACPORTS}${PKG_PREFIX}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/python3.3" "${APPCONTENTS}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/"
+	rsync -a --exclude "__pycache__" "${SYS_PYTHON_LIB_PATH}/site-packages/lxml"* "${APPCONTENTS}/lib/python${PYTHON_VERSION}/site-packages/"
+	#cp -R "${SYS_PYTHON_PATH}/lib/python3.3" "${APPCONTENTS}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib/"
 	#find ${APPCONTENTS}/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/lib -name "__pycache__" -exec rm -rf {} \;
 
 	# MLT
@@ -241,6 +245,7 @@ mkapp()
 	pushd "${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}"
 	IMAGEMAGICK_CONFIG_DIR=`ls -1d config-* |head -n 1`
 	popd
+	echo "IMAGEMAGICK_CONFIG_DIR: ${IMAGEMAGICK_CONFIG_DIR}"
 	pushd "${MACPORTS}${PKG_PREFIX}/etc"
 	IMAGEMAGICK_ETC_DIR=`ls -1d ImageMagick-* |head -n 1`
 	popd
@@ -248,15 +253,16 @@ mkapp()
 	for FILE in `ls -1 *.so`; do
 		"$SCRIPTPATH/autobuild/osx/relocate-binary.sh" "${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/coders/$FILE" "$MACPORTS" "$APPCONTENTS"
 	done
-	cp -R ${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/coders/*.la "${APPCONTENTS}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/coders/"
+	#cp -R ${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/coders/*.la "${APPCONTENTS}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/coders/"
 	popd
 	pushd "${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/filters/"
 	for FILE in `ls -1 *.so`; do
 		"$SCRIPTPATH/autobuild/osx/relocate-binary.sh" "${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/filters/$FILE" "$MACPORTS" "$APPCONTENTS"
 	done
-	cp -R ${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/filters/*.la  "${APPCONTENTS}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/filters/"
+	#cp -R ${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/filters/*.la  "${APPCONTENTS}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_MODULES_DIR}/filters/"
 	popd
-	cp -R "${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_CONFIG_DIR}"  "${APPCONTENTS}/lib/${IMAGEMAGICK_DIR}/"
+	mkdir -p "${APPCONTENTS}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_CONFIG_DIR}/"
+	cp -R "${MACPORTS}${PKG_PREFIX}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_CONFIG_DIR}/"  "${APPCONTENTS}/lib/${IMAGEMAGICK_DIR}/${IMAGEMAGICK_CONFIG_DIR}/"
 	cp -R "${MACPORTS}${PKG_PREFIX}/etc/${IMAGEMAGICK_ETC_DIR}"  "${APPCONTENTS}/etc/"
 
 	#cp -R "${MACPORTS}/share/icons"  "$APPCONTENTS/share/"
