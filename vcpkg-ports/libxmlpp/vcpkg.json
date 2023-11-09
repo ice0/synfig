@@ -1,6 +1,6 @@
 {
   "name": "libxmlpp",
-  "version": "2.42.1",
+  "version": "2.42.2",
   "description": "libxml++ (a.k.a. libxmlplusplus) provides a C++ interface to XML files",
   "homepage": "https://github.com/libxmlplusplus/libxmlplusplus",
   "license": "LGPL-2.1",

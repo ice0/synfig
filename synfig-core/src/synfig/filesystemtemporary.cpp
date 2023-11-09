@@ -44,6 +44,10 @@
 #include "localization.h"
 #include "zstreambuf.h"
 
+#ifdef _WIN32
+#include "io.h"
+#endif
+
 #endif
 
 /* === U S I N G =========================================================== */

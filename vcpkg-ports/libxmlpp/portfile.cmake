@@ -1,9 +1,9 @@
 vcpkg_check_linkage(ONLY_DYNAMIC_LIBRARY)
 
 vcpkg_download_distfile(ARCHIVE
-    URLS "https://github.com/libxmlplusplus/libxmlplusplus/releases/download/2.42.1/libxml++-2.42.1.tar.xz"
-    FILENAME "libxml++-2.42.1.tar.xz"
-    SHA512 6C1D3A3150DDA3C933F27CA5A45A764CE6872487B91803AD366774F1B370C2C6E4CF2FC5C55666043DB803AE43A508603C8017AEFEAC458337999B629389E7AB
+    URLS "https://github.com/libxmlplusplus/libxmlplusplus/releases/download/2.42.2/libxml++-2.42.2.tar.xz"
+    FILENAME "libxml++-2.42.2.tar.xz"
+    SHA512 214da4c8120fedc96adf6ad965b65be9f4deb53d86f41667c236c52e1e3aace819fc61b096815879cc38aaf12ac77fbccb050088ce6bc3ff03030dcc81e4a8c9
 )
 
 vcpkg_extract_source_archive_ex(
