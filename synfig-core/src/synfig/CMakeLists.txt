@@ -106,6 +106,7 @@ target_link_libraries(libsynfig PUBLIC
 	PkgConfig::SIGCPP
 	PkgConfig::GLIBMM
 	PkgConfig::GIOMM
+	PkgConfig::GMODULE
 	PkgConfig::XMLPP
 	PkgConfig::FFTW
 	ZLIB::ZLIB
