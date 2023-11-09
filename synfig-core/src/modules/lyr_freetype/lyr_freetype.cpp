@@ -137,6 +137,8 @@ private:
 
 	FontConfigWrap()
 	{
+		Glib::setenv("FONTCONFIG_FILE", "C\:/projects/synfig-arm/vcpkg/packages/fontconfig_arm64-windows/etc/fonts/fonts.conf");
+		//config = FcInitLoadOwnConfig(config);
 		config = FcInitLoadConfigAndFonts();
 #ifdef _WIN32
 		// Windows 10 (1809) Added local user fonts installed to C:\Users\%USERNAME%\AppData\Local\Microsoft\Windows\Fonts
