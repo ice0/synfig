@@ -45,6 +45,28 @@
 
 #endif
 
+#include <chrono>
+#include <unordered_map>
+
+class Timer {
+public:
+	Timer() { reset(); }
+	void reset() { start = now(); }
+
+	double getElapsedSeconds() {
+		auto duration = now() - start;
+		return std::chrono::duration<double, std::milli>(duration).count();
+	}
+
+private:
+	static std::chrono::time_point<std::chrono::high_resolution_clock> now() {
+		return std::chrono::high_resolution_clock::now();
+	}
+
+	std::chrono::time_point<std::chrono::high_resolution_clock> start;
+
+};
+
 using namespace synfig;
 using namespace rendering;
 using namespace software;
@@ -303,6 +325,8 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 	if (pitch == 0) pitch = sizeof(Color)*width;
 
 	// check format
+	Timer t;
+	t.reset();
 	Color constant = *pixels;
 	Color::value_type *constant_channels = (Color::value_type*)(void*)&constant;
 	bool discrete = true;
@@ -315,7 +339,23 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 			channels_equality[i][j] = true;
 		constant_equality[i] = true;
 	}
+	std::cout << "Step1:" << t.getElapsedSeconds() << std::endl;
 
+	t.reset();
+#if 1
+	for (int i = 0; i < 256; ++i) {
+		const float val = i / 255.f;
+		discrete_values.emplace_back(DiscreteHelper(val));
+	}
+	discrete = true;
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
+			channels_equality[i][j] = false;
+		}
+		constant_equality[i] = false;
+	}
+	constant_equality[3] = true;
+#else
 	for(int row = 0; row < height; ++row) {
 		for(const Color *color = (const Color*)((const char*)pixels + row*pitch), *end = color + width; color < end; ++color)
 		{
@@ -364,6 +404,10 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 			}
 		}
 	}
+	std::cout << "discrete_values.size() " << discrete_values.size() << std::endl;
+#endif
+	std::cout << "Step2:" << t.getElapsedSeconds() << std::endl;
+	t.reset();
 
 	this->channel_type = discrete ? ChannelUInt8 : ChannelFloat32;
 	int channel_size = this->channel_type == ChannelUInt8 ? sizeof(unsigned char) : sizeof(ColorReal);
@@ -383,7 +427,9 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 			for(; index < 256; ++index)
 				discrete_to_float[index] = discrete_to_float[index - 1];
 	}
+	std::cout << "Step3:" << t.getElapsedSeconds() << std::endl;
 
+	t.reset();
 	pixel_size = 0;
 	for(int i = 0; i < 4; ++i) {
 		channels[i] = i*channel_size;
@@ -401,6 +447,8 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 	this->width = width;
 	this->height = height;
 	row_size = width * pixel_size;
+	std::cout << "Step4:" << t.getElapsedSeconds() << std::endl;
+	t.reset();
 
 	const char *s;
 	bool gzip = (s = getenv("SYNFIG_PACK_IMAGES_GZIP")) && atoi(s) != 0;
@@ -413,11 +461,18 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 	if ((!gzip && !split) || std::max((width-1)/ChunkSize + 1, (height-1)/ChunkSize + 1)*CacheRows*ChunkSize*ChunkSize*16 > width*height)
 	{
 		// no compression
+		std::cout << "no compression\n";
 		data.resize(row_size*height);
-		char *pixel = &data.front();
+		char* pixel = data.data();
 		for(int row = 0; row < height; ++row)
-			for(const Color *color = (const Color*)((const char*)pixels + row*pitch), *end = color + width; color < end; ++color, pixel += pixel_size)
-				set_pixel(pixel, *color);
+			for(const Color *color = (const Color*)((const char*)pixels + row*pitch), *end = color + width; color < end; ++color, pixel += pixel_size) {
+				//set_pixel(pixel, *color);
+				pixel[0] = color->get_r() * 255;
+				pixel[1] = color->get_g() * 255;
+				pixel[2] = color->get_b() * 255;
+				pixel[3] = color->get_a() * 255;
+			}
+
 	}
 	else
 	{
@@ -464,6 +519,7 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 
 		this->data = data;
 	}
+	std::cout << "Step5:" << t.getElapsedSeconds() << std::endl;
 }
 
 void
