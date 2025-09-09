@@ -34,6 +34,7 @@
 #include "color.h"
 #include "surface_etl.h"
 #include <ETL/handle>
+#include <vector>
 
 /* === M A C R O S ========================================================= */
 
@@ -76,6 +77,23 @@ public:
 		{ return uncook_static(x); }
 };
 
+struct ImageInfo {
+	enum class Format {
+		RGB,    // 24-bit (8 bits per channel × 3 channels)
+		RGBA,   // 32-bit (8 bits per channel × 4 channels)
+		FLOAT   // 128-bit (32 bits per channel × 4 channels)
+	};
+	uint32_t width;          // Ширина изображения в пикселях
+	uint32_t height;         // Высота изображения в пикселях
+	uint8_t  channels;       // Количество каналов (1-4, например: 1 - grayscale, 3 - RGB, 4 - RGBA)
+	Format format_;
+
+	void WriteImageToFloatBuffer(float* buffer);
+	void WriteImageToColorBuffer(Color* buffer) const;
+
+	std::vector<char> data;
+};
+
 
 /*!	\class Surface
 **	\brief Bitmap Surface
@@ -88,6 +106,7 @@ public:
 	class alpha_pen;
 
 	Surface() { }
+	ImageInfo imageInfo;
 
 	Surface(const size_type::value_type &w, const size_type::value_type &h):
 		surface<Color, ColorPrep>(w,h) { }

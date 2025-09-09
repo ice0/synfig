@@ -135,6 +135,7 @@ magickpp_mptr::get_frame(synfig::Surface& surface, const synfig::RendDesc& /*ren
 		const bool has_alpha = image.matte();
 		constexpr MagickCore::ImageType TrueColorAlphaType = Magick::TrueColorMatteType;
 #endif
+		std::cout << "image.depth: " << image.depth() << std::endl;
 
 		if (has_alpha)
 			image.type(TrueColorAlphaType);
@@ -153,7 +154,39 @@ magickpp_mptr::get_frame(synfig::Surface& surface, const synfig::RendDesc& /*ren
 	using namespace MagickCore;
 
 
-		constexpr synfig::Color::value_type factor = QuantumRange;
+	auto& img = surface.imageInfo;
+	img.width = width;
+	img.height = height;
+	const auto pixel_count = width*height;
+	constexpr auto factor2 = QuantumRange / 255;
+
+	if (has_alpha) {
+		img.channels = 4;
+		img.format_ = synfig::ImageInfo::Format::RGBA;
+		img.data.resize(pixel_count*4);
+		size_t j = 0;
+		for (size_t i = 0; i < pixel_count; ++i) {
+			const auto& color = packet[i];
+			img.data[j++] = color.red / factor2;
+			img.data[j++] = color.green / factor2;
+			img.data[j++] = color.blue / factor2;
+			img.data[j++] = color.opacity / factor2;
+		}
+	} else {
+		img.channels = 3;
+		img.format_ = synfig::ImageInfo::Format::RGB;
+		img.data.resize(pixel_count*3);
+		size_t j = 0;
+		for (size_t i = 0; i < pixel_count; ++i) {
+			const auto& color = packet[i];
+			img.data[j++] = color.red / factor2;
+			img.data[j++] = color.green / factor2;
+			img.data[j++] = color.blue / factor2;
+		}
+	}
+	return true;
+
+	constexpr synfig::Color::value_type factor = QuantumRange;
 
 		for (size_t y = 0, i = 0; y < height; ++y) {
 			for (size_t x = 0; x < width; ++x) {

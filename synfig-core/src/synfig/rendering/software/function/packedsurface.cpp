@@ -186,6 +186,7 @@ PackedSurface::Reader::get_pixel(int x, int y) const
 	else
 	if (surface->pixel_size)
 	{
+		//std::cout << "111\n";
 		return surface->get_pixel(&surface->data[x*surface->pixel_size + y*surface->row_size]);
 	}
 	return surface->constant;
@@ -266,6 +267,8 @@ PackedSurface::set_channel(void *pixel, int offset, ChannelType type, Color::val
 Color
 PackedSurface::get_pixel(const void *pixel) const
 {
+	const unsigned char* p = reinterpret_cast<const unsigned char*>(pixel);
+	return Color(p[0] / 255.0f, p[1] / 255.0f, p[2] / 255.0f, 1.0f);
 	return Color(
 		get_channel(pixel, channels[0], channel_type, constant.get_r(), discrete_to_float),
 		get_channel(pixel, channels[1], channel_type, constant.get_g(), discrete_to_float),
@@ -294,6 +297,25 @@ PackedSurface::get_compressed_chunk(int index, const void *&data, int &size, boo
 	compressed = size != chunk_size;
 }
 
+void PackedSurface::set_pixels(ImageInfo&& image) {
+	image_ = image;
+	const auto pixel_count = image_.width*image_.height;
+	data.resize(pixel_count*4);
+	this->channel_type = ChannelUInt8;
+	this->width = image_.width;
+	this->height = image_.height;
+	if (image_.format_ == ImageInfo::Format::RGB) {
+		for (int i = 0; i < pixel_count; ++i) {
+			data[i*4+0] = image_.data[i*3+0]; // r
+			data[i*4+1] = image_.data[i*3+1]; // g
+			data[i*4+2] = image_.data[i*3+2]; // b
+			data[i*4+3] = 255; // a
+		}
+	} else {
+		abort();
+	}
+}
+
 void
 PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch) {
 	clear();
@@ -316,6 +338,7 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 		constant_equality[i] = true;
 	}
 
+#if 0
 	for(int row = 0; row < height; ++row) {
 		for(const Color *color = (const Color*)((const char*)pixels + row*pitch), *end = color + width; color < end; ++color)
 		{
@@ -401,6 +424,65 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 	this->width = width;
 	this->height = height;
 	row_size = width * pixel_size;
+#else
+	if (image_.data.empty()) {
+		abort();
+	}
+	discrete = true;
+	this->width = width;
+	this->height = height;
+	pixel_size = 4;
+	row_size = width * pixel_size;
+
+	data.resize(row_size*height);
+	uint8_t* pixel = reinterpret_cast<uint8_t*>(data.data());
+	const auto pixel_count = width*height;
+	int j = 0;
+	for (int i = 0; i < pixel_count*3; i+=3) {
+		data[j++] = image_.data[i+0];
+		data[j++] = image_.data[i+1];
+		data[j++] = image_.data[i+2];
+		data[j++] = 255;
+	}
+
+	/*for(int row = 0; row < height; ++row)
+		for(const Color *color = (const Color*)((const char*)pixels + row*pitch), *end = color + width; color < end; ++color, pixel += pixel_size)
+			set_pixel(pixel, *color);*/
+
+	return;
+
+	for (int i = 0; i < 256; ++i) {
+		const float val = i / 255.f;
+		discrete_values.emplace_back(DiscreteHelper(val));
+	}
+
+	int index = 0;
+	for(std::vector<DiscreteHelper>::const_iterator i = discrete_values.begin(); i != discrete_values.end(); ++i, ++index)
+		discrete_to_float[index] = i->value;
+	if (index > 0)
+		for(; index < 256; ++index)
+			discrete_to_float[index] = discrete_to_float[index - 1];
+
+
+	discrete = true;
+	for(int i = 0; i < 4; ++i) {
+		for(int j = 0; j < 4; ++j) {
+			channels_equality[i][j] = false;
+		}
+		constant_equality[i] = false;
+	}
+	constant_equality[3] = true;
+
+
+	//return;
+
+	//data.resize(row_size*height);
+	//char *pixel = &data.front();
+	/*for(int row = 0; row < height; ++row)
+		for(const Color *color = (const Color*)((const char*)pixels + row*pitch), *end = color + width; color < end; ++color, pixel += pixel_size)
+			set_pixel(pixel, *color);*/
+
+#endif
 
 	const char *s;
 	bool gzip = (s = getenv("SYNFIG_PACK_IMAGES_GZIP")) && atoi(s) != 0;
@@ -413,11 +495,25 @@ PackedSurface::set_pixels(const Color *pixels, int width, int height, int pitch)
 	if ((!gzip && !split) || std::max((width-1)/ChunkSize + 1, (height-1)/ChunkSize + 1)*CacheRows*ChunkSize*ChunkSize*16 > width*height)
 	{
 		// no compression
+#if 0
 		data.resize(row_size*height);
 		char *pixel = &data.front();
 		for(int row = 0; row < height; ++row)
 			for(const Color *color = (const Color*)((const char*)pixels + row*pitch), *end = color + width; color < end; ++color, pixel += pixel_size)
 				set_pixel(pixel, *color);
+#else
+		data.swap(image_.data);
+		/*data.resize(row_size*height);
+		uint8_t* pixel = reinterpret_cast<uint8_t*>(data.data());
+		const auto pixel_count = width*height;
+		int j = 0;
+		for (int i = 0; i < pixel_count*3; i+=3) {
+			data[j++] = image_.data[i+0];
+			data[j++] = image_.data[i+1];
+			data[j++] = image_.data[i+2];
+			//data[j++] = 255;
+		}*/
+#endif
 	}
 	else
 	{

@@ -54,6 +54,27 @@
 
 #endif
 
+#include <chrono>
+
+class Timer {
+public:
+	Timer() { reset(); }
+	void reset() { start = now(); }
+
+	double getElapsedMilliseconds() {
+		auto duration = now() - start;
+		return std::chrono::duration<double, std::milli>(duration).count();
+	}
+
+private:
+	static std::chrono::time_point<std::chrono::high_resolution_clock> now() {
+		return std::chrono::high_resolution_clock::now();
+	}
+
+	std::chrono::time_point<std::chrono::high_resolution_clock> start;
+
+};
+
 /* === M A C R O S ========================================================= */
 
 /* === G L O B A L S ======================================================= */
@@ -164,20 +185,50 @@ Importer::get_frame(const RendDesc & /* renddesc */, const Time &time)
 	if (last_surface_ && last_surface_->is_exists() && !is_animated())
 		return last_surface_;
 
+	const char *s = getenv("SYNFIG_PACK_IMAGES");
+	bool pack_image = s == nullptr || atoi(s) != 0;
+
+	Timer t;
 	Surface surface;
 	if(!get_frame(surface, RendDesc(), time)) {
 		warning(strprintf(_("Unable to get frame from \"%s\" [%s]"), identifier.filename.u8_str(), time.get_string().c_str()));
 		return nullptr;
 	}
 
-	const char *s = getenv("SYNFIG_PACK_IMAGES");
-	if (s == nullptr || atoi(s) != 0)
-		last_surface_ = new rendering::SurfaceSWPacked();
+	std::cout << "get_frame (ms): " << t.getElapsedMilliseconds() << std::endl;
+	t.reset();
+
+	if (pack_image) {
+		//auto& img = surface.imageInfo;
+
+		auto& img = surface.imageInfo;
+		if (!img.data.empty()) {
+			const auto width = img.width;
+			const auto height = img.height;
+
+			std::vector<Color> float_data;
+			float_data.resize(height*width*4);
+			img.WriteImageToColorBuffer(float_data.data());
+
+			last_surface_ = new rendering::SurfaceSWPacked(std::move(img));
+
+			last_surface_->assign(float_data.data(), width, height);
+
+			//float_data.resize(img.height*img.width);
+			//img.WriteImageToFloatBuffer(float_data.data());
+			//img.WriteImageToColorBuffer(float_data.data());
+			//last_surface_->assign(float_data.data(), img.width, img.height);
+			std::cout << "get_frame2 (ms): " << t.getElapsedMilliseconds() << std::endl;
+
+			return last_surface_;
+		}
+	}
 	else
 		last_surface_ = new rendering::SurfaceSW();
 
 	if (surface.is_valid())
 		last_surface_->assign(surface[0], surface.get_w(), surface.get_h());
 
+	std::cout << "get_frame3 (ms): " << t.getElapsedMilliseconds() << std::endl;
 	return last_surface_;
 }

@@ -53,6 +53,8 @@ public:
 	virtual Token::Handle get_token() const
 		{ return token.handle(); }
 
+	ImageInfo image_;
+
 protected:
 	virtual bool assign_vfunc(const Surface &surface);
 	virtual bool reset_vfunc();
@@ -64,6 +66,15 @@ private:
 public:
 	SurfaceSWPacked()
 		{ }
+	SurfaceSWPacked(ImageInfo&& image) {
+		//image_ = image;
+		set_desc(image.width, image.height, false);
+		surface.set_pixels(std::move(image));
+		//this->width = image_.width;
+		//this->height = image_.height;
+		//this->blank = image_.width + image_.height;
+	}
+
 	explicit SurfaceSWPacked(const Surface &other)
 		{ assign(other); }
 	const software::PackedSurface& get_surface() const

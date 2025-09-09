@@ -239,7 +239,85 @@ synfig::Surface::blit_to(alpha_pen& pen, int x, int y, int w, int h) const
 	surface<Color, ColorPrep>::blit_to(pen,x,y,w,h);
 }
 
+void ImageInfo::WriteImageToFloatBuffer(float* buffer) {
+	const size_t pixel_count = width * height;
+	const size_t output_channels = 4; // Всегда преобразуем в 4 канала (RGBA)
 
+	switch (format_) {
+		case Format::RGB: {
+			const char* src = data.data();
+			for (size_t i = 0; i < pixel_count; ++i) {
+				// Копируем RGB каналы
+				for (uint8_t c = 0; c < 3; ++c) {
+					buffer[i * output_channels + c] = src[i * 3 + c] / 255.0f;
+				}
+				// Устанавливаем альфа-канал в 1.0
+				buffer[i * output_channels + 3] = 1.0f;
+			}
+			break;
+		}
+		case Format::RGBA: {
+			const char* src = data.data();
+			for (size_t i = 0; i < pixel_count; ++i) {
+				for (uint8_t c = 0; c < 4; ++c) {
+					buffer[i * output_channels + c] = src[i * 4 + c] / 255.0f;
+				}
+			}
+			break;
+		}
+		case Format::FLOAT: {
+			// Просто копируем данные, так как они уже в float формате
+			// (предполагаем, что data содержит достаточно float значений)
+			const float* src = reinterpret_cast<const float*>(data.data());
+			for (size_t i = 0; i < pixel_count; ++i) {
+				for (uint8_t c = 0; c < channels; ++c) {
+					buffer[i * output_channels + c] = src[i * channels + c];
+				}
+				// Если было меньше 4 каналов, заполняем остальные
+				for (uint8_t c = channels; c < output_channels; ++c) {
+					buffer[i * output_channels + c] = (c == 3) ? 1.0f : 0.0f;
+				}
+			}
+			break;
+		}
+	}
+}
 
+void ImageInfo::WriteImageToColorBuffer(Color* buffer) const {
+	const size_t pixel_count = width * height;
+	const size_t output_channels = 4; // Всегда преобразуем в 4 канала (RGBA)
 
+	switch (format_) {
+		case Format::RGB: {
+			const uint8_t* src = reinterpret_cast<const uint8_t*>(data.data());
+			for (size_t i = 0; i < pixel_count; ++i) {
+				// Копируем RGB каналы
+				buffer[i] = Color(src[i * 3 + 0] / 255.0f, src[i * 3 + 1] / 255.0f, src[i * 3 + 2] / 255.0f, 1.0f);
+			}
+			break;
+		}
+		case Format::RGBA: {
+			const char* src = data.data();
+			for (size_t i = 0; i < pixel_count; ++i) {
+				buffer[i] = Color(src[i * 3 + 0] / 255.0f, src[i * 3 + 1] / 255.0f, src[i * 3 + 2] / 255.0f, src[i * 3 + 3] / 255.0f);
+			}
+			break;
+		}
+		case Format::FLOAT: {
+			// Просто копируем данные, так как они уже в float формате
+			// (предполагаем, что data содержит достаточно float значений)
+			const float* src = reinterpret_cast<const float*>(data.data());
+			for (size_t i = 0; i < pixel_count; ++i) {
+				/*for (uint8_t c = 0; c < channels; ++c) {
+					buffer[i * output_channels + c] = src[i * channels + c];
+				}
+				// Если было меньше 4 каналов, заполняем остальные
+				for (uint8_t c = channels; c < output_channels; ++c) {
+					buffer[i * output_channels + c] = (c == 3) ? 1.0f : 0.0f;
+				}*/
+			}
+			break;
+		}
+	}
+}
 

@@ -77,6 +77,7 @@ foreach(MOD IN ITEMS ${MODS_ENABLED})
     set(SYNFIG_MODULES_CONTENT "${SYNFIG_MODULES_CONTENT}\n${MOD}")
     add_subdirectory(${MOD})
     add_dependencies(synfig_bin ${MOD})
+	# add dependency to studio
 endforeach(MOD)
 
 file(WRITE ${SYNFIG_BUILD_ROOT}/etc/synfig_modules.cfg ${SYNFIG_MODULES_CONTENT})

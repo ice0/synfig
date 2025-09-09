@@ -55,6 +55,7 @@ namespace software
 class PackedSurface
 {
 public:
+	ImageInfo image_;
 	enum ChannelType {
 		ChannelUInt8,
 		ChannelFloat32
@@ -162,6 +163,7 @@ public:
 
 	void clear();
 	void set_pixels(const Color *pixels, int width, int height, int pitch = 0);
+	void set_pixels(ImageInfo&& image);
 	int get_width() const { return width; }
 	int get_height() const { return height; }
 	void get_pixels(Color *target) const;

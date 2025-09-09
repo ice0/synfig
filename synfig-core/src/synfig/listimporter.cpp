@@ -40,6 +40,8 @@
 
 #include "filesystemnative.h"
 #include <synfig/rendering/software/surfacesw.h>
+#include <future>
+#include <glibmm/miscutils.h>
 
 
 #endif
@@ -63,6 +65,50 @@ SYNFIG_IMPORTER_SET_SUPPORTS_FILE_SYSTEM_WRAPPER(ListImporter, false);
 /* === P R O C E D U R E S ================================================= */
 
 /* === M E T H O D S ======================================================= */
+
+void ListImporter::preload_images() {
+	std::vector<std::future<void>> futures;
+
+	// Launch all layer parsing tasks concurrently
+	const Glib::ustring image_threads = Glib::getenv("SYNFIG_IMAGE_THREADS");
+	const uint32_t max_image_threads = 10;// image_threads.empty() ? 1 : stratoi(image_threads.c_str());
+
+	//const auto policy = image_threads.empty() ? std::launch::deferred : std::launch::async;
+	const auto policy = max_image_threads <= 1 ? std::launch::deferred : std::launch::async;
+
+	for (const auto& filename : filename_list) {
+		{
+			std::lock_guard<std::mutex> lock(cache_mtx_);
+			if (image_cache_.find(filename) != image_cache_.end()) {
+				continue;
+			}
+		}
+		futures.emplace_back(std::async(policy, [&]() {
+			std::cout << "Preloading: " + filename + "...\n";
+			Importer::Handle importer(Importer::open(FileSystem::Identifier(FileSystemNative::instance(), filename)));
+			if (importer) {
+				RendDesc renddesc;
+				importer->get_frame(renddesc, 0);
+			}
+			{
+				std::lock_guard<std::mutex> lock(cache_mtx_);
+				image_cache_.emplace(filename, importer);
+			}
+		}));
+		// Limit to max image threads
+		if (futures.size() >= max_image_threads) {
+			for (auto& future : futures) {
+				future.get();
+			}
+			futures.clear();
+		}
+	}
+
+	// Collect results in original order
+	for (auto& future : futures) {
+		future.get();
+	}
+}
 
 ListImporter::ListImporter(const FileSystem::Identifier &identifier):
 Importer(identifier)
@@ -133,6 +179,8 @@ Importer(identifier)
 		filename_list.push_back(prefix + prevphoneme + prevext);	// do it one more time for the last phoneme
 		synfig::info("finally, frame %d, phoneme = %s, path = '%s'", prevframe, prevphoneme.c_str(), (prefix + prevphoneme + prevext).c_str());
 
+		preload_images();
+
 		return;
 	}
 
@@ -152,10 +200,21 @@ Importer(identifier)
 		}
 		filename_list.push_back(prefix+line);
 	}
+	preload_images();
 }
 
 
-ListImporter::~ListImporter() = default;
+ListImporter::~ListImporter() {
+	std::cout << "Delete ~ListImporter\n";
+	{
+		std::lock_guard<std::mutex> lock(cache_mtx_);
+		image_cache_.clear();
+	}
+
+	for (const auto& filename : filename_list) {
+		Importer::forget(FileSystem::Identifier(FileSystemNative::instance(), filename));
+	}
+};
 
 Importer::Handle
 ListImporter::get_sub_importer(const RendDesc &renddesc, Time time, ProgressCallback *cb)

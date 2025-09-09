@@ -56,6 +56,8 @@ private:
 	std::list<Importer::Handle> frame_cache;
 
 	Importer::Handle get_sub_importer(const RendDesc &renddesc, Time time, ProgressCallback *cb);
+	std::map<std::string, Importer::Handle> image_cache_;
+	std::mutex cache_mtx_; // mutex for image cache
 
 public:
 	ListImporter(const FileSystem::Identifier &identifier);
@@ -65,6 +67,7 @@ public:
 	virtual bool get_frame(Surface &surface, const RendDesc &renddesc, Time time, ProgressCallback* cb = nullptr);
 	virtual rendering::Surface::Handle get_frame(const RendDesc &renddesc, const Time &time);
 	virtual bool is_animated();
+	void preload_images();
 
 };
 
